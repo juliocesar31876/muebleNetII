@@ -1,0 +1,4 @@
+# Referenced at /mnt/eaba75c6-2f35-4bbb-a7a1-c30544cb08e8/datos/git2/muebleNet2/android/app/build/intermediates/merged_manifests/debug/AndroidManifest.xml:20
+-keep class androidx.core.app.CoreComponentFactory { <init>(); }
+# Referenced at /mnt/eaba75c6-2f35-4bbb-a7a1-c30544cb08e8/datos/git2/muebleNet2/android/app/build/intermediates/merged_manifests/debug/AndroidManifest.xml:20
+-keep class com.mueblenet2.MainApplication { <init>(); }

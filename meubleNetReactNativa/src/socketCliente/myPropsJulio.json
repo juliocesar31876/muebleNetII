@@ -1,0 +1,10 @@
+{
+    "socket": {
+        "url": "ws://192.168.0.32:8080/prueba/server/",
+        "key": ""
+    },
+    "images": {
+        "url": "http://192.168.0.32:8080/pasanakuServer/imagesController",
+        "urlImage": "http://192.168.0.32:8080/pasanakuServer/images/"
+    }
+}

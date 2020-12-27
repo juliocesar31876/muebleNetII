@@ -1,0 +1,115 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import {
+    Text,
+    View,
+    TouchableOpacity,
+} from 'react-native';
+import Barra from '../../Component/Barra';
+import AddMaterial from './AddMaterial';
+import VerMaterial from './VerMaterial';
+import AddTipoMaterial from './AddTipoMaterial';
+import VerTipoMaterial from './VerTipoMaterial';
+import * as popupActions from '../../Actions/popupActions'
+class AlmacenPage extends Component {
+    static navigationOptions = {
+        headerShown: false,
+    }
+    constructor(props) {
+        super(props);
+        this.state = {
+            isOpen: false,
+            index: 0,
+            componet: "Agregar material",
+            titulo: "Almacen",
+            arrayMenu: ["Agregar material", "Agregar tipo material", "Ver materiales", "Ver tipo material",]
+        }
+
+    }
+    select(text) {
+        this.state.componet = text
+        this.setState({ ...this.state })
+    }
+    barraMenu() {
+        return (
+            <View style={{
+                width: "100%",
+                height: 50,
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'center',
+            }}>
+                {this.state.arrayMenu.map((text) => {
+                    var color = "#fff"
+                    if (this.state.componet === text) {
+                        color = "#666"
+                    }
+                    return (
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.select(text)
+                            }}
+                            style={{
+                                flex: 0.3,
+                                height: "90%",
+                                margin: 5,
+                                borderWidth: 1,
+                                borderRadius: 10,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderColor: color,
+                            }}>
+                            <Text style={{
+                                color: color,
+                                fontSize: 8,
+                                textAlign: "center",
+                                fontWeight: 'bold',
+                            }}>{text}</Text>
+                        </TouchableOpacity>
+                    )
+                })
+                }
+            </View>
+        )
+    }
+    selectComponet() {
+        switch (this.state.componet) {
+            case "Agregar material":
+                return <AddMaterial />
+            case "Agregar tipo material":
+                return <AddTipoMaterial />
+            case "Ver materiales":
+                return <VerMaterial />
+            case "Ver tipo material":
+                return <VerTipoMaterial />
+            default:
+                return <View />
+        }
+    }
+    render() {
+        if (this.props.state.materialReducer.estado === "exito" && this.props.state.materialReducer.type === "updateMaterial") {
+            this.props.state.materialReducer.estado = ""
+            this.props.cerrarPopup()
+        }
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    width: "100%",
+                    alignItems: 'center',
+                    backgroundColor: "#000",
+                }}>
+                <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
+                {this.selectComponet()}
+                {this.barraMenu()}
+            </View>
+        );
+    }
+};
+const initStates = (state) => {
+    return { state }
+};
+const initActions = ({
+    ...popupActions
+});
+export default connect(initStates,initActions)(AlmacenPage);

@@ -1,0 +1,10 @@
+{
+    "socket": {
+        "url": "ws://192.168.0.32:8080/muebleNet2/server/",
+        "key": ""
+    },
+    "images": {
+        "url": "http://192.168.0.32:8080/muebleNet2/imagesController",
+        "urlImage": "http://192.168.0.32:8080/muebleNet2/images/"
+    }
+}

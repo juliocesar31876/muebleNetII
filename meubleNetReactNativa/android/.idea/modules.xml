@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/muebleNet2.iml" filepath="$PROJECT_DIR$/.idea/modules/muebleNet2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/muebleNet2.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/muebleNet2.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/865382991/muebleNet2.react-native-community_async-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/865382991/muebleNet2.react-native-community_async-storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/2109233420/muebleNet2.react-native-community_masked-view.iml" filepath="$PROJECT_DIR$/.idea/modules/2109233420/muebleNet2.react-native-community_masked-view.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-273923765/muebleNet2.react-native-gesture-handler.iml" filepath="$PROJECT_DIR$/.idea/modules/-273923765/muebleNet2.react-native-gesture-handler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/289650075/muebleNet2.react-native-image-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/289650075/muebleNet2.react-native-image-picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/346027357/muebleNet2.react-native-linear-gradient.iml" filepath="$PROJECT_DIR$/.idea/modules/346027357/muebleNet2.react-native-linear-gradient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1411480049/muebleNet2.react-native-reanimated.iml" filepath="$PROJECT_DIR$/.idea/modules/1411480049/muebleNet2.react-native-reanimated.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-596364556/muebleNet2.react-native-safe-area-context.iml" filepath="$PROJECT_DIR$/.idea/modules/-596364556/muebleNet2.react-native-safe-area-context.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-749669364/muebleNet2.react-native-screens.iml" filepath="$PROJECT_DIR$/.idea/modules/-749669364/muebleNet2.react-native-screens.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1661922711/muebleNet2.react-native-svg.iml" filepath="$PROJECT_DIR$/.idea/modules/-1661922711/muebleNet2.react-native-svg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1779918586/muebleNet2.react-native-tcp-socket.iml" filepath="$PROJECT_DIR$/.idea/modules/1779918586/muebleNet2.react-native-tcp-socket.iml" />
+    </modules>
+  </component>
+</project>
