@@ -52,7 +52,7 @@ const Svg = (props) => {
             return <Almacen style={props.style} />
         case "productos":
             return <Productos style={props.style} />
-        case "ventas":
+        case "realizar ventas":
             return <Ventas style={props.style} />
         case "arreglo":
             return <Arreglo style={props.style} />

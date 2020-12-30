@@ -1,6 +1,10 @@
 const initialState = {
     estado: "Not Found",
     dataVentaPendiente: false,
+    dataVentaDatosPendiente: false,
+    dataVentaDatosFinalizado: false,
+    dataVentaCargoCompra: {},
+    dataVentaTrabajo: {},
     dataCredito: {},
     dataVentaFinalizado: false,
     dataVentaProducto: {},
@@ -13,8 +17,17 @@ export default (state, action) => {
             case "addVenta":
                 addVenta(state, action);
                 break;
+            case "addVentaTrabajo":
+                addVentaTrabajo(state, action);
+                break; u
             case "getVentaPendiente":
                 getVentaPendiente(state, action);
+                break;
+            case "getVentaDatosRellenar":
+                getVentaDatosRellenar(state, action);
+                break;
+            case "getVentaDatosRellenado":
+                getVentaDatosRellenado(state, action);
                 break;
             case "finalizarVenta":
                 finalizarVenta(state, action);
@@ -35,8 +48,8 @@ export default (state, action) => {
 }
 const update = (state, action) => {
     for (const key in state) {
-        if (key===action.modelo) {
-            state[key]=action.data
+        if (key === action.modelo) {
+            state[key] = action.data
             break
         }
     }
@@ -58,6 +71,16 @@ const addVenta = (state, action) => {
         state.data = action.data
     }
 }
+const addVentaTrabajo = (state, action) => {
+    state.estado = action.estado
+    state.type = action.type
+    if (action.estado === "exito") {
+
+    }
+    if (action.estado === "actualizar") {
+        state.data = action.data
+    }
+}
 const getVentaPendiente = (state, action) => {
     state.estado = action.estado
     state.type = action.type
@@ -71,6 +94,52 @@ const getVentaPendiente = (state, action) => {
     }
     if (action.estado === "actualizar") {
         state.data = action.data
+    }
+}
+const getVentaDatosRellenado = (state, action) => {
+    state.estado = action.estado
+    state.type = action.type
+    if (action.estado === "exito") {
+        if (!state.dataVentaDatosFinalizado || action.data.length === 0) {
+            state.dataVentaDatosFinalizado = {}
+        }
+        action.data.map((obj) => {
+            var totalMonto = 0
+            var totalCompras = 0
+
+            obj.venta_cargo_compra.map((data) => {
+                var personas = data.persona[0]
+                data.persona = personas
+                totalMonto=totalMonto+data.monto
+                state.dataVentaCargoCompra[data.key_venta] = data
+            })
+            obj.ventatrabajo.map((data) => {
+                var trabajo = data.trabajos[0]
+                data.trabajos = trabajo
+                state.dataVentaTrabajo[data.key_venta] = data
+            })
+            if (obj.ventascompras !== null) {
+                obj.ventascompras.map((data) => {
+                    totalCompras = totalCompras + data.precio
+                })
+            }
+            obj["totalCompras"] = totalCompras
+            obj["totalMonto"] = totalMonto
+            state.dataVentaDatosFinalizado[obj.key] = obj
+
+        })
+    }
+}
+const getVentaDatosRellenar = (state, action) => {
+    state.estado = action.estado
+    state.type = action.type
+    if (action.estado === "exito") {
+        if (!state.dataVentaDatosPendiente || action.data.length === 0) {
+            state.dataVentaDatosPendiente = {}
+        }
+        action.data.map((obj) => {
+            state.dataVentaDatosPendiente[obj.key] = obj
+        })
     }
 }
 const finalizarVenta = (state, action) => {

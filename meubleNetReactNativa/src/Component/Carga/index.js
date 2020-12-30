@@ -81,9 +81,31 @@ const Carga = (props) => {
         if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaPendiente") {
             return <View />
         }
-       
         if (!props.state.ventaReducer.dataVentaPendiente) {
             props.getVentaPendiente(props.state.socketReducer.socket);
+            return <View />
+        }
+         if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenar") {
+            return <View />
+        }
+        if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaFinalizado") {
+            return <View />
+        }
+        
+        if (!props.state.ventaReducer.dataVentaFinalizado) {
+            props.getVentaFinalizado(props.state.socketReducer.socket);
+            return <View />
+        }
+        if (!props.state.ventaReducer.dataVentaDatosPendiente) {
+            props.getVentaDatosRellenar(props.state.socketReducer.socket);
+            return <View />
+        }
+         if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenado") {
+            return <View />
+        }
+       
+        if (!props.state.ventaReducer.dataVentaDatosFinalizado) {
+            props.getVentaDatosRellenado(props.state.socketReducer.socket);
             return <View />
         }
        

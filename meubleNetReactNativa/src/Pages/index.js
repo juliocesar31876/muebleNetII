@@ -14,7 +14,9 @@ import RellenarDatoVentaPage from './RellenarDatoVentaPage';
 import MenuDatoVentaPage from './RellenarDatoVentaPage/MenuDatoVentaPage';
 import VentaPerdidaPage from './RellenarDatoVentaPage/VentaPerdidaPage';
 import VentaTrabajoPage from './RellenarDatoVentaPage/VentaTrabajoPage';
-import VentaCompraPage from './RellenarDatoVentaPage/VentaCompraPage';
+import VentaComprasPage from './RellenarDatoVentaPage/VentaComprasPage';
+import MenuReporteVentaPage from './MenuReporteVentaPage';
+import InformeVentaPage from './MenuReporteVentaPage/InformeVentaPage';
 export const getPages = () => {
     return {
         CargaPage,
@@ -28,11 +30,13 @@ export const getPages = () => {
         AlmacenPage,
         ReporteVentaPage,
         VistaProductoPage,
-        VentaProductoPage, 
+        VentaProductoPage,
         RellenarDatoVentaPage,
         MenuDatoVentaPage,
-        VentaCompraPage,
         VentaPerdidaPage,
-        VentaTrabajoPage   
+        VentaTrabajoPage,
+        MenuReporteVentaPage,
+        InformeVentaPage,
+        VentaComprasPage
     }
 }

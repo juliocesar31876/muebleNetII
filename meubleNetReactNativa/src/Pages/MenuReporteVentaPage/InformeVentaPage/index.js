@@ -1,58 +1,45 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-    Text,
     View,
-    TouchableOpacity,
-    TextInput,
     StyleSheet,
-    ScrollView
+    ScrollView,
+    TouchableOpacity,
+    Text
 } from 'react-native';
-import * as usuarioActions from '../../Actions/usuarioActions'
-import * as ventaActions from '../../Actions/ventaActions'
-import Barra from '../../Component/Barra';
-import Svg from '../../Svg';
+import Svg from '../../../Svg';
+import * as usuarioActions from '../../../Actions/usuarioActions'
+import Barra from '../../../Component/Barra';
 import moment from 'moment';
-class RellenarDatoVentaPage extends Component {
+class InformeVentaPage extends Component {
     static navigationOptions = {
         headerShown: false,
     }
     constructor(props) {
         super(props);
         this.state = {
-            titulo: "Datos faltantes rellenar ventas",
+            titulo: "Informe venta",
+            menu: ["Reporte ventas", "Datos ventas faltante", "Informe venta"]
+
         }
     }
-    render() {
 
-        
+    render() {
         return (
             <View style={{
                 flex: 1,
                 backgroundColor: '#000',
             }}>
                 <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
-                <TouchableOpacity
-                    onPress={() => {
-                        this.props.getVentaDatosRellenar(this.props.state.socketReducer.socket);
-                    }}
-                    style={{ width: 40, height: 40, position: "absolute", top: 4, right: 10 }}>
-                    <Svg name={"actualizarVista"}
-                        style={{
-                            width: 30,
-                            height: 30,
-                            fill: "#fff",
-                            margin: 5,
-                        }} />
-                </TouchableOpacity>
+
                 <ScrollView style={{ flex: 1, width: "100%", }}>
                     <View style={{ width: "100%", margin: 5, flex: 1, alignItems: 'center', }}>
-                        {Object.keys(this.props.state.ventaReducer.dataVentaDatosPendiente).map((key) => {
-                            var obj = this.props.state.ventaReducer.dataVentaDatosPendiente[key]
+                        {Object.keys(this.props.state.ventaReducer.dataVentaDatosFinalizado).map((key) => {
+                            var obj = this.props.state.ventaReducer.dataVentaDatosFinalizado[key]
                             var fecha = moment(obj.fecha_on, "YYYY-MM-DD").format("DD/MM/YYYY");
                             return (
                                 <TouchableOpacity
-                                    onPress={() => this.props.navigation.navigate("MenuDatoVentaPage", { venta: obj ,mostrar:true})}
+                                    onPress={() => this.props.navigation.navigate("MenuDatoVentaPage", { venta: obj,mostrar:false })}
                                     style={{ width: "90%", borderBottomWidth: 2, borderColor: "#666", margin: 5, borderRadius: 10, flexDirection: 'row', }}>
                                     <View style={{ flex: 1, }}>
                                         <Text style={{ color: "#fff", fontSize: 11, flex: 1, margin: 5, }}> Cliente :   {obj.cliente} </Text>
@@ -81,6 +68,7 @@ class RellenarDatoVentaPage extends Component {
                 </ScrollView>
 
 
+
             </View>
         );
     }
@@ -106,10 +94,9 @@ const styles = StyleSheet.create({
     },
 });
 const initActions = ({
-    ...usuarioActions,
-    ...ventaActions
+    ...usuarioActions
 });
 const initStates = (state) => {
     return { state }
 };
-export default connect(initStates, initActions)(RellenarDatoVentaPage);
+export default connect(initStates, initActions)(InformeVentaPage);

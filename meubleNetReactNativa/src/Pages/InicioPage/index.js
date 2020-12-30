@@ -9,7 +9,6 @@ import {
     ScrollView,
     FlatList
 } from 'react-native';
-import NaviDrawer from '../../Component/NaviDrawer';
 import Barra from '../../Component/Barra';
 import Svg from '../../Svg';
 class InicioPage extends Component {
@@ -23,7 +22,7 @@ class InicioPage extends Component {
         var areaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[key_area_trabajo].nombre
         arrayMenu = []
         if (areaTrabajo === "administrador") {
-            arrayMenu = [ "productos","personales","ventas","reporte ventas"];
+            arrayMenu = ["productos", "personales", "realizar ventas", "reporte ventas","compras"];
         }
         if (areaTrabajo === "compras") {
             arrayMenu = ["compras"];
@@ -69,14 +68,14 @@ class InicioPage extends Component {
             case "compras":
                 this.props.navigation.navigate("ComprasPage", { pagina: item })
                 return <View />
-            case "ventas":
+            case "realizar ventas":
                 this.props.navigation.navigate("VentasPage", { pagina: item })
                 return <View />
             case "almacen":
                 this.props.navigation.navigate("AlmacenPage", { pagina: item })
                 return <View />
             case "reporte ventas":
-                this.props.navigation.navigate("RellenarDatoVentaPage", { pagina: item })
+                this.props.navigation.navigate("MenuReporteVentaPage", { pagina: item })
                 return <View />
             case "salir":
                 AsyncStorage.removeItem('usuario')
@@ -123,8 +122,6 @@ class InicioPage extends Component {
                                 color: "#fff",
                                 fontWeight: 'bold',
                             }}>{item.toLowerCase()}</Text>
-
-
                         </TouchableOpacity>
                     )}
                     numColumns={2}
@@ -150,11 +147,8 @@ class InicioPage extends Component {
                 </TouchableOpacity>
             </View>
         )
-
     }
     render() {
-
-
         return (
             <View
                 style={{
@@ -178,14 +172,7 @@ class InicioPage extends Component {
                         {this.Menu()}
                     </View>
                 </ScrollView>
-                <NaviDrawer
-                    isOpen={this.state.isOpen}
-                    onChange={this.handleChange}
-                    pag={"InicioPage"}
-                    nav={this.props.navigation} />
             </View>
-
-
         );
     }
 };

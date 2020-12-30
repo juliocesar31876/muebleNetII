@@ -17,24 +17,10 @@ const VentasFinalizados = (props) => {
             fechaFin: false
         },
     })
-    if (props.state.sucursalReducer.estado === "cargando" && props.state.sucursalReducer.type === "getAllSucursal") {
-        return <Estado estado={"cargando"} />
-    }
-    if (!props.state.sucursalReducer.dataSucursal) {
-        props.getAllSucursal(props.state.socketReducer.socket);
-        return <View />
-    }
-    if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaFinalizado") {
-        return <Estado estado={"cargando"} />
-    }
+  
     if (props.state.ventaReducer.estado === "exito" && props.state.ventaReducer.type === "finalizarVenta") {
         props.state.ventaReducer.estado = ""
     }
-    if (!props.state.ventaReducer.dataVentaFinalizado) {
-        props.getVentaFinalizado(props.state.socketReducer.socket);
-        return <View />
-    }
-
     const popupCalendario = () => {
         props.abrirPopupCalendario((fechaSelecionada) => {
             state.fecha.value = fechaSelecionada.format('MMMM').toUpperCase()

@@ -175,6 +175,11 @@ class VentaTrabajoPage extends Component {
         console.log(this.state.dataTrabajo[key].armador[num]);
     }
     render() {
+        if (this.props.state.ventaReducer.estado === "exito" && this.props.state.ventaReducer.type === "addVentaTrabajo") {
+            this.props.getVentaDatosRellenado(this.props.state.socketReducer.socket);
+            this.props.navigation.goBack()
+            return <View />
+        }
         return (
             <View style={{ flex: 1, backgroundColor: "#000", }}>
                 <Barra titulo={"Venta Trabajo"} navigation={this.props.navigation} />
@@ -187,12 +192,13 @@ class VentaTrabajoPage extends Component {
                                 <View style={{ width: "100%", flexDirection: 'row', borderBottomWidth: 1, borderColor: "#fff", alignItems: 'center', padding: 5 }}>
                                     <View style={{ flex: 1, }}>
                                         <Text style={{ color: '#fff', margin: 2, fontSize: 12, }}>{objProducto.nombre.toUpperCase()}</Text>
-                                        <Text style={{ color: '#fff', margin: 2, fontSize: 12 }}>Total : {(objProducto.precio_venta * objProducto.cantidad)} Bs</Text>
+                                        <Text style={{ color: '#fff', margin: 2, fontSize: 12 }}>PrecioVenta : {objProducto.precio_venta} Bs</Text>
+                                        <Text style={{ color: '#fff', margin: 2, fontSize: 12 }}>PrecioProduccion : {objProducto.precio_produccion} Bs</Text>
                                     </View>
-                                    <View style={{ flex: 0.5, }}>
-                                        <Text style={{ color: '#fff', margin: 2, fontSize: 12 }}>Prec : {objProducto.precio_venta} Bs</Text>
+                                    <View style={{ flex: 0.7, }}>
                                         <Text style={{ color: '#fff', margin: 2, fontSize: 12 }}>Cant : {objProducto.cantidad}</Text>
                                         <Text style={{ color: '#fff', margin: 2, fontSize: 12 }}>Desc : {objProducto.descuento} %</Text>
+                                        <Text style={{ color: '#fff', margin: 2, fontSize: 12 }}>Total : {(objProducto.precio_venta * objProducto.cantidad)} Bs</Text>
                                     </View>
                                 </View>
                             )

@@ -57,6 +57,44 @@ export const getVentaPendiente = (socket) => async (dispatch) => {
         estado: "cargando"
     })
 }
+export const getVentaDatosRellenado = (socket) => async (dispatch) => {
+    var objToSend = {
+        component: "venta",
+        type: "getVentaDatosRellenado",
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
+export const getVentaDatosRellenar = (socket) => async (dispatch) => {
+    var objToSend = {
+        component: "venta",
+        type: "getVentaDatosRellenar",
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
 export const finalizarVenta = (socket,datos) => async (dispatch) => {
     var objToSend = {
         component: "venta",
