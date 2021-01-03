@@ -22,7 +22,7 @@ class InicioCompraPage extends Component {
         var areaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[key_area_trabajo].nombre
         arrayMenu = []
         if (areaTrabajo === "compras") {
-            arrayMenu = ["compras empresa", "Ver libro compras"];
+            arrayMenu = [ "Ver libro compras"];
         }
         this.state = {
             isOpen: false,

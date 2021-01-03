@@ -25,9 +25,15 @@ class ListaComprasPage extends Component {
         var compras = props.navigation.state.params.comprasLibro.compra
         var persona = props.navigation.state.params.persona
         var area = props.navigation.state.params.area
+        var usuario = props.state.usuarioReducer.usuarioLog
+        var personaUsuario = props.state.usuarioReducer.usuarioLog.persona
+        var area_trabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[personaUsuario.key_area_trabajo].nombre
         var menu = ["Finzalizar libro", "Registrar ingreso"]
-        if (area === "compras") {
+        if (area_trabajo === "compras") {
             menu = ["Realizar Compras"]
+        }
+        if (area_trabajo === "administrador") {
+            menu = ["Agregar ingreso", "Finalizar libro"]
         }
         if (compras === null) {
             compras = []
@@ -44,6 +50,16 @@ class ListaComprasPage extends Component {
     }
 
     render() {
+        if (this.props.state.comprasReducer.estado === "exito" && this.props.state.comprasReducer.type === "finalizarLibroComprasIngreso") {
+            this.props.state.comprasReducer.estado = ""
+            this.props.state.comprasReducer.type = ""
+            this.props.navigation.goBack()
+        }
+          if (this.props.state.comprasReducer.estado === "actualizar" && this.props.state.comprasReducer.type === "finalizarLibroComprasIngreso") {
+            this.props.state.comprasReducer.estado = ""
+            this.props.state.comprasReducer.type = ""
+            this.props.navigation.goBack()
+        }
         return (
             <View style={{
                 flex: 1,
@@ -55,11 +71,14 @@ class ListaComprasPage extends Component {
                     <View style={{ width: "100%", margin: 5, flex: 1, alignItems: 'center', }}>
                         <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}> Muestra el libro de compras</Text>
                         <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
-                            Saldo disponible : {(this.state.comprasLibro.totalIngreso - this.state.comprasLibro.totalCompras)} </Text>
-                        <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
-                            Fecha ingresado saldo  </Text>
+                            Saldo disponible : {(this.state.comprasLibro.totalIngreso - this.state.comprasLibro.totalCompras)}  Bs</Text>
+
                         <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
                             Total Ingreso {this.state.comprasLibro.totalIngreso}  Bs</Text>
+                        <Text style={{ color: '#999', textAlign: 'left', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
+                            Total Egreso {this.state.comprasLibro.totalCompras} Bs</Text>
+                        <Text style={{ color: '#999', textAlign: 'center', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
+                            Fecha ingresado saldo  </Text>
                         {this.state.ingreso.map((ingreso, key) => {
                             var pago = "efectivo"
                             if (ingreso.pago) {
@@ -73,11 +92,15 @@ class ListaComprasPage extends Component {
                                     style={{ width: "100%", borderBottomWidth: 2, borderColor: "#666", margin: 5, borderRadius: 10, height: 50, alignItems: 'center', justifyContent: 'center', }}>
                                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center', }}>
                                         <View style={{ flex: 1, width: '100%', flexDirection: 'row', }}>
-                                            <Text style={{ flex: 0.6, color: '#fff', fontWeight: 'bold', margin: 5, }}> {fecha}  {pago}  </Text>
+                                            <Text style={{ flex: 0.6, color: '#fff', fontWeight: 'bold', margin: 5, fontSize: 12, }}> {fecha}  {pago}  </Text>
                                             <Text style={{
                                                 flex: 0.4, color: '#fff', fontWeight: 'bold', margin: 5,
                                                 textAlign: 'center', fontSize: 12,
                                             }}>{ingreso.monto} Bs    </Text>
+                                            <Text style={{
+                                                flex: 0.4, color: '#fff', fontWeight: 'bold', margin: 5,
+                                                textAlign: 'center', fontSize: 12,
+                                            }}>Hora: {hora}    </Text>
                                         </View>
 
                                     </View>
@@ -86,6 +109,7 @@ class ListaComprasPage extends Component {
                         })}
                         <Text style={{ color: '#999', textAlign: 'center', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
                             Compras Ingreo - egreso</Text>
+
                         <View style={{ width: '100%', flexDirection: 'row', marginTop: 10, alignItems: 'center', }}>
 
                             <View style={{ flex: 0.6, flexDirection: 'row', alignItems: 'center', }}>
@@ -107,7 +131,7 @@ class ListaComprasPage extends Component {
                             var numero = (key + 1)
                             var fecha = compras.fecha_on.split("T")[0]
                             var hora = compras.fecha_on.split("T")[1]
-                            var colors = "#fff"
+                            var colors = "#999"
                             var cantidad = 0
                             var precio = 0
                             var detalleCompra = ""
@@ -149,8 +173,12 @@ class ListaComprasPage extends Component {
                         })}
                     </View>
                 </ScrollView>
-                <View style={{ width: '100%', height: 80, alignItems: 'center', }}>
+                <View style={{ width: '100%', height: 80, alignItems: 'center', flexDirection: 'row', }}>
                     {this.state.menu.map((text) => {
+                        var icono = "add"
+                        if (text === "Finalizar libro") {
+                            icono = "cerrar"
+                        }
                         return (
                             <View style={{ flex: 1, alignItems: 'center', height: 70, }}>
                                 <TouchableOpacity
@@ -160,13 +188,36 @@ class ListaComprasPage extends Component {
                                                 this.props.navigation.navigate("ComprasPage",
                                                     { key_compras_libro: this.state.comprasLibro.key, objCompralibro: this.state.comprasLibro })
                                                 return <View />
-
+                                            case "Finalizar libro":
+                                                this.props.navigation.navigate("AddSaldoCompradorPage",
+                                                    {
+                                                        key_compras_libro: this.state.comprasLibro.key,
+                                                        objCompralibro: this.state.comprasLibro,
+                                                        persona: this.state.persona,
+                                                        area: this.state.area,
+                                                        finalizo: true,
+                                                        nuevo: false,
+                                                        saldo: (this.state.comprasLibro.totalIngreso - this.state.comprasLibro.totalCompras)
+                                                    })
+                                                return <View />
+                                            case "Agregar ingreso":
+                                                this.props.navigation.navigate("AddSaldoCompradorPage",
+                                                    {
+                                                        key_compras_libro: this.state.comprasLibro.key,
+                                                        objCompralibro: this.state.comprasLibro,
+                                                        persona: this.state.persona,
+                                                        area: this.state.area,
+                                                        finalizo: false,
+                                                        nuevo: false,
+                                                        saldo: (this.state.comprasLibro.totalIngreso - this.state.comprasLibro.totalCompras)
+                                                    })
+                                                return <View />
                                             default:
                                                 return <View />
                                         }
                                     }}
                                     style={{ width: 100, height: 50, margin: 5, borderRadius: 100, alignItems: 'center', }}>
-                                    <Svg name={'add'}
+                                    <Svg name={icono}
                                         style={{
                                             width: 40,
                                             height: 40,
@@ -174,7 +225,7 @@ class ListaComprasPage extends Component {
                                             margin: 5,
                                         }} />
                                     <Text style={{
-                                        color: '#fff', fontWeight: 'bold', margin: 5,
+                                        color: '#fff', fontWeight: 'bold', margin: 5, width: '100%', textAlign: 'center',
                                         fontSize: 10,
                                     }}> {text}    </Text>
                                 </TouchableOpacity>

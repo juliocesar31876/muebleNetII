@@ -12,8 +12,6 @@ import Svg from '../../../Svg';
 import * as usuarioActions from '../../../Actions/usuarioActions'
 import * as popupActions from '../../../Actions/popupActions'
 import Barra from '../../../Component/Barra';
-import moment from 'moment';
-import MiCheckBox from '../../../Component/MiCheckBox';
 class VerLibroComprasPage extends Component {
     static navigationOptions = {
         headerShown: false,
@@ -22,11 +20,14 @@ class VerLibroComprasPage extends Component {
         super(props);
         var persona = props.navigation.state.params.persona
         var area = props.navigation.state.params.area
+        var personaUsuario = props.state.usuarioReducer.usuarioLog.persona
+        var area_trabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[personaUsuario.key_area_trabajo].nombre
         this.state = {
             titulo: "Ver libro compras",
             menu: ["Reporte ventas", "Datos ventas faltante", "Informe venta"],
             persona,
-            area
+            area,
+            area_trabajo
         }
     }
 
@@ -40,9 +41,9 @@ class VerLibroComprasPage extends Component {
 
                 <ScrollView style={{ flex: 1, width: "100%", }}>
                     <View style={{ width: "100%", margin: 5, flex: 1, alignItems: 'center', }}>
-                    <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}> Muestra el libro de compras</Text>
-                        <Text style={{ width: '90%', color: '#999', fontWeight: 'bold', fontSize: 15, margin: 5, }}>
-                            -. Cancela un saldo a los compradores para realizar las compras de materiales  </Text>
+                        <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}> Muestra el libro de compras</Text>
+                        <Text style={{ width: '90%', color: '#999', fontWeight: 'bold', fontSize: 15, margin: 5, marginTop: 20, }}>
+                            Lista de libro de compras  </Text>
                         {Object.keys(this.props.state.comprasReducer.dataLibroComprasPendiente).map((key) => {
                             var obj = this.props.state.comprasReducer.dataLibroComprasPendiente[key]
                             var fecha = obj.fecha_on.split("T")[0]
@@ -73,17 +74,24 @@ class VerLibroComprasPage extends Component {
                         })}
                     </View>
                 </ScrollView>
-                <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("AddSaldoCompradorPage", { persona: this.state.persona, area: this.state.area, nuevo: true, finalizo: false })}
-                    style={{ width: 50, height: 50, margin: 5, borderRadius: 100, }}>
-                    <Svg name={'add'}
-                        style={{
-                            width: 50,
-                            height: 50,
-                            fill: "#999",
-                            margin: 5,
-                        }} />
-                </TouchableOpacity>
+                {this.state.area_trabajo === "administrador" ?
+                    (
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate("AddSaldoCompradorPage", { persona: this.state.persona, area: this.state.area, nuevo: true, finalizo: false })}
+                            style={{ width: 50, height: 50, margin: 5, borderRadius: 100, }}>
+                            <Svg name={'add'}
+                                style={{
+                                    width: 50,
+                                    height: 50,
+                                    fill: "#999",
+                                    margin: 5,
+                                }} />
+                        </TouchableOpacity>
+                    )
+                    :
+                    (
+                        <View />
+                    )}
             </View>
         );
     }

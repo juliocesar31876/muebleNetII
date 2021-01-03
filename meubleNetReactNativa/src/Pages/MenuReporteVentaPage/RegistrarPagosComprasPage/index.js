@@ -88,8 +88,7 @@ class RegistrarPagosComprasPage extends Component {
                 <ScrollView style={{ flex: 1, width: "100%", }}>
                     <View style={{ width: "100%", margin: 5, flex: 1, alignItems: 'center', }}>
                         <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}> Cancelar saldo para compras </Text>
-                        <Text style={{ width: '90%', color: '#999', fontWeight: 'bold', fontSize: 15, margin: 5, }}>
-                            -. Cancela un saldo a los compradores para realizar las compras de materiales  </Text>
+                        
                         {Object.keys(this.props.state.personaReducer.dataPersonas).map((key) => {
                             var persona = this.props.state.personaReducer.dataPersonas[key]
                             var area = this.props.state.areaTrabajoReducer.dataAreaTrabajo[persona.key_area_trabajo].nombre
@@ -99,9 +98,9 @@ class RegistrarPagosComprasPage extends Component {
                             return (
                                 <TouchableOpacity
                                     onPress={() => this.props.navigation.navigate("VerLibroComprasPage", { persona, area })}
-                                    style={{ width: "90%", borderBottomWidth: 2, borderColor: "#666", margin: 5, borderRadius: 10, }}>
-                                    <Text style={{ color: '#fff', fontWeight: 'bold', }}> Comprad(a) :  {persona.nombre + " " + persona.paterno}</Text>
-                                    <Text style={{ color: '#fff', fontWeight: 'bold', }}> CI :  {persona.ci}</Text>
+                                    style={{ width: "90%", borderBottomWidth: 2, borderColor: "#666", margin: 2, borderRadius: 10, padding:5}}>
+                                    <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5,}}> Comprad(a) :  {persona.nombre + " " + persona.paterno}</Text>
+                                    <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5,}}> CI :  {persona.ci}</Text>
                                 </TouchableOpacity>
                             )
                         })}

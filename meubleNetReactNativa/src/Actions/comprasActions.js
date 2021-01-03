@@ -42,6 +42,48 @@ export const addLibroCompras = (socket, datos) => async (dispatch) => {
         estado: "cargando"
     })
 }
+export const addLibroComprasIngreso = (socket, datos) => async (dispatch) => {
+    var objToSend = {
+        component: "compras",
+        type: "addLibroComprasIngreso",
+        data: datos,
+        mensaje: "",
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
+export const finalizarLibroComprasIngreso = (socket, datos) => async (dispatch) => {
+    var objToSend = {
+        component: "compras",
+        type: "finalizarLibroComprasIngreso",
+        data: datos,
+        mensaje: "",
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
 export const getComprasFecha = (socket,datos) => async (dispatch) => {
     var objToSend = {
         component: "compras",
