@@ -4,6 +4,7 @@ const initialState = {
     dataVentaDatosPendiente: false,
     dataVentaDatosFinalizado: false,
     dataVentaCargoCompra: {},
+    dataComprasPendienteVenta: false,
     dataVentaTrabajo: {},
     dataCredito: {},
     dataVentaFinalizado: false,
@@ -41,6 +42,9 @@ export default (state, action) => {
             case "update":
                 update(state, action);
                 break;
+            case "getAllCompraPendienteVenta":
+                getAllCompraPendienteVenta(state, action);
+                break;
         }
         state = { ...state };
     }
@@ -75,7 +79,14 @@ const addVentaTrabajo = (state, action) => {
     state.estado = action.estado
     state.type = action.type
     if (action.estado === "exito") {
-
+        var data = {}
+        Object.keys(state.dataVentaDatosPendiente).map((key) => {
+            var obj = state.dataVentaDatosPendiente[key]
+            if (action.data.key_venta !== key) {
+                data[obj.key_venta] = obj
+            }
+        })
+        state.dataVentaDatosPendiente = data
     }
     if (action.estado === "actualizar") {
         state.data = action.data
@@ -104,29 +115,12 @@ const getVentaDatosRellenado = (state, action) => {
             state.dataVentaDatosFinalizado = {}
         }
         action.data.map((obj) => {
-            var totalMonto = 0
-            var totalCompras = 0
-
-            obj.venta_cargo_compra.map((data) => {
-                var personas = data.persona[0]
-                data.persona = personas
-                totalMonto=totalMonto+data.monto
-                state.dataVentaCargoCompra[data.key_venta] = data
-            })
             obj.ventatrabajo.map((data) => {
                 var trabajo = data.trabajos[0]
                 data.trabajos = trabajo
                 state.dataVentaTrabajo[data.key_venta] = data
             })
-            if (obj.ventascompras !== null) {
-                obj.ventascompras.map((data) => {
-                    totalCompras = totalCompras + data.precio
-                })
-            }
-            obj["totalCompras"] = totalCompras
-            obj["totalMonto"] = totalMonto
             state.dataVentaDatosFinalizado[obj.key] = obj
-
         })
     }
 }
@@ -137,6 +131,7 @@ const getVentaDatosRellenar = (state, action) => {
         if (!state.dataVentaDatosPendiente || action.data.length === 0) {
             state.dataVentaDatosPendiente = {}
         }
+        state.dataVentaDatosPendiente = {}
         action.data.map((obj) => {
             state.dataVentaDatosPendiente[obj.key] = obj
         })
@@ -188,5 +183,17 @@ const getVentaFecha = (state, action) => {
     }
     if (action.estado === "actualizar") {
         state.data = action.data
+    }
+}
+const getAllCompraPendienteVenta = (state, action) => {
+    state.estado = action.estado
+    state.type = action.type
+    if (action.estado === "exito") {
+        if (!state.dataComprasPendienteVenta || action.data.length === 0) {
+            state.dataComprasPendienteVenta = {}
+        }
+        action.data.map((obj) => {
+            state.dataComprasPendienteVenta[obj.key] = obj
+        })
     }
 }

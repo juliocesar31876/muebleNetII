@@ -167,3 +167,23 @@ export const update = (datos,modelo) => async (dispatch) => {
         estado: "cargando"
     })
 }
+export const getAllCompraPendienteVenta = (socket,data) => async (dispatch) => {
+    var objToSend = {
+        component: "venta",
+        type: "getAllCompraPendienteVenta",
+        data,
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}

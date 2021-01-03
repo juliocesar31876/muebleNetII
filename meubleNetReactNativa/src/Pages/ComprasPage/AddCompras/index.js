@@ -9,15 +9,7 @@ import moment from 'moment';
 const AddCompras = (props) => {
     const state2 = {
         obj: {
-            nombre: {
-                value: "",
-                error: false
-            },
-            descripcion: {
-                value: "",
-                error: false
-            },
-            precio: {
+            detalle: {
                 value: "",
                 error: false
             },
@@ -25,23 +17,17 @@ const AddCompras = (props) => {
                 value: "",
                 error: false
             },
+            precio: {
+                value: "",
+                error: false
+            },
         },
-        key_sucursal: {
-            value: "Selecione sucursal",
-            error: false
-        },
+
     }
     const [state, setstate] = React.useState({
         obj: {
-            nombre: {
-                value: "",
-                error: false
-            },
-            descripcion: {
-                value: "",
-                error: false
-            },
-            precio: {
+
+            detalle: {
                 value: "",
                 error: false
             },
@@ -49,11 +35,12 @@ const AddCompras = (props) => {
                 value: "",
                 error: false
             },
+            precio: {
+                value: "",
+                error: false
+            },
         },
-        key_sucursal: {
-            value: "Selecione sucursal",
-            error: false
-        },
+
     })
     if (!props.state.socketReducer.socket) {
         return <Estado estado={"Reconectando"} />
@@ -63,62 +50,9 @@ const AddCompras = (props) => {
             props.state.comprasReducer.estado = ""
             props.state.comprasReducer.type = ""
             setstate({ ...state2 })
-        }
-    }
-    const popupSucursal = () => {
-        if (Object.keys(props.state.sucursalReducer.dataSucursal).length === 0) {
-            alert("agregue un tipo de producto")
+            props.navigation.goBack()
             return <View />
         }
-        const selecSucursal = (obj) => {
-            state.key_sucursal.value = obj.direccion
-            state.key_sucursal.error = false
-            state.key_sucursal["data"] = obj
-            setstate({ ...state })
-            props.cerrarPopup()
-        }
-        props.abrirPopup(() => {
-            return (
-                <View style={{
-                    width: "90%",
-                    height: "80%",
-                    backgroundColor: "#ffffff66",
-                    borderRadius: 10,
-                }}>
-                    <ScrollView style={{ flex: 1, }}>
-                        <View style={{
-                            flex: 1,
-                            margin: 10,
-                            width: "100%",
-                            alignItems: 'center',
-                        }}>
-                            {Object.keys(props.state.sucursalReducer.dataSucursal).map((key) => {
-                                var obj = props.state.sucursalReducer.dataSucursal[key]
-                                return (
-                                    <TouchableOpacity
-                                        onPress={() => selecSucursal(obj)}
-                                        style={{
-                                            margin: 5,
-                                            width: "90%",
-                                            height: 50,
-                                            borderRadius: 10,
-                                            borderWidth: 3,
-                                            flexDirection: 'row',
-                                            borderColor: "#fff",
-                                            alignItems: 'center',
-                                            backgroundColor: "#000",
-
-                                        }}>
-                                        <Text style={{ margin: 4, color: "#666" }}>Sucursal :</Text>
-                                        <Text style={{ margin: 4, color: "#fff", fontSize: 12, textAlign: "center", flex: 1, }}>{obj.direccion}</Text>
-                                    </TouchableOpacity>
-                                )
-                            })}
-                        </View>
-                    </ScrollView>
-                </View>
-            )
-        })
     }
     const hanlechage = (data) => {
         state.obj[data.id] = {
@@ -130,7 +64,11 @@ const AddCompras = (props) => {
     const addCompras = () => {
         var exito = true
         var data = {}
-        data["fecha_compra"] = moment().format('YYYY-MM-DD');
+        var fecha = moment()
+            .format('YYYY-MM-DD');
+        var hora = moment()
+            .format('HH:mm:ss');
+        var fecha_on = fecha + "T" + hora
         for (const key in state.obj) {
             var obj = state.obj[key]
             if (obj.value === "") {
@@ -141,17 +79,24 @@ const AddCompras = (props) => {
             }
         }
         setstate({ ...state })
+        var total = (state.obj.cantidad.value * state.obj.precio.value)
+        var saldo = props.params.objCompralibro.totalIngreso - props.params.objCompralibro.totalCompras
+
         if (exito) {
-            data["key_persona"] = props.state.usuarioReducer.usuarioLog.persona.key
-            data["key_sucursal"] = state.key_sucursal.data.key
-            data["estado"] = 1
+            if (total > saldo) {
+                alert("No tiene saldo suficiente para realizar compras\n" + "Hable con el administrador para que realize un pago\nY seguir con sus compras")
+                return <View />
+            }
+            data["fecha_on"] = fecha_on
+            data["key_compras_libro"] = props.params.key_compras_libro
+            data["ingreso"] = false
             props.addCompras(props.state.socketReducer.socket, data)
         }
     }
     return (
         <View style={{
             flex: 1,
-            width: "80%",
+            width: "90%",
             justifyContent: 'center',
         }}>
             <ScrollView style={{ flex: 1, }}>
@@ -168,7 +113,7 @@ const AddCompras = (props) => {
                         }
                         return (
                             <View style={{
-                                width: "80%",
+                                width: "90%",
                                 margin: 1,
                             }}>
                                 <Text style={{ fontSize: 12, color: "#fff", }}>{key.toUpperCase()}</Text>
@@ -181,17 +126,6 @@ const AddCompras = (props) => {
                             </View>
                         )
                     })}
-                    <View style={{
-                        width: "80%",
-                        margin: 1,
-                    }}>
-                        <Text style={{ fontSize: 12, color: "#fff", }}>SUCURSAL</Text>
-                        <TouchableOpacity
-                            onPress={() => popupSucursal()}
-                            style={(state.key_sucursal.error ? styles.error : styles.touc)}>
-                            <Text style={{ fontSize: 10, color: "#666", }}>{state.key_sucursal.value.toUpperCase()}</Text>
-                        </TouchableOpacity>
-                    </View>
                     <View
                         style={{
                             flex: 1,
@@ -207,8 +141,8 @@ const AddCompras = (props) => {
                         {props.state.comprasReducer.estado === "cargando" && props.state.comprasReducer.type === "addCompras" ? (
                             <ActivityIndicator size="small" color="#fff" />
                         ) : (
-                                <TouchableOpacity onPress={() => addCompras()} style={{ flex: 1, alignItems: 'center',justifyContent: 'center',}}>
-                                    <Text  style={{  color: "#fff", textAlign: "center", fontSize: 15, }}>Agreagar compras</Text>
+                                <TouchableOpacity onPress={() => addCompras()} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+                                    <Text style={{ color: "#fff", textAlign: "center", fontSize: 12, }}>Agreagar compras</Text>
                                 </TouchableOpacity>
                             )
                         }

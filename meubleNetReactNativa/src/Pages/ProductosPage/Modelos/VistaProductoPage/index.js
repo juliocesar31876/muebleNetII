@@ -6,10 +6,12 @@ import {
     StyleSheet,
     ScrollView,
     Image,
+    TouchableOpacity,
 } from 'react-native';
 import * as usuarioActions from '../../../../Actions/usuarioActions'
 import Barra from '../../../../Component/Barra';
 import myPropsJulio from '../../../../nativeSocket/myPropsJulio.json'
+import Svg from '../../../../Svg';
 class VistaProductoPage extends Component {
     static navigationOptions = {
         headerShown: false,
@@ -45,13 +47,42 @@ class VistaProductoPage extends Component {
                             <Image source={{ uri: this.state.url }} style={{ width: "100%", height: "100%", fill: "#000" }} />
                         </View>
 
-                        <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}>{this.state.producto.nombre.toUpperCase()}</Text>
-                        <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 15, }}>Precio Venta : {this.state.producto.precio_venta} Bs</Text>
-                        <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 15, }}>Precio Produccion: {this.state.producto.precio_produccion} Bs</Text>
-                        <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 15, }}>{this.state.producto.descripcion} </Text>
+
+                        <View style={{ width: '100%', alignItems: 'center', marginTop: 50, }}>
+
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate("CosteProduccionPage", { producto: this.state.producto, pagina: "Coste Produccion" })}
+                                style={{
+                                    alignItems: 'center',
+                                    width: 100,
+                                    height: 50,
+                                    borderRadius: 100,
+                                    position: 'absolute',
+                                    right: 10,
+                                }}>
+                                <Svg name={"costeProduccion"}
+                                    style={{
+                                        width: 50,
+                                        height: 50,
+                                        fill: "#fff",
+                                        margin: 5,
+                                    }} />
+
+                                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 10, textAlign: 'center' }
+                                }>COSTE PRODUCCION</Text>
+                            </TouchableOpacity>
+                            <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}>{this.state.producto.nombre.toUpperCase()}</Text>
+                            <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 15, }}>Precio Venta : {this.state.producto.precio_venta} Bs</Text>
+                            <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 15, }}>Precio Produccion: {this.state.producto.precio_produccion} Bs</Text>
+                            <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 15, }}>{this.state.producto.descripcion} </Text>
+
+                        </View>
                     </View>
 
+
+
                 </ScrollView>
+
             </View>
         );
     }

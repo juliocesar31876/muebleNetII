@@ -10,6 +10,7 @@ import * as productoActions from '../../Actions/productoActions'
 import * as sucursalActions from '../../Actions/sucursalActions'
 import * as materialActions from '../../Actions/materialActions'
 import * as ventaActions from '../../Actions/ventaActions'
+import * as comprasActions from '../../Actions/comprasActions'
 
 const Carga = (props) => {
     const [obj, setObj] = React.useState(false);
@@ -24,26 +25,51 @@ const Carga = (props) => {
         if (!props.state.socketReducer.socket) {
             return <View />
         }
-        if (props.state.areaTrabajoReducer.estado === "cargando" && props.state.areaTrabajoReducer.type === "getAllAreaTrabajo") {
-            return <View />
-        }
-        if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getAllPersona") {
-            return <View />
-        }
+
+
         if (!props.state.usuarioReducer.usuarioLog) {
             props.state.usuarioReducer.estado = ""
             props.state.navigationReducer.replace("LoginPage");
             return <ShowPage />
         }
+        if (props.state.areaTrabajoReducer.estado === "cargando" && props.state.areaTrabajoReducer.type === "getAllAreaTrabajo") {
+            return <View />
+        }
         if (!props.state.areaTrabajoReducer.dataAreaTrabajo) {
             props.getAllAreaTrabajo(props.state.socketReducer.socket);
             return <View />
         }
+        if (props.state.sucursalReducer.estado === "cargando" && props.state.sucursalReducer.type === "getAllSucursal") {
+            return <View />
+        }
+        if (!props.state.sucursalReducer.dataSucursal) {
+            props.getAllSucursal(props.state.socketReducer.socket);
+            return <View />
+        }
+        /////////////area compras<
+        if (props.state.areaTrabajoReducer.dataAreaTrabajo[props.state.usuarioReducer.usuarioLog.persona.key_area_trabajo].nombre === "compras") {
+            if (props.state.comprasReducer.estado === "cargando" && props.state.comprasReducer.type === "getAllLibroComprasPendienteUsuario") {
+                return <View />
+            }
+            if (!props.state.comprasReducer.dataLibroComprasPendiente) {
+                props.getAllLibroComprasPendienteUsuario(props.state.socketReducer.socket,
+                    { key_persona: props.state.usuarioReducer.usuarioLog.persona.key });
+                return <View />
+            }
+            props.state.navigationReducer.replace("InicioCompraPage");
+            return <View />
+        }
+        /////////////area compras>
+
+
         if (props.state.productosReducer.estado === "cargando" && props.state.productosReducer.type === "getAllProducto") {
             return <View />
         }
         if (!props.state.productosReducer.dataProducto) {
             props.getAllProducto(props.state.socketReducer.socket);
+            return <View />
+        }
+        if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getAllPersona") {
             return <View />
         }
         if (!props.state.personaReducer.dataPersonas) {
@@ -57,13 +83,7 @@ const Carga = (props) => {
             props.getAllTipoProducto(props.state.socketReducer.socket);
             return <View />
         }
-        if (props.state.sucursalReducer.estado === "cargando" && props.state.sucursalReducer.type === "getAllSucursal") {
-            return <View />
-        }
-        if (!props.state.sucursalReducer.dataSucursal) {
-            props.getAllSucursal(props.state.socketReducer.socket);
-            return <View />
-        }
+        
         if (props.state.materialReducer.estado === "cargando" && props.state.materialReducer.type === "getAllTipoMaterial") {
             return <View />
         }
@@ -85,13 +105,13 @@ const Carga = (props) => {
             props.getVentaPendiente(props.state.socketReducer.socket);
             return <View />
         }
-         if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenar") {
+        if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenar") {
             return <View />
         }
         if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaFinalizado") {
             return <View />
         }
-        
+
         if (!props.state.ventaReducer.dataVentaFinalizado) {
             props.getVentaFinalizado(props.state.socketReducer.socket);
             return <View />
@@ -100,17 +120,23 @@ const Carga = (props) => {
             props.getVentaDatosRellenar(props.state.socketReducer.socket);
             return <View />
         }
-         if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenado") {
+        if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenado") {
             return <View />
         }
-       
+
         if (!props.state.ventaReducer.dataVentaDatosFinalizado) {
             props.getVentaDatosRellenado(props.state.socketReducer.socket);
             return <View />
         }
-       
+        if (props.state.comprasReducer.estado === "cargando" && props.state.comprasReducer.type === "getAllLibroComprasPendiente") {
+            return <View />
+        }
+        if (!props.state.comprasReducer.dataLibroComprasPendiente) {
+            props.getAllLibroComprasPendiente(props.state.socketReducer.socket);
+            return <View />
+        }
         props.state.navigationReducer.replace("InicioPage");
-     
+
     } else {
         const delay = ms => new Promise(res => setTimeout(res, ms));
         const yourFunction = async () => {
@@ -147,7 +173,8 @@ const initActions = ({
     ...productoActions,
     ...sucursalActions,
     ...materialActions,
-    ...ventaActions
+    ...ventaActions,
+    ...comprasActions
 
 });
 export default connect(initStates, initActions)(Carga);

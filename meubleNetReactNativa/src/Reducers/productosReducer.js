@@ -13,6 +13,9 @@ export default (state, action) => {
             case "addTipoProducto":
                 addTipoProducto(state, action);
                 break;
+            case "addCosteProduccion":
+                addCosteProduccion(state, action);
+                break;
             case "getAllTipoProducto":
                 getAllTipoProducto(state, action);
                 break;
@@ -28,7 +31,7 @@ export default (state, action) => {
     return state;
 }
 const actualizarProducto = (state, action) => {
-    state.dataProducto[action.data.key_producto].cantidad=action.data.cantidad-action.data.detalleVenta.cantidad
+    state.dataProducto[action.data.key_producto].cantidad = action.data.cantidad - action.data.detalleVenta.cantidad
 }
 const addProducto = (state, action) => {
     state.estado = action.estado
@@ -51,6 +54,15 @@ const addTipoProducto = (state, action) => {
         state.dataTipoProducto[action.data.key] = action.data
     }
 }
+const addCosteProduccion = (state, action) => {
+    state.estado = action.estado
+    state.type = action.type
+    if (action.estado === "exito") {
+        var total =state.dataProducto[action.data.key_producto].totalCosteProduccion
+        state.dataProducto[action.data.key_producto].totalCosteProduccion = total+(action.data.precio*action.data.cantidad)
+        state.dataProducto[action.data.key_producto].coste_produccion.push(action.data)
+    }
+}
 const getAllTipoProducto = (state, action) => {
     state.estado = action.estado
     state.type = action.type
@@ -60,6 +72,7 @@ const getAllTipoProducto = (state, action) => {
         }
         action.data.map((obj) => {
             state.dataTipoProducto[obj.key] = obj
+
         })
     }
 }
@@ -71,7 +84,17 @@ const getAllProducto = (state, action) => {
             state.dataProducto = {}
         }
         action.data.map((obj) => {
+            var totalCosteProduccion = 0
+            if (obj.coste_produccion === null) {
+                obj.coste_produccion = []
+            }
+            obj.coste_produccion.map((data) => {
+                var cantidad = Number(data.cantidad)
+                totalCosteProduccion = totalCosteProduccion + (data.precio * cantidad)
+            })
+            obj["totalCosteProduccion"] = totalCosteProduccion
             state.dataProducto[obj.key] = obj
+
         })
     }
 }

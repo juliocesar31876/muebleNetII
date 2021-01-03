@@ -37,7 +37,6 @@ class VentaTrabajoPage extends Component {
             compra: {
                 nombrePersona: "Selecione Comprador",
                 key_persona: false,
-                monto: "",
             },
             dataTrabajo
         };
@@ -133,10 +132,6 @@ class VentaTrabajoPage extends Component {
         })
         if (!this.state.compra.key_persona) {
             error = "selecion comprador "
-            exito = false
-        }
-        if (this.state.compra.monto === "") {
-            error = "inserte monto  "
             exito = false
         }
         if (exito) {
@@ -272,16 +267,6 @@ class VentaTrabajoPage extends Component {
                             style={{ justifyContent: 'center', alignItems: 'center', width: '80%', height: 40, backgroundColor: "#fff", borderRadius: 10, }}>
                             <Text>{this.state.compra.nombrePersona}</Text>
                         </TouchableOpacity>
-                        <Text style={{ color: '#fff', width: '80%', margin: 5, }}> Cargo pago de compras</Text>
-                        <TextInput
-                            value={this.state.compra.monto}
-                            keyboardType={"numeric"}
-                            onChangeText={text => {
-                                this.state.compra.monto = text
-                                this.setState({ ...this.state })
-                            }}
-                            style={{ width: '80%', height: 40, backgroundColor: "#fff", borderRadius: 10, }} />
-
                     </View>
 
                 </ScrollView>

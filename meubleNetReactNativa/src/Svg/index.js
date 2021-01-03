@@ -20,17 +20,26 @@ import Persona from '../img/persona.svg';
 import Reporte from '../img/reporte.svg';
 import ActualizarVista from '../img/actualizarVista.svg';
 import Add from '../img/add.svg';
+import ComprasVenta from '../img/comprasVenta.svg';
+import InformeCompra from '../img/informeCompra.svg';
+import CosteProduccion from '../img/costeProduccion.svg';
 
 const Svg = (props) => {
 
     switch (props.name) {
         case "add":
             return <Add style={props.style} />
+            case "Ver libro compras":
+            return <CosteProduccion style={props.style} />
+        case "compras empresa":
+            return <ComprasVenta style={props.style} />
+        case "compras pendiente":
+            return <InformeCompra style={props.style} />
         case "actualizarVista":
             return <ActualizarVista style={props.style} />
         case "addVenta":
-            return <AddVenta style={props.style} /> 
-              case "reporte ventas":
+            return <AddVenta style={props.style} />
+        case "reporte ventas":
             return <Reporte style={props.style} />
         case "ventasProducto":
             return <VentasProducto style={props.style} />

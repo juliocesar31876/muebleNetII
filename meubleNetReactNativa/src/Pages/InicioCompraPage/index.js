@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Barra from '../../Component/Barra';
 import Svg from '../../Svg';
-class InicioPage extends Component {
+class InicioCompraPage extends Component {
     static navigationOptions = {
         headerShown: false,
     }
@@ -21,21 +21,15 @@ class InicioPage extends Component {
         var key_area_trabajo = usuario.persona.key_area_trabajo
         var areaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[key_area_trabajo].nombre
         arrayMenu = []
-        if (areaTrabajo === "administrador") {
-            arrayMenu = ["productos", "personales", "realizar ventas", "reporte ventas", "compras"];
-        }
         if (areaTrabajo === "compras") {
-            arrayMenu = ["compras"];
+            arrayMenu = ["compras empresa", "Ver libro compras"];
         }
-        if (areaTrabajo === "ventas") {
-            arrayMenu = ["ventas"];
-        }
-
         this.state = {
             isOpen: false,
             index: 0,
             titulo: "Inicio",
-            menu: arrayMenu
+            menu: arrayMenu,
+            areaTrabajo
         }
     }
     handleChange = (num) => {
@@ -59,24 +53,18 @@ class InicioPage extends Component {
             case "productos":
                 this.props.navigation.navigate("ProductosPage", { pagina: item })
                 return <View />
-            case "area trabajo":
-                this.props.navigation.navigate("AreaTrabajoPage", { pagina: item })
+            case "compras empresa":
+                this.props.navigation.navigate("ComprasVentaPage", { pagina: item })
                 return <View />
-            case "personales":
-                this.props.navigation.navigate("PersonaPage", { pagina: item })
+            case "Ver libro compras":
+                this.props.navigation.navigate("VerLibroComprasPage", {
+                    persona: this.props.state.usuarioReducer.usuarioLog.persona,
+                    area: this.state.areaTrabajo
+                })
                 return <View />
-            case "compras":
-                this.props.navigation.navigate("ComprasPage", { pagina: item })
-                return <View />
-            case "realizar ventas":
-                this.props.navigation.navigate("VentasPage", { pagina: item })
-                return <View />
-            case "almacen":
-                this.props.navigation.navigate("AlmacenPage", { pagina: item })
-                return <View />
-            case "reporte ventas":
-                this.props.navigation.navigate("MenuReporteVentaPage", { pagina: item })
-                return <View />
+            /*   case "almacen":
+                  this.props.navigation.navigate("AlmacenPage", { pagina: item })
+                  return <View /> */
             case "salir":
                 AsyncStorage.removeItem('usuario')
                 this.props.state.usuarioReducer.usuariolog = false;
@@ -121,6 +109,7 @@ class InicioPage extends Component {
                                 fontSize: 12,
                                 color: "#fff",
                                 fontWeight: 'bold',
+                                textAlign: 'center'
                             }}>{item.toLowerCase()}</Text>
                         </TouchableOpacity>
                     )}
@@ -159,6 +148,7 @@ class InicioPage extends Component {
                 }}>
                 <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
                 <Text style={{ color: "#fff", fontSize: 40, fontWeight: 'bold', }}>muebleNet</Text>
+                <Text style={{ color: "#fff", fontSize: 13, fontWeight: 'bold', }}>Saldo disponible : 2000 bs</Text>
                 <ScrollView style={{
                     flex: 1,
                     width: "100%",
@@ -222,4 +212,4 @@ const initStates = (state) => {
     return { state }
 };
 
-export default connect(initStates)(InicioPage);
+export default connect(initStates)(InicioCompraPage);

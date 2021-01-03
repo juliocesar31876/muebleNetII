@@ -76,21 +76,17 @@ class MenuDatoVentaPage extends Component {
                                 </TouchableOpacity>
                             ) : (
                                 <View style={{ flex: 1, width: "100%", }}>
-                                    <Text style={{ fontWeight: 'bold', color: '#999', margin: 5, textAlign: 'center', fontSize: 18 }}
-                                    >Cargo de compras</Text>
-                                    <Text style={{ fontWeight: 'bold', color: '#999', margin: 5, textAlign: 'left', fontSize: 13 }}
-                                    >Total de compras realizados : {this.state.venta.totalCompras} Bs</Text>
-                                    <Text style={{ fontWeight: 'bold', color: '#999', margin: 5, textAlign: 'left', fontSize: 13 }}
-                                    >Saldo de compras : {(this.state.venta.totalMonto - this.state.venta.totalCompras)} Bs</Text>
-                                    <TouchableOpacity
+                                 {/*    <Text style={{ fontWeight: 'bold', color: '#999', margin: 5, textAlign: 'center', fontSize: 18 }}
+                                    >Cargo de compras</Text> */}
+                               {/*      <TouchableOpacity
                                         onPress={() => this.props.navigation.navigate("VentaComprasPage", {
                                             venta: this.state.venta
                                         })}
                                         style={{ width: 80, height: 30, borderWidth: 1, borderColor: '#fff', borderRadius: 10, }}>
                                         <Text style={{ fontWeight: 'bold', color: '#999', margin: 5, textAlign: 'center', fontSize: 10 }}
                                         >Ver compras</Text>
-                                    </TouchableOpacity>
-                                    {this.state.venta.venta_cargo_compra.map((objVentaCargo) => {
+                                    </TouchableOpacity> */}
+                                    {/*    {this.state.venta.venta_cargo_compra.map((objVentaCargo) => {
 
                                         return (
                                             <View style={{ width: '100%', borderBottomWidth: 1, borderColor: "#fff", marginTop: 5, }}>
@@ -105,12 +101,13 @@ class MenuDatoVentaPage extends Component {
                                         )
 
                                     })
-                                    }
+                                    } */}
                                     <Text style={{ fontWeight: 'bold', color: '#999', margin: 5, textAlign: 'center', fontSize: 18 }}
                                     >Trabajo Muebles</Text>
 
                                     {this.state.venta.ventatrabajo.map((objVentaTrabajo) => {
-                                        var persona = this.props.state.personaReducer.dataPersonas[objVentaTrabajo.trabajos.key_persona]
+                                        var persona = this.props.state.personaReducer.dataPersonas[objVentaTrabajo.trabajos.key_persona_trabajo]
+                                        var persona_compra = this.props.state.personaReducer.dataPersonas[objVentaTrabajo.trabajos.key_persona_compra]
                                         var producto_terminado = "Terminado"
                                         if (!objVentaTrabajo.trabajos.producto_terminado) {
                                             producto_terminado = "Pendiente"
@@ -119,9 +116,11 @@ class MenuDatoVentaPage extends Component {
                                             <View style={{ width: '100%', borderBottomWidth: 1, borderColor: "#fff", }}>
                                                 <Text
                                                     style={{ color: '#fff', margin: 2, fontSize: 14, margin: 5, width: '100%', textAlign: 'right' }}
-                                                > {objVentaTrabajo.trabajos.nombre.toUpperCase()} </Text><Text
-                                                    style={{ color: '#fff', margin: 2, fontSize: 12, margin: 5, }}
-                                                >Persona : {persona.nombre.toUpperCase() + " " + persona.paterno.toUpperCase()} </Text>
+                                                > {objVentaTrabajo.trabajos.nombre.toUpperCase()} </Text>
+                                                <Text style={{ color: '#fff', margin: 2, fontSize: 12, margin: 5, }}
+                                                >Persona trabajo: {persona.nombre.toUpperCase() + " " + persona.paterno.toUpperCase()} </Text>
+                                                <Text style={{ color: '#fff', margin: 2, fontSize: 12, margin: 5, }}
+                                                >Persona compras: {persona_compra.nombre.toUpperCase() + " " + persona_compra.paterno.toUpperCase()} </Text>
                                                 <Text
                                                     style={{ color: '#fff', margin: 2, fontSize: 12, margin: 5, }}
                                                 >Mueble terminado : {producto_terminado} </Text>

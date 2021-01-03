@@ -74,7 +74,7 @@ const Vender = (props) => {
             }
         },
     })
-  const selecSucursal = (obj) => {
+    const selecSucursal = (obj) => {
         state.obj.key_sucursal.value = obj.direccion
         state.obj.key_sucursal.error = false
         state.obj.key_sucursal["data"] = obj
@@ -113,7 +113,12 @@ const Vender = (props) => {
         }
         setState({ ...state })
         if (exito) {
-          var  array = []
+            var fecha = moment()
+                .format('YYYY-MM-DD');
+            var hora = moment()
+                .format('HH:mm:ss');
+            data["fecha_on"] = fecha + "T" + hora
+            var array = []
             for (const key in props.state.ventaReducer.dataVentaProducto) {
                 var obj = props.state.ventaReducer.dataVentaProducto[key]
                 if (!obj) {
@@ -121,6 +126,7 @@ const Vender = (props) => {
                 }
                 array.push(props.state.ventaReducer.dataVentaProducto[key])
             }
+            data["datos_completo"] = false
             objventa = {
                 venta: data,
                 detalle: array

@@ -40,6 +40,27 @@ export const AddTipoProducto = (socket, datos) => async (dispatch) => {
         estado: "cargando"
     })
 }
+export const addCosteProduccion = (socket, datos) => async (dispatch) => {
+    var objToSend = {
+        component: "producto",
+        type: "addCosteProduccion",
+        data: datos,
+        mensaje: "",
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
 export const getAllTipoProducto = (socket) => async (dispatch) => {
     var objToSend = {
         component: "producto",
