@@ -41,6 +41,7 @@ const addProducto = (state, action) => {
             state.dataProducto = {}
         }
         state.dataProducto[action.data.key] = action.data
+        state.dataProducto[action.data.key]["costeproduccion"] = null
         state.foto = action.data.key
     }
 }
@@ -58,8 +59,8 @@ const addCosteProduccion = (state, action) => {
     state.estado = action.estado
     state.type = action.type
     if (action.estado === "exito") {
-        var total =state.dataProducto[action.data.key_producto].totalCosteProduccion
-        state.dataProducto[action.data.key_producto].totalCosteProduccion = total+(action.data.precio*action.data.cantidad)
+        var total = state.dataProducto[action.data.key_producto].totalCosteProduccion
+        state.dataProducto[action.data.key_producto].totalCosteProduccion = total + (action.data.precio * action.data.cantidad)
         state.dataProducto[action.data.key_producto].coste_produccion.push(action.data)
     }
 }

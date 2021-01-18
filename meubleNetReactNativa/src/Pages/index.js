@@ -16,6 +16,7 @@ import MenuDatoVentaPage from './RellenarDatoVentaPage/MenuDatoVentaPage';
 import VentaPerdidaPage from './RellenarDatoVentaPage/VentaPerdidaPage';
 import VentaTrabajoPage from './RellenarDatoVentaPage/VentaTrabajoPage';
 import VentaComprasPage from './RellenarDatoVentaPage/VentaComprasPage';
+import VerificarCosteProduccionPage from './RellenarDatoVentaPage/VerificarCosteProduccionPage';
 import MenuReporteVentaPage from './MenuReporteVentaPage';
 import ListaComprasPage from './MenuReporteVentaPage/ListaComprasPage';
 import InformeVentaPage from './MenuReporteVentaPage/InformeVentaPage';
@@ -24,6 +25,12 @@ import RegistrarPagosComprasPage from './MenuReporteVentaPage/RegistrarPagosComp
 import AddSaldoCompradorPage from './MenuReporteVentaPage/AddSaldoCompradorPage';
 import InicioCompraPage from './InicioCompraPage';
 import ComprasVentaPage from './InicioCompraPage/ComprasVentaPage';
+////////////////////////armador usuario
+import InicioArmadorPage from './InicioArmadorPage';
+import PagoSalarioPage from './PagoSalarioPage';
+import TrabajosArmadorPage from './InicioArmadorPage/TrabajosArmadorPage';
+import SalarioTrabajoPage from './InicioArmadorPage/SalarioTrabajoPage';
+import ListaPagosPage from './PagoSalarioPage/ListaPagosPage';
 export const getPages = () => {
     return {
         CargaPage,
@@ -51,6 +58,12 @@ export const getPages = () => {
         AddSaldoCompradorPage,
         CosteProduccionPage,
         VerLibroComprasPage,
-        ListaComprasPage
+        ListaComprasPage,
+        VerificarCosteProduccionPage,
+        InicioArmadorPage,
+        TrabajosArmadorPage,
+        SalarioTrabajoPage,
+        PagoSalarioPage,
+        ListaPagosPage
     }
 }

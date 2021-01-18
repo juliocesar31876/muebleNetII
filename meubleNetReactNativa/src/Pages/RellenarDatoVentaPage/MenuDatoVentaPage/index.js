@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
+import * as ventaActions from '../../../Actions/ventaActions'
 import Barra from '../../../Component/Barra';
 class MenuDatoVentaPage extends Component {
     static navigationOptions = {
@@ -13,8 +14,6 @@ class MenuDatoVentaPage extends Component {
         props.navigation.state.params.venta.detalle.map((objProducto) => {
             totalDetalle = totalDetalle + (objProducto.precio_venta * objProducto.cantidad)
         })
-
-
         this.state = {
             venta: props.navigation.state.params.venta,
             totalDetalle,
@@ -32,6 +31,7 @@ class MenuDatoVentaPage extends Component {
     render() {
         if (this.props.state.ventaReducer.estado === "exito" && this.props.state.ventaReducer.type === "addVentaTrabajo") {
             this.props.state.ventaReducer.estado = ""
+            this.props.getVentaDatosRellenado(this.props.state.socketReducer.socket);
             this.props.navigation.goBack()
             return <View />
         }
@@ -66,6 +66,40 @@ class MenuDatoVentaPage extends Component {
                                 </View>
                             )
                         })}
+                        <Text style={{ fontWeight: 'bold', color: '#999', margin: 5, textAlign: 'center', fontSize: 18 }}>Verificar coste produccion</Text>
+
+                        {this.state.venta.detalle.map((objProducto) => {
+                            return (
+                                <View style={{ margin: 5, width: "100%", flexDirection: 'row', borderColor: "#fff", alignItems: 'center', padding: 5 }}>
+                                    <View style={{ flex: 1, }}>
+                                        <Text style={{ color: '#fff', margin: 2, fontSize: 12, }}>{objProducto.nombre.toUpperCase()}</Text>
+                                    </View>
+                                    <View
+                                        style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                if (objProducto.costeproduccion === null) {
+                                                    alert("no contiene ningun coste de produccion agregado")
+                                                    return<View/>
+                                                }
+                                                if (objProducto.costeproduccion === undefined) {
+                                                    alert("no contiene ningun coste de produccion agregado")
+                                                    return<View/>
+                                                }
+                                                this.props.navigation.navigate("VerificarCosteProduccionPage",
+                                                    {
+                                                        venta: this.state.venta,
+                                                        costeproduccion: objProducto.costeproduccion,
+                                                        nombre: objProducto.nombre
+                                                    })
+                                            }}
+                                            style={{ width: 110, height: 40, borderBottomWidth: 1, borderColor: '#fff' }}>
+                                            <Text style={{ color: '#fff', margin: 2, fontSize: 13, }}>Coste produccion</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            )
+                        })}
                         {this.state.mostrar
                             ? (
                                 <TouchableOpacity
@@ -76,32 +110,7 @@ class MenuDatoVentaPage extends Component {
                                 </TouchableOpacity>
                             ) : (
                                 <View style={{ flex: 1, width: "100%", }}>
-                                 {/*    <Text style={{ fontWeight: 'bold', color: '#999', margin: 5, textAlign: 'center', fontSize: 18 }}
-                                    >Cargo de compras</Text> */}
-                               {/*      <TouchableOpacity
-                                        onPress={() => this.props.navigation.navigate("VentaComprasPage", {
-                                            venta: this.state.venta
-                                        })}
-                                        style={{ width: 80, height: 30, borderWidth: 1, borderColor: '#fff', borderRadius: 10, }}>
-                                        <Text style={{ fontWeight: 'bold', color: '#999', margin: 5, textAlign: 'center', fontSize: 10 }}
-                                        >Ver compras</Text>
-                                    </TouchableOpacity> */}
-                                    {/*    {this.state.venta.venta_cargo_compra.map((objVentaCargo) => {
 
-                                        return (
-                                            <View style={{ width: '100%', borderBottomWidth: 1, borderColor: "#fff", marginTop: 5, }}>
-                                                <Text
-                                                    style={{ color: '#fff', margin: 2, fontSize: 12, margin: 5, }}
-                                                >Persona  : {objVentaCargo.persona.nombre.toUpperCase() + " " + objVentaCargo.persona.paterno.toUpperCase()} </Text>
-                                                <Text
-                                                    style={{ color: '#fff', margin: 2, fontSize: 12, margin: 5, }}
-                                                >Monto dado : {objVentaCargo.monto} Bs</Text>
-
-                                            </View>
-                                        )
-
-                                    })
-                                    } */}
                                     <Text style={{ fontWeight: 'bold', color: '#999', margin: 5, textAlign: 'center', fontSize: 18 }}
                                     >Trabajo Muebles</Text>
 
@@ -144,4 +153,7 @@ class MenuDatoVentaPage extends Component {
 const initStates = (state) => {
     return { state }
 };
-export default connect(initStates)(MenuDatoVentaPage);
+const initActions = ({
+    ...ventaActions
+});
+export default connect(initStates, initActions)(MenuDatoVentaPage);

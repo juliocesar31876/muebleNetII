@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import * as usuarioActions from '../../../../Actions/usuarioActions'
 import Barra from '../../../../Component/Barra';
-import myPropsJulio from '../../../../nativeSocket/myPropsJulio.json'
+import myPropsJulio from '../../../../nativeSocket/myPropsServer.json'
 import Svg from '../../../../Svg';
 class VistaProductoPage extends Component {
     static navigationOptions = {
@@ -59,8 +59,9 @@ class VistaProductoPage extends Component {
                                     borderRadius: 100,
                                     position: 'absolute',
                                     right: 10,
+                                    top: 70,
                                 }}>
-                                <Svg name={"costeProduccion"}
+                                <Svg name={"Ver libro compras"}
                                     style={{
                                         width: 50,
                                         height: 50,

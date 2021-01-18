@@ -171,7 +171,6 @@ class VentaTrabajoPage extends Component {
     }
     render() {
         if (this.props.state.ventaReducer.estado === "exito" && this.props.state.ventaReducer.type === "addVentaTrabajo") {
-            this.props.getVentaDatosRellenado(this.props.state.socketReducer.socket);
             this.props.navigation.goBack()
             return <View />
         }
@@ -205,8 +204,8 @@ class VentaTrabajoPage extends Component {
                             return (
                                 <View style={{ width: '100%', alignItems: 'center', }}>
                                     <View style={{ width: '90%', flexDirection: 'row', justifyContent: 'center', margin: 5, alignItems: 'center', }}>
-                                        <Text style={{ color: '#fff', fontWeight: 'bold', flex: 1, }}> {obj.nombre_producto.toUpperCase()} </Text>
-                                        <Text style={{ color: '#fff', fontWeight: 'bold', flex: 1, }}> CANTIDAD: {obj.cantidad}    </Text>
+                                        <Text style={{ color: '#fff', fontWeight: 'bold', flex: 1, }}> {(key+1)}- {obj.nombre_producto.toUpperCase()} </Text>
+                                        <Text style={{ color: '#fff', fontWeight: 'bold', flex: 0.5, }}> CANTIDAD: {obj.cantidad}    </Text>
                                         <TouchableOpacity
                                             onPress={() => this.addArmador(obj, key)}
                                             style={{

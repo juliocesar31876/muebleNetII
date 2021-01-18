@@ -47,7 +47,8 @@ const Carga = (props) => {
             return <View />
         }
         /////////////area compras<
-        if (props.state.areaTrabajoReducer.dataAreaTrabajo[props.state.usuarioReducer.usuarioLog.persona.key_area_trabajo].nombre === "compras") {
+        var area = props.state.areaTrabajoReducer.dataAreaTrabajo[props.state.usuarioReducer.usuarioLog.persona.key_area_trabajo].nombre
+        if (area === "compras") {
             if (props.state.comprasReducer.estado === "cargando" && props.state.comprasReducer.type === "getAllLibroComprasPendienteUsuario") {
                 return <View />
             }
@@ -56,11 +57,60 @@ const Carga = (props) => {
                     { key_persona: props.state.usuarioReducer.usuarioLog.persona.key });
                 return <View />
             }
+
+            if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "PagoTrabajoPendiente") {
+                return <View />
+            }
+
+            if (!props.state.personaReducer.dataPagoTrabajoPersonaPendiente) {
+                props.PagoTrabajoPendiente(props.state.socketReducer.socket,
+                    {
+                        key_persona: props.state.usuarioReducer.usuarioLog.persona.key,
+                        area
+                    });
+                return <View />
+            }
+            if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getPagoSalario") {
+                return <View />
+            }
+            if (!props.state.personaReducer.dataPagoSalarioPersona.dataPago) {
+                props.getPagoSalario(props.state.socketReducer.socket,
+                    { key_persona: props.state.usuarioReducer.usuarioLog.persona.key });
+                return <View />
+            }
             props.state.navigationReducer.replace("InicioCompraPage");
             return <View />
         }
-        /////////////area compras>
-
+        /////////////area armador>
+        if (area === "armador mueble") {
+            if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getTrabajoPendiente") {
+                return <View />
+            }
+            if (!props.state.personaReducer.dataTrabajoPersonaPendiente) {
+                props.getTrabajoPendiente(props.state.socketReducer.socket,
+                    { key_persona: props.state.usuarioReducer.usuarioLog.persona.key });
+                return <View />
+            }
+            if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "PagoTrabajoPendiente") {
+                return <View />
+            }
+            if (!props.state.personaReducer.dataPagoTrabajoPersonaPendiente) {
+                props.PagoTrabajoPendiente(props.state.socketReducer.socket,
+                    { key_persona: props.state.usuarioReducer.usuarioLog.persona.key, area });
+                return <View />
+            }
+            if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getPagoSalario") {
+                return <View />
+            }
+            if (!props.state.personaReducer.dataPagoSalarioPersona.dataPago) {
+                props.getPagoSalario(props.state.socketReducer.socket,
+                    { key_persona: props.state.usuarioReducer.usuarioLog.persona.key });
+                return <View />
+            }
+            props.state.navigationReducer.replace("InicioArmadorPage");
+            return <View />
+        }
+        /////////////>
 
         if (props.state.productosReducer.estado === "cargando" && props.state.productosReducer.type === "getAllProducto") {
             return <View />
@@ -83,7 +133,7 @@ const Carga = (props) => {
             props.getAllTipoProducto(props.state.socketReducer.socket);
             return <View />
         }
-        
+
         if (props.state.materialReducer.estado === "cargando" && props.state.materialReducer.type === "getAllTipoMaterial") {
             return <View />
         }
@@ -105,9 +155,6 @@ const Carga = (props) => {
             props.getVentaPendiente(props.state.socketReducer.socket);
             return <View />
         }
-        if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenar") {
-            return <View />
-        }
         if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaFinalizado") {
             return <View />
         }
@@ -116,6 +163,10 @@ const Carga = (props) => {
             props.getVentaFinalizado(props.state.socketReducer.socket);
             return <View />
         }
+        if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenar") {
+            return <View />
+        }
+
         if (!props.state.ventaReducer.dataVentaDatosPendiente) {
             props.getVentaDatosRellenar(props.state.socketReducer.socket);
             return <View />
@@ -133,6 +184,13 @@ const Carga = (props) => {
         }
         if (!props.state.comprasReducer.dataLibroComprasPendiente) {
             props.getAllLibroComprasPendiente(props.state.socketReducer.socket);
+            return <View />
+        }
+        if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getAllPagoPendientePersona") {
+            return <View />
+        }
+        if (!props.state.personaReducer.dataPagoPendiente) {
+            props.getAllPagoPendientePersona(props.state.socketReducer.socket);
             return <View />
         }
         props.state.navigationReducer.replace("InicioPage");

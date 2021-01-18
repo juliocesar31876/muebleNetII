@@ -16,7 +16,7 @@ import * as productoActions from '../../../../Actions/productoActions'
 import * as popupActions from '../../../../Actions/popupActions'
 import * as sucursalActions from '../../../../Actions/sucursalActions'
 //import myPropsJulio from '../../../../nativeSocket/myPropsJulio.json';
-import myPropsJulio from '../../../../nativeSocket/myPropsJulio.json';
+import myPropsJulio from '../../../../nativeSocket/myPropsServer.json';
 import Estado from '../../../../Component/Estado';
 const AddProductos = (props) => {
     const state2 = {

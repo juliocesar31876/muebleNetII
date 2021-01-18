@@ -13,7 +13,7 @@ import * as usuarioActions from '../../../../Actions/usuarioActions'
 import * as popupActions from '../../../../Actions/popupActions'
 import * as productoActions from '../../../../Actions/productoActions'
 import Barra from '../../../../Component/Barra';
-import myPropsJulio from '../../../../nativeSocket/myPropsJulio.json'
+import myPropsJulio from '../../../../nativeSocket/myPropsServer.json'
 import Svg from '../../../../Svg';
 class CosteProduccionPage extends Component {
     static navigationOptions = {

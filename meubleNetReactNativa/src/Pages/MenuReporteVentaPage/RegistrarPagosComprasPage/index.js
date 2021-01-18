@@ -99,7 +99,7 @@ class RegistrarPagosComprasPage extends Component {
                                 <TouchableOpacity
                                     onPress={() => this.props.navigation.navigate("VerLibroComprasPage", { persona, area })}
                                     style={{ width: "90%", borderBottomWidth: 2, borderColor: "#666", margin: 2, borderRadius: 10, padding:5}}>
-                                    <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5,}}> Comprad(a) :  {persona.nombre + " " + persona.paterno}</Text>
+                                    <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5,}}>  {persona.nombre.toUpperCase() + " " + persona.paterno.toUpperCase()}</Text>
                                     <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5,}}> CI :  {persona.ci}</Text>
                                 </TouchableOpacity>
                             )

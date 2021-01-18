@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ScrollView, TouchableOpacity, View,Text, StyleSheet } from 'react-native';
+import { ScrollView, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import Svg from '../../../Svg';
-const DetalleVenta = (props) =>{
+const DetalleVenta = (props) => {
     return (
         <ScrollView style={{
             flex: 1,
@@ -14,12 +14,16 @@ const DetalleVenta = (props) =>{
                 margin: 5,
             }}>
                 {Object.keys(props.state.ventaReducer.dataVentaProducto).map((key) => {
-                    var obj =props.state.ventaReducer.dataVentaProducto[key]
+                    var obj = props.state.ventaReducer.dataVentaProducto[key]
                     if (!obj) {
                         return <View />
                     }
                     return (
-                        <View style={{ width: "80%", alignItems: 'center', justifyContent: 'center', borderColor: "#fff", borderRadius: 10, borderWidth: 2, margin: 5, }}>
+                        <View style={{
+                            width: "90%",
+                            alignItems: 'center', justifyContent: 'center',
+                            borderColor: "#fff", borderRadius: 10, borderBottomWidth: 2, margin: 5,padding:2
+                        }}>
                             <TouchableOpacity
                                 onPress={() => props.eliminarProductoVenta(key)}
                                 style={{
@@ -39,10 +43,9 @@ const DetalleVenta = (props) =>{
                                 </Svg>
                             </TouchableOpacity>
                             <View style={styles.vie}>
-                                <Text style={{ color: "#666", flex: 0.6, }}>Detalle :</Text>
                                 <Text
                                     style={{ color: "#fff", flex: 1, }}>
-                                    {obj.producto} </Text>
+                                    {obj.producto.toUpperCase()} </Text>
                             </View>
                             <View style={styles.vie}>
                                 <Text style={{ color: "#666", flex: 0.6, }}>Precio :</Text>

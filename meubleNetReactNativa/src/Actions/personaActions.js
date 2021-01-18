@@ -120,6 +120,90 @@ export const getPersonaTrabajo = (socket, datos) => async (dispatch) => {
         estado: "cargando"
     })
 }
+export const getTrabajoPendiente = (socket, datos) => async (dispatch) => {
+    var objToSend = {
+        component: "persona",
+        type: "getTrabajoPendiente",
+        data: datos,
+        mensaje: "",
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
+export const terminarTrabajoPendiente = (socket, datos) => async (dispatch) => {
+    var objToSend = {
+        component: "persona",
+        type: "terminarTrabajoPendiente",
+        data: datos,
+        mensaje: "",
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
+export const PagoTrabajoPendiente = (socket, datos) => async (dispatch) => {
+    var objToSend = {
+        component: "persona",
+        type: "PagoTrabajoPendiente",
+        data: datos,
+        mensaje: "",
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
+export const getPagoTrabajoRealizado = (socket, datos) => async (dispatch) => {
+    var objToSend = {
+        component: "persona",
+        type: "getPagoTrabajoRealizado",
+        data: datos,
+        mensaje: "",
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
 export const estadoActualizar = () => async (dispatch) => {
     var objToSend = {
         component: "persona",
@@ -138,6 +222,68 @@ export const addTrabajoEnpleado = (socket, datos) => async (dispatch) => {
         type: "addTrabajoEnpleado",
         mensaje: "",
         data: datos,
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
+export const getPagoAreaPendiente = (socket, datos) => async (dispatch) => {
+    var objToSend = {
+        component: "persona",
+        type: "getPagoAreaPendiente",
+        mensaje: "",
+        data: datos,
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
+export const getAllPagoPendientePersona = (socket) => async (dispatch) => {
+    var objToSend = {
+        component: "persona",
+        type: "getAllPagoPendientePersona",
+        mensaje: "",
+        estado: "cargando"
+    };
+    if (!socket) {
+        dispatch({
+            ...objToSend,
+            estado: "error"
+        })
+        return;
+    }
+    socket.send(JSON.stringify(objToSend));
+    dispatch({
+        ...objToSend,
+        estado: "cargando"
+    })
+}
+export const getPagoSalario = (socket,data) => async (dispatch) => {
+    var objToSend = {
+        component: "persona",
+        data,
+        type: "getPagoSalario",
+        mensaje: "",
         estado: "cargando"
     };
     if (!socket) {

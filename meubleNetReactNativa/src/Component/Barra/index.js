@@ -30,7 +30,6 @@ const Barra = (props) => {
     return (
         <View style={{
             width: "100%",
-            height: 50,
             flex: 0.1,
             flexDirection: 'row',
             backgroundColor: "#000",

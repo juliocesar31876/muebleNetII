@@ -12,6 +12,7 @@ import personaReducer from './personaReducer';
 import comprasReducer from './comprasReducer';
 import materialReducer from './materialReducer';
 import ventaReducer from './ventaReducer';
+import trabajoReducer from './trabajoReducer';
 export default combineReducers({
     navigationReducer,
     socketReducer,
@@ -25,5 +26,6 @@ export default combineReducers({
     personaReducer,
     comprasReducer,
     materialReducer,
-    ventaReducer
+    ventaReducer,
+    trabajoReducer
 });

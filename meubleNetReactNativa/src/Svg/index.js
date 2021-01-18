@@ -23,13 +23,27 @@ import Add from '../img/add.svg';
 import ComprasVenta from '../img/comprasVenta.svg';
 import InformeCompra from '../img/informeCompra.svg';
 import CosteProduccion from '../img/costeProduccion.svg';
+import Salario from '../img/salario.svg';
+import TrabajoMueble from '../img/trabajoMueble.svg';
+import ArmarMueble from '../img/armarMueble.svg';
+import Terminarmueble from '../img/terminarmueble.svg';
 
 const Svg = (props) => {
 
     switch (props.name) {
+        case "terminarmueble":
+            return <Terminarmueble style={props.style} />
+        case "armarMueble":
+            return <ArmarMueble style={props.style} />
+        case "armador":
+            return <ArmarMueble style={props.style} />
+        case "salario":
+            return <Salario style={props.style} />
+        case "trabajos":
+            return <TrabajoMueble style={props.style} />
         case "add":
             return <Add style={props.style} />
-            case "Ver libro compras":
+        case "Ver libro compras":
             return <CosteProduccion style={props.style} />
         case "compras empresa":
             return <ComprasVenta style={props.style} />

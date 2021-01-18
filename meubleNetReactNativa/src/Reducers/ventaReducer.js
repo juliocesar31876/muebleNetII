@@ -111,6 +111,7 @@ const getVentaDatosRellenado = (state, action) => {
     state.estado = action.estado
     state.type = action.type
     if (action.estado === "exito") {
+        state.dataVentaDatosFinalizado = {}
         if (!state.dataVentaDatosFinalizado || action.data.length === 0) {
             state.dataVentaDatosFinalizado = {}
         }

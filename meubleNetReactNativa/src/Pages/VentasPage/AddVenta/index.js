@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { FlatList, Image, ScrollView, TouchableOpacity, View,Text, TextInput } from 'react-native';
-import myPropsJulio from '../../../nativeSocket/myPropsJulio.json'
+import myPropsJulio from '../../../nativeSocket/myPropsServer.json'
 //import myPropsJulio from '../../../nativeSocket/myPropsJulio.json'
 import Estado from '../../../Component/Estado';
 import * as popupActions from '../../../Actions/popupActions'

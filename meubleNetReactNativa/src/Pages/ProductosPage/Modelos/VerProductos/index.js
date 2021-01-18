@@ -13,9 +13,6 @@ const VerProductos = (props) => {
             data: false
         },
     })
-    if (!props.state.socketReducer.socket) {
-        return <Estado estado={"Reconectando"} />
-    }
 
     const popupTipo = () => {
         if (Object.keys(props.state.productosReducer.dataTipoProducto).length === 0) {

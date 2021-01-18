@@ -18,7 +18,7 @@ class MenuReporteVentaPage extends Component {
         super(props);
         this.state = {
             titulo: "Menu reporte ventas",
-            menu: ["Finalizar ventas", "Datos ventas faltante", "Informe venta", "registrar pagos compras"]
+            menu: [ "Datos ventas faltante", "Informe venta", ]
         }
     }
     select(text) {
@@ -26,8 +26,6 @@ class MenuReporteVentaPage extends Component {
             case "Finalizar ventas":
                 this.props.navigation.navigate("ReporteVentaPage")
                 return <View />
-            case "registrar pagos compras":
-                this.props.navigation.navigate("RegistrarPagosComprasPage")
                 return <View />
             case "Datos ventas faltante":
                 this.props.navigation.navigate("RellenarDatoVentaPage")

@@ -25,15 +25,17 @@ const TrabajoEmpleado = (props) => {
             error: false,
             data: false
         },
+        key_persona_compra: {
+            value: "Selecione Comprador",
+            error: false,
+            data: false
+        },
         key_producto: {
             value: "Selecione Producto",
             error: false,
             data: false
         },
         producto_terminado: {
-            value: false,
-        },
-        pago_recibido: {
             value: false,
         },
     })
@@ -99,10 +101,10 @@ const TrabajoEmpleado = (props) => {
                 </View>)
         })
     }
-    const popupPersona = () => {
+    const popupPersona = (id) => {
         const selecEmpleado = (objEmpleado) => {
-            state.key_persona.value = objEmpleado.nombre + " " + objEmpleado.paterno + " " + objEmpleado.materno + "  CI:" + objEmpleado.ci
-            state.key_persona.data = objEmpleado
+            state[id].value = objEmpleado.nombre + " " + objEmpleado.paterno + " " + objEmpleado.materno + "  CI:" + objEmpleado.ci
+            state[id].data = objEmpleado
             setstate({ ...state })
             props.cerrarPopup()
         }
@@ -186,12 +188,16 @@ const TrabajoEmpleado = (props) => {
             }
             var data = {
                 datos: {
-                    key_persona: state.key_persona.data.key,
+                    key_persona_trabajo: state.key_persona.data.key,
+                    key_persona_compra: state.key_persona.data.key,
+                    key_sucursal: state.key_persona.data.key_sucursal,
                     nombre: state.key_producto.data.nombre,
                     trabajo_precio: state.key_producto.data.precio_armador,
                     producto_terminado: state.producto_terminado.value,
-                    pago_recibido: state.pago_recibido.value,
-                    key_sucursal: state.key_persona.data.key_sucursal,
+                    pago_recibido: false,
+                    encargo_compra_pago: state.key_producto.data.encargo_compra_pago,
+                    pago_compra_recibido: false,
+                    compra_realizado: false,
                 },
                 cantidad_producto: num
             }
@@ -230,9 +236,17 @@ const TrabajoEmpleado = (props) => {
                     <View style={{ width: "100%", flexDirection: 'column', }}>
                         <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Persona</Text>
                         <TouchableOpacity
-                            onPress={() => popupPersona()}
+                            onPress={() => popupPersona("key_persona")}
                             style={(state.key_persona.error ? styles.error : styles.touc)}>
                             <Text style={{ fontSize: 13, color: "#666", }}>{state.key_persona.value.toUpperCase()}  </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ width: "100%", flexDirection: 'column', }}>
+                        <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Persona compra</Text>
+                        <TouchableOpacity
+                            onPress={() => popupPersona("key_persona_compra")}
+                            style={(state.key_persona_compra.error ? styles.error : styles.touc)}>
+                            <Text style={{ fontSize: 13, color: "#666", }}>{state.key_persona_compra.value.toUpperCase()}  </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{ width: "100%", flexDirection: 'row', margin: 5, }}>
@@ -241,12 +255,6 @@ const TrabajoEmpleado = (props) => {
                                 onChange={text => hanlechage({ text: text, id: "producto_terminado" })}
                             />
                             <Text style={{ margin: 4, color: "#fff", fontSize: 12, fontWeight: 'bold', }}>producto terminado</Text>
-                        </View>
-                        <View style={{ flex: 1, alignItems: 'center', }}>
-                            <MiCheckBox ischeck={state.pago_recibido.value} id={"pago_recibido"}
-                                onChange={text => hanlechage({ text: text, id: "pago_recibido" })}
-                            />
-                            <Text style={{ margin: 4, color: "#fff", fontSize: 12, fontWeight: 'bold', }}>Pago recibido</Text>
                         </View>
                     </View>
                     <View

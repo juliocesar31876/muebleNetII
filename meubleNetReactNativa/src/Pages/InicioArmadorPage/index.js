@@ -13,50 +13,29 @@ import {
 import Barra from '../../Component/Barra';
 import Svg from '../../Svg';
 import myPropsJulio from '../../nativeSocket/myPropsServer.json';
-class InicioCompraPage extends Component {
+class InicioArmadorPage extends Component {
     static navigationOptions = {
         headerShown: false,
     }
     constructor(props) {
         super(props);
-        var usuario = props.state.usuarioReducer.usuarioLog
-        var key_area_trabajo = usuario.persona.key_area_trabajo
-        var url = myPropsJulio.images.urlImage + usuario.persona.ci + ".png" + `?tipo=${"persona"}&date=${Date.now()}`
-        var areaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[key_area_trabajo].nombre
         arrayMenu = []
-        if (areaTrabajo === "compras") {
-            arrayMenu = ["Ver libro compras", "salario"];
-        }
+        arrayMenu = ["trabajos", "salario"];
+
+        var usuarioPersona = props.state.usuarioReducer.usuarioLog.persona
+        var url = myPropsJulio.images.urlImage + usuarioPersona.ci + ".png" + `?tipo=${"persona"}&date=${Date.now()}`
+
         this.state = {
-            isOpen: false,
-            index: 0,
             titulo: "Inicio",
             menu: arrayMenu,
-            areaTrabajo,
             url,
-            usuarioPersona: usuario.persona
-        }
-    }
-    handleChange = (num) => {
-        if (num === -1) {
-            this.state.isOpen = true;
-            this.setState({ ...this.state })
-
-            return;
-        }
-        this.state.index = num;
-        switch (num) {
-            case 0:
-                this.state.isOpen = false;
-                this.setState({ ...this.state })
-                return;
-            default: return
+            usuarioPersona
         }
     }
     handleClick = (item) => {
         switch (item) {
-            case "productos":
-                this.props.navigation.navigate("ProductosPage", { pagina: item })
+            case "trabajos":
+                this.props.navigation.navigate("TrabajosArmadorPage")
                 return <View />
             case "salario":
                 this.props.navigation.navigate("SalarioTrabajoPage")
@@ -67,9 +46,6 @@ class InicioCompraPage extends Component {
                     area: this.state.areaTrabajo
                 })
                 return <View />
-            /*   case "almacen":
-                  this.props.navigation.navigate("AlmacenPage", { pagina: item })
-                  return <View /> */
             case "salir":
                 AsyncStorage.removeItem('usuario')
                 this.props.state.usuarioReducer.usuariolog = false;
@@ -159,10 +135,11 @@ class InicioCompraPage extends Component {
                     backgroundColor: "#000",
                 }}>
                 <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
+
                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', marginTop: 20, }}>
                     <View style={{ flex: 1, }}>
                         <Text style={{ color: "#fff", fontSize: 40, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>muebleNet</Text>
-                        <Text style={{ color: "#fff", fontSize: 15, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>Compras</Text>
+                        <Text style={{ color: "#fff", fontSize: 15, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>Armador</Text>
 
                     </View>
                     <View style={{ flex: 0.4, alignItems: 'center', }}>
@@ -178,6 +155,7 @@ class InicioCompraPage extends Component {
                 <ScrollView style={{
                     flex: 1,
                     width: "100%",
+                    marginTop: 50,
                 }}>
                     <View style={{
                         flex: 1,
@@ -238,4 +216,4 @@ const initStates = (state) => {
     return { state }
 };
 
-export default connect(initStates)(InicioCompraPage);
+export default connect(initStates)(InicioArmadorPage);

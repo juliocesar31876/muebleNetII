@@ -4,6 +4,8 @@ import MiCheckBox from '../../../Component/MiCheckBox';
 import * as popupActions from '../../../Actions/popupActions'
 import * as productoActions from '../../../Actions/productoActions'
 import * as ventaActions from '../../../Actions/ventaActions'
+import moment from 'moment';
+
 import { connect } from 'react-redux';
 const Vender = (props) => {
     const [state, setState] = React.useState({
@@ -137,7 +139,8 @@ const Vender = (props) => {
         alert("Complete su datos")
     }
     if (props.state.ventaReducer.estado === "exito" && props.state.ventaReducer.type === "addVenta") {
-        props.state.ventaReducer.estado = ""
+        props.state.ventaReducer.estado = "",
+        props.getVentaDatosRellenar(props.state.socketReducer.socket);
         props.state.ventaReducer.data.detalle.map((item) => {
             props.actualizarProducto(item)
         })
