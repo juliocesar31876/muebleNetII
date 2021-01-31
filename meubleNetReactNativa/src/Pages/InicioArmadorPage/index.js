@@ -21,24 +21,30 @@ class InicioArmadorPage extends Component {
         super(props);
         arrayMenu = []
         arrayMenu = ["trabajos", "salario"];
-
+        var admin = false
         var usuarioPersona = props.state.usuarioReducer.usuarioLog.persona
+        var key_area_trabajo = usuarioPersona.key_area_trabajo
+        var areaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[key_area_trabajo].nombre
         var url = myPropsJulio.images.urlImage + usuarioPersona.ci + ".png" + `?tipo=${"persona"}&date=${Date.now()}`
-
         this.state = {
-            titulo: "Inicio",
+            titulo: "",
             menu: arrayMenu,
             url,
-            usuarioPersona
+            usuarioPersona,
+            admin,
+            areaTrabajo
         }
     }
     handleClick = (item) => {
         switch (item) {
             case "trabajos":
-                this.props.navigation.navigate("TrabajosArmadorPage")
+                this.props.navigation.navigate("TrabajosArmadorPage", { areaTrabajo: this.state.areaTrabajo })
                 return <View />
             case "salario":
-                this.props.navigation.navigate("SalarioTrabajoPage")
+                this.props.navigation.navigate("SalarioTrabajoPage", {
+                    admin: false,
+                    pagina: ""
+                })
                 return <View />
             case "Ver libro compras":
                 this.props.navigation.navigate("VerLibroComprasPage", {
@@ -134,13 +140,9 @@ class InicioArmadorPage extends Component {
                     alignItems: 'center',
                     backgroundColor: "#000",
                 }}>
-                <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
-
                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', marginTop: 20, }}>
                     <View style={{ flex: 1, }}>
                         <Text style={{ color: "#fff", fontSize: 40, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>muebleNet</Text>
-                        <Text style={{ color: "#fff", fontSize: 15, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>Armador</Text>
-
                     </View>
                     <View style={{ flex: 0.4, alignItems: 'center', }}>
                         <View style={{ borderColor: "#999", borderWidth: 1, width: 70, height: 70, borderRadius: 100, overflow: 'hidden', alignItems: 'center', }}>

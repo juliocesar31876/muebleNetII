@@ -87,34 +87,36 @@ public class Persona {
     private void addTrabajoEnpleado(JSONObject data, Session session) throws JSONException, SQLException, IOException {
         JSONObject datat = data.getJSONObject("data").getJSONObject("datos");
         int cantidad_producto = data.getJSONObject("data").getInt("cantidad_producto");
-        datat.put("key", UUID.randomUUID());
-        datat.put("fecha_on", now());
-        datat.put("estado", 1);
+
         Conexion conPg = ConexionPostgres.getInstance();
         String trabajo = null;
-        JSONObject addPersonas = conPg.ejecutarConsultaObject(""
-                + "select row_to_json(persona.*) as json "
-                + "from persona "
-                + "where persona.key = '" + datat.getString("key_persona") + "'");
-        if (!addPersonas.isNull("key")) {
-            conPg.Transacction();
-            for (int i = 0; i < cantidad_producto; i++) {
-                try {
-                    trabajo = conPg.insertar("trabajo_producto", new JSONArray().put(datat));
-                    //updateProducto(data, session);
-                    conPg.commit();
-                } catch (Exception e) {
-                    conPg.rollback();
-                }
+        //       JSONObject addPersonas = conPg.ejecutarConsultaObject(""
+        //             + "select row_to_json(persona.*) as json "
+        //           + "from persona "
+        //         + "where persona.key = '" + datat.getString("key_persona") + "'");
+        //   if (!addPersonas.isNull("key")) {
+        conPg.Transacction();
+        for (int i = 0; i < cantidad_producto; i++) {
+            try {
+                datat.put("key", UUID.randomUUID());
+                datat.put("estado", 1);
+                trabajo = conPg.insertar("trabajo_producto", new JSONArray().put(datat));
+                //updateProducto(data, session);
+                conPg.commit();
+            } catch (Exception e) {
+                conPg.rollback();
+                session.getBasicRemote().sendText("{estado:'error' ,error:'" + e.getLocalizedMessage() + "'}");
+                return;
             }
-            conPg.Transacction_end();
-            send(data, session);
-            data.put("estado", "exito");
-            data.put("error", false);
-        } else {
-            data.put("estado", "error");
-            data.put("error", "existe ");
         }
+        conPg.Transacction_end();
+        send(data, session);
+        data.put("estado", "exito");
+        data.put("error", false);
+        //   } else {
+        //     data.put("estado", "error");
+        //    data.put("error", "existe ");
+        // }
         return;
     }
 
@@ -288,8 +290,7 @@ public class Persona {
 
     private void getTrabajoPendiente(JSONObject data, Session session) throws JSONException, SQLException {
         JSONObject datat = data.getJSONObject("data");
-
-        Conexion con = ConexionPostgres.getInstance();
+        String areaTrabajo = datat.getString("area");
         String consulta2 = "select json_agg(row_to_json(trabajo_producto.*)) as json from(\n"
                 + "	select tp.*,p.key as key_producto\n"
                 + "	from trabajo_producto tp"
@@ -297,6 +298,18 @@ public class Persona {
                 + "	where tp.producto_terminado = false\n"
                 + "	and tp.key_persona_trabajo='" + datat.getString("key_persona") + "'"
                 + ")trabajo_producto";
+        if (areaTrabajo.equals("limpieza")) {
+            consulta2 = "select json_agg(row_to_json(trabajo_producto.*)) as json from(\n"
+                    + "	select tp.*,p.key as key_producto\n"
+                    + "	from trabajo_producto tp"
+                    + "     join productos p on p.nombre=tp.nombre\n"
+                    + "	where tp.trabajo_limpieza_realizado = false\n"
+                    + "	and tp.producto_terminado= true \n"
+                    + "	and tp.key_persona_limpieza='" + datat.getString("key_persona") + "'"
+                    + ")trabajo_producto";
+        }
+        Conexion con = ConexionPostgres.getInstance();
+
         JSONArray arr = con.ejecutarConsultaArray(consulta2);
         data.put("data", arr);
         data.put("estado", "exito");
@@ -305,12 +318,14 @@ public class Persona {
 
     private void terminarTrabajoPendiente(JSONObject data, Session session) throws JSONException, SQLException {
         JSONObject datat = data.getJSONObject("data");
+        String areaTrabajo = datat.getString("areaTrabajo");
         String key_trabajo = datat.getString("key_trabajo_producto");
         String nombre = datat.getString("nombre_producto");
         Conexion conPg = ConexionPostgres.getInstance();
         String consulta = "UPDATE public.trabajo_producto\n"
                 + "SET producto_terminado=" + true
                 + " WHERE trabajo_producto.key='" + key_trabajo + "'";
+
         JSONObject pagosArmador = new JSONObject();
         pagosArmador.put("key", UUID.randomUUID());
         pagosArmador.put("estado", 1);
@@ -333,14 +348,22 @@ public class Persona {
         String pagos = null;
         conPg.Transacction();
         try {
+            if (areaTrabajo.equals("limpieza")) {
+                consulta = "UPDATE public.trabajo_producto\n"
+                        + "SET trabajo_limpieza_realizado=" + true
+                        + " WHERE trabajo_producto.key='" + key_trabajo + "'";
+            } else {
+                pagos = conPg.insertar("pago_salario", new JSONArray().put(pagoCompra));
+            }
             boolean key = conPg.updateData(consulta);
             pago = conPg.insertar("pago_salario", new JSONArray().put(pagosArmador));
-            pagos = conPg.insertar("pago_salario", new JSONArray().put(pagoCompra));
+
             conPg.commit();
         } catch (Exception e) {
             conPg.rollback();
         }
         conPg.Transacction_end();
+        data.put("objTrabajo", pagosArmador);
         data.put("estado", "exito");
     }
 
@@ -366,7 +389,6 @@ public class Persona {
                 + "	from trabajo_producto tp"
                 + "     join productos p on p.nombre=tp.nombre\n"
                 + "	where tp.producto_terminado = true\n"
-                + "	and tp.pago_recibido= false "
                 + "	and tp.key_persona_trabajo='" + key_persona + "'"
                 + ")trabajo_producto";
         String consultaComprador = "select json_agg(row_to_json(trabajo_producto.*)) as json from(\n"
@@ -377,12 +399,21 @@ public class Persona {
                 + "	and tp.pago_recibido= false "
                 + "	and tp.key_persona_compra='" + key_persona + "'"
                 + ")trabajo_producto";
+        String consultaLimpieza = "select json_agg(row_to_json(trabajo_producto.*)) as json from(\n"
+                + "	select trabajo_producto.*,productos.key as key_producto\n"
+                + "	from trabajo_producto     \n"
+                + "	join productos on productos.nombre=trabajo_producto.nombre\n"
+                + "	where trabajo_producto.trabajo_limpieza_realizado = false\n"
+                + "	and trabajo_producto.key_persona_limpieza='" + key_persona + "')trabajo_producto";
 
         if (datat.getString("area").equals("compras")) {
             consulta = consultaComprador;
         }
         if (datat.getString("area").equals("armador mueble")) {
             consulta = consultaComprador;
+        }
+        if (datat.getString("area").equals("limpieza")) {
+            consulta = consultaLimpieza;
         }
         JSONArray arr = con.ejecutarConsultaArray(consulta);
         data.put("data", arr);

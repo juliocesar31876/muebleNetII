@@ -62,14 +62,14 @@ const Carga = (props) => {
                 return <View />
             }
 
-            if (!props.state.personaReducer.dataPagoTrabajoPersonaPendiente) {
+        /*     if (!props.state.personaReducer.dataPagoTrabajoPersonaPendiente) {
                 props.PagoTrabajoPendiente(props.state.socketReducer.socket,
                     {
                         key_persona: props.state.usuarioReducer.usuarioLog.persona.key,
                         area
                     });
                 return <View />
-            }
+            } */
             if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getPagoSalario") {
                 return <View />
             }
@@ -78,27 +78,29 @@ const Carga = (props) => {
                     { key_persona: props.state.usuarioReducer.usuarioLog.persona.key });
                 return <View />
             }
-            props.state.navigationReducer.replace("InicioCompraPage");
+            props.state.navigationReducer.replace("InicioCompraPage", {
+                admin: false
+            });
             return <View />
         }
         /////////////area armador>
-        if (area === "armador mueble") {
+        if (area === "armador mueble" || area === "limpieza") {
             if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getTrabajoPendiente") {
                 return <View />
             }
             if (!props.state.personaReducer.dataTrabajoPersonaPendiente) {
                 props.getTrabajoPendiente(props.state.socketReducer.socket,
-                    { key_persona: props.state.usuarioReducer.usuarioLog.persona.key });
+                    { key_persona: props.state.usuarioReducer.usuarioLog.persona.key,area });
                 return <View />
             }
             if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "PagoTrabajoPendiente") {
                 return <View />
             }
-            if (!props.state.personaReducer.dataPagoTrabajoPersonaPendiente) {
+            /* if (!props.state.personaReducer.dataPagoTrabajoPersonaPendiente) {
                 props.PagoTrabajoPendiente(props.state.socketReducer.socket,
                     { key_persona: props.state.usuarioReducer.usuarioLog.persona.key, area });
                 return <View />
-            }
+            } */
             if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getPagoSalario") {
                 return <View />
             }
@@ -107,7 +109,10 @@ const Carga = (props) => {
                     { key_persona: props.state.usuarioReducer.usuarioLog.persona.key });
                 return <View />
             }
-            props.state.navigationReducer.replace("InicioArmadorPage");
+            props.state.navigationReducer.replace("InicioArmadorPage", {
+                admin: false,
+                area
+            });
             return <View />
         }
         /////////////>
@@ -134,7 +139,7 @@ const Carga = (props) => {
             return <View />
         }
 
-        if (props.state.materialReducer.estado === "cargando" && props.state.materialReducer.type === "getAllTipoMaterial") {
+        /* if (props.state.materialReducer.estado === "cargando" && props.state.materialReducer.type === "getAllTipoMaterial") {
             return <View />
         }
         if (!props.state.materialReducer.dataTipoMaterial) {
@@ -147,8 +152,8 @@ const Carga = (props) => {
         if (!props.state.materialReducer.dataMaterial) {
             props.getAllMaterial(props.state.socketReducer.socket);
             return <View />
-        }
-        if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaPendiente") {
+        } */
+       /*  if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaPendiente") {
             return <View />
         }
         if (!props.state.ventaReducer.dataVentaPendiente) {
@@ -158,41 +163,41 @@ const Carga = (props) => {
         if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaFinalizado") {
             return <View />
         }
-
         if (!props.state.ventaReducer.dataVentaFinalizado) {
             props.getVentaFinalizado(props.state.socketReducer.socket);
             return <View />
-        }
-        if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenar") {
+        } */
+
+      /*   if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenar") {
             return <View />
         }
 
         if (!props.state.ventaReducer.dataVentaDatosPendiente) {
             props.getVentaDatosRellenar(props.state.socketReducer.socket);
             return <View />
-        }
-        if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenado") {
+        } */
+       /*  if (props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "getVentaDatosRellenado") {
             return <View />
         }
 
         if (!props.state.ventaReducer.dataVentaDatosFinalizado) {
             props.getVentaDatosRellenado(props.state.socketReducer.socket);
             return <View />
-        }
-        if (props.state.comprasReducer.estado === "cargando" && props.state.comprasReducer.type === "getAllLibroComprasPendiente") {
+        } */
+      /*   if (props.state.comprasReducer.estado === "cargando" && props.state.comprasReducer.type === "getAllLibroComprasPendiente") {
             return <View />
         }
         if (!props.state.comprasReducer.dataLibroComprasPendiente) {
             props.getAllLibroComprasPendiente(props.state.socketReducer.socket);
             return <View />
-        }
-        if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getAllPagoPendientePersona") {
+        } */
+        /* if (props.state.personaReducer.estado === "cargando" && props.state.personaReducer.type === "getAllPagoPendientePersona") {
             return <View />
         }
         if (!props.state.personaReducer.dataPagoPendiente) {
             props.getAllPagoPendientePersona(props.state.socketReducer.socket);
             return <View />
-        }
+        } */
         props.state.navigationReducer.replace("InicioPage");
 
     } else {

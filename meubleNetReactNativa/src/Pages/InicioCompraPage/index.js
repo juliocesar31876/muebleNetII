@@ -24,13 +24,11 @@ class InicioCompraPage extends Component {
         var url = myPropsJulio.images.urlImage + usuario.persona.ci + ".png" + `?tipo=${"persona"}&date=${Date.now()}`
         var areaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[key_area_trabajo].nombre
         arrayMenu = []
-        if (areaTrabajo === "compras") {
-            arrayMenu = ["Ver libro compras", "salario"];
-        }
+        arrayMenu = ["Ver libro compras", "salario"];
         this.state = {
             isOpen: false,
             index: 0,
-            titulo: "Inicio",
+            titulo: "",
             menu: arrayMenu,
             areaTrabajo,
             url,
@@ -59,7 +57,10 @@ class InicioCompraPage extends Component {
                 this.props.navigation.navigate("ProductosPage", { pagina: item })
                 return <View />
             case "salario":
-                this.props.navigation.navigate("SalarioTrabajoPage")
+                this.props.navigation.navigate("SalarioTrabajoPage", {
+                    pagina: "",
+                    area: this.state.areaTrabajo
+                })
                 return <View />
             case "Ver libro compras":
                 this.props.navigation.navigate("VerLibroComprasPage", {
@@ -158,7 +159,6 @@ class InicioCompraPage extends Component {
                     alignItems: 'center',
                     backgroundColor: "#000",
                 }}>
-                <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', marginTop: 20, }}>
                     <View style={{ flex: 1, }}>
                         <Text style={{ color: "#fff", fontSize: 40, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>muebleNet</Text>

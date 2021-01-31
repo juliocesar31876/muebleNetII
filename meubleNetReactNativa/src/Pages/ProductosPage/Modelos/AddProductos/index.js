@@ -73,6 +73,10 @@ const AddProductos = (props) => {
                 value: "",
                 error: false
             },
+            pago_limpieza: {
+                value: "",
+                error: false
+            },
             encargado_compra: {
                 value: "",
                 error: false
@@ -95,7 +99,7 @@ const AddProductos = (props) => {
     if (!props.state.socketReducer.socket) {
         return <Estado estado={"Reconectando"} />
     }
-  
+
     const hanlechage = (data) => {
         state.obj[data.id] = {
             value: data.text,
@@ -151,8 +155,8 @@ const AddProductos = (props) => {
         var data = {}
         for (const key in state.obj) {
             var obj = state.obj[key]
-            if (key==="precio") {
-                
+            if (key === "precio") {
+
             }
             if (obj.value === "") {
                 exito = false
@@ -168,7 +172,7 @@ const AddProductos = (props) => {
         setState({ ...state })
         if (exito) {
             data["key_tipo_producto"] = state.obj.key_tipo_producto.data.key
-            data["descuento"] =0
+            data["descuento"] = 0
             data["estado"] = 1
             props.registrarProducto(props.state.socketReducer.socket, data)
         }
@@ -270,8 +274,12 @@ const AddProductos = (props) => {
                     {Object.keys(state.obj).map((key) => {
                         var data = state.obj[key]
                         var keyboardTyp = ""
-                        if (key === "precio_venta"||key === "precio_produccion"||key === "encargado_compra"||key === "precio_armador") {
-                            keyboardTyp = "phone-pad"
+                        if (key === "precio_venta" ||
+                            key === "precio_produccion" ||
+                            key === "encargado_compra" ||
+                            key === "pago_limpieza" ||
+                            key === "precio_armador") {
+                            keyboardTyp = "numeric"
                         }
                         if (key === "descripcion") {
                             return (

@@ -45,6 +45,9 @@ export default (state, action) => {
             case "getAllCompraPendienteVenta":
                 getAllCompraPendienteVenta(state, action);
                 break;
+            case "vaciarDataVentaProducto":
+                vaciarDataVentaProducto(state, action);
+                break;
         }
         state = { ...state };
     }
@@ -116,6 +119,9 @@ const getVentaDatosRellenado = (state, action) => {
             state.dataVentaDatosFinalizado = {}
         }
         action.data.map((obj) => {
+            if (obj.ventatrabajo === null) {
+                obj.ventatrabajo = {}
+            }
             obj.ventatrabajo.map((data) => {
                 var trabajo = data.trabajos[0]
                 data.trabajos = trabajo
@@ -197,4 +203,7 @@ const getAllCompraPendienteVenta = (state, action) => {
             state.dataComprasPendienteVenta[obj.key] = obj
         })
     }
+}
+const vaciarDataVentaProducto = (state, action) => {
+    state.dataVentaProducto = {}
 }

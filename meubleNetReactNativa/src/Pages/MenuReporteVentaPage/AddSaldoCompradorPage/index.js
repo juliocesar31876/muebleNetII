@@ -25,6 +25,7 @@ class AddSaldoCompradorPage extends Component {
         var area = props.navigation.state.params.area
         var nuevo = props.navigation.state.params.nuevo
         var finalizo = props.navigation.state.params.finalizo
+        var usuario = props.state.usuarioReducer.usuarioLog
         var montoDevolver = 0
         var key_compras_libro = false
         var saldo = 0
@@ -70,7 +71,8 @@ class AddSaldoCompradorPage extends Component {
             finalizo,
             nuevo,
             key_compras_libro,
-            saldo
+            saldo,
+            usuario
         }
     }
     hanlechages(data) {
@@ -142,7 +144,10 @@ class AddSaldoCompradorPage extends Component {
             var data = {
                 compras_libro,
                 compras_ingreso,
-                compras
+                compras,
+                nombreUsuario: this.state.persona.nombre + " " + this.state.persona.paterno,
+                key_persona_usuario: this.state.usuario.key_persona,
+                fecha_on
             }
             this.props.addLibroCompras(this.props.state.socketReducer.socket, data)
             return <View />
@@ -160,13 +165,17 @@ class AddSaldoCompradorPage extends Component {
                 detalle: texto,
                 cantidad: 1,
                 key_compras_libro: this.state.key_compras_libro,
-                ingreso
+                ingreso,
             }
             var data = {
                 compras,
-                key_persona:this.state.persona.key,
-                compras_ingreso
+                key_persona: this.state.persona.key,
+                compras_ingreso,
+                nombreUsuario: this.state.persona.nombre + " " + this.state.persona.paterno,
+                key_persona_usuario: this.state.usuario.key_persona,
+                fecha_on
             }
+            
             this.props.addLibroComprasIngreso(this.props.state.socketReducer.socket, data)
             return <View />
 
@@ -187,7 +196,7 @@ class AddSaldoCompradorPage extends Component {
             var data = {
                 compras,
                 compras_libro,
-                key_persona:this.state.persona.key
+                key_persona: this.state.persona.key
             }
             this.props.finalizarLibroComprasIngreso(this.props.state.socketReducer.socket, data)
             return <View />
@@ -305,7 +314,7 @@ class AddSaldoCompradorPage extends Component {
 
                     </View>
 
-                    <TouchableOpacity  style={{ marginTop: 20, width: 120, height: 50,alignItems: 'center', justifyContent: 'center', }}>
+                    <TouchableOpacity style={{ marginTop: 20, width: 120, height: 50, alignItems: 'center', justifyContent: 'center', }}>
                         {this.esperandoRepuesta()}
                     </TouchableOpacity>
 

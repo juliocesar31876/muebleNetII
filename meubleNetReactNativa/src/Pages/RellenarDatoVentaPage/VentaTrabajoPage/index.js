@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Barra from '../../../Component/Barra';
 import * as ventaActions from '../../../Actions/ventaActions'
@@ -20,6 +20,10 @@ class VentaTrabajoPage extends Component {
             var obj = {
                 nombre_producto: producto.nombre,
                 cantidad: producto.cantidad,
+                precio_armador: producto.precio_armador,
+                precio_produccion: producto.precio_produccion,
+                pago_limpieza: producto.pago_limpieza,
+                precio_venta: producto.precio_venta,
                 armador: {
                     1: {
                         key_persona: false,
@@ -38,11 +42,22 @@ class VentaTrabajoPage extends Component {
                 nombrePersona: "Selecione Comprador",
                 key_persona: false,
             },
+            limpieza: {
+                nombrePersona: "Selecione Limpieza",
+                key_persona: false,
+            },
             dataTrabajo
         };
     }
     popupPersona = (key_dataTrabajo, pasar, area, key2) => {
         const selecEmpleado = (persona) => {
+            if (area === "limpieza") {
+                this.state.limpieza.key_persona = persona.key
+                this.state.limpieza.nombrePersona = persona.nombre + " " + persona.paterno
+                this.setState({ ...this.state })
+                this.props.cerrarPopup()
+                return <View />
+            }
             if (pasar) {
                 this.state.compra.key_persona = persona.key
                 this.state.compra.nombrePersona = persona.nombre + " " + persona.paterno
@@ -111,6 +126,7 @@ class VentaTrabajoPage extends Component {
         this.state.dataTrabajo.map((obj, key) => {
             var num = 0
             Object.keys(obj.armador).map((key) => {
+
                 var data = obj.armador[key]
                 var cantidad = Number(data.cantidad)
                 num = num + cantidad
@@ -134,6 +150,10 @@ class VentaTrabajoPage extends Component {
             error = "selecion comprador "
             exito = false
         }
+        if (!this.state.limpieza.key_persona) {
+            error = "selecion limpieza "
+            exito = false
+        }
         if (exito) {
             var fecha = moment()
                 .format('YYYY-MM-DD');
@@ -144,7 +164,8 @@ class VentaTrabajoPage extends Component {
                 fecha_on: timeStam,
                 key_venta: this.state.venta.key,
                 compras: this.state.compra,
-                armadores: this.state.dataTrabajo
+                armadores: this.state.dataTrabajo,
+                limpieza: this.state.limpieza
             }
             this.props.addVentaTrabajo(this.props.state.socketReducer.socket, objSend)
             return <View />
@@ -175,7 +196,12 @@ class VentaTrabajoPage extends Component {
             return <View />
         }
         return (
-            <View style={{ flex: 1, backgroundColor: "#000", }}>
+            <View style={{
+                flex: 1, backgroundColor: "#000",
+                width: Dimensions.get("window").width,
+                height: Dimensions.get("window").height,
+                alignItems: 'center',
+            }}>
                 <Barra titulo={"Venta Trabajo"} navigation={this.props.navigation} />
 
                 <ScrollView style={{ flex: 1, width: "100%", }}>
@@ -204,7 +230,7 @@ class VentaTrabajoPage extends Component {
                             return (
                                 <View style={{ width: '100%', alignItems: 'center', }}>
                                     <View style={{ width: '90%', flexDirection: 'row', justifyContent: 'center', margin: 5, alignItems: 'center', }}>
-                                        <Text style={{ color: '#fff', fontWeight: 'bold', flex: 1, }}> {(key+1)}- {obj.nombre_producto.toUpperCase()} </Text>
+                                        <Text style={{ color: '#fff', fontWeight: 'bold', flex: 1, }}> {(key + 1)}- {obj.nombre_producto.toUpperCase()} </Text>
                                         <Text style={{ color: '#fff', fontWeight: 'bold', flex: 0.5, }}> CANTIDAD: {obj.cantidad}    </Text>
                                         <TouchableOpacity
                                             onPress={() => this.addArmador(obj, key)}
@@ -236,7 +262,7 @@ class VentaTrabajoPage extends Component {
                                                     </TouchableOpacity>
                                                 </View>
                                                 <View style={{ flex: 0.5, alignItems: 'center', }}>
-                                                    <Text style={{ color: '#fff', width: '80%', margin: 5, }}> Cantidad mueble</Text>
+                                                    <Text style={{ color: '#fff', width: '80%', margin: 5, fontSize: 10, }}> Cantidad mueble</Text>
                                                     <TextInput
                                                         value={data.monto}
                                                         keyboardType={"numeric"}
@@ -265,6 +291,13 @@ class VentaTrabajoPage extends Component {
                             onPress={() => this.popupPersona("", true, "compras")}
                             style={{ justifyContent: 'center', alignItems: 'center', width: '80%', height: 40, backgroundColor: "#fff", borderRadius: 10, }}>
                             <Text>{this.state.compra.nombrePersona}</Text>
+                        </TouchableOpacity>
+
+                        <Text style={{ color: '#fff', width: '80%', margin: 5, }}> Limpieza</Text>
+                        <TouchableOpacity
+                            onPress={() => this.popupPersona("", true, "limpieza")}
+                            style={{ justifyContent: 'center', alignItems: 'center', width: '80%', height: 40, backgroundColor: "#fff", borderRadius: 10, }}>
+                            <Text>{this.state.limpieza.nombrePersona}</Text>
                         </TouchableOpacity>
                     </View>
 

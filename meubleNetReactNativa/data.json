@@ -1,0 +1,24 @@
+[
+    {
+        "key": "149ca02b-49a8-4bb6-91eb-f8c0562fe092",
+        "key_persona": "f9d7bc10-628a-4e51-982c-ad427a1b5d7f",
+        "descripcion": "Pago pendiente muebletocador jazmin",
+        "debe": 0,
+        "haber": 220,
+        "estado": 1,
+        "fecha_on": "2021-01-17T18:25:10",
+        "fecha_off": null,
+        "cancelado": false
+    },
+    {
+        "key": "15c8bc5e-072a-41fe-9f9f-04b6c354d11d",
+        "key_persona": "f9d7bc10-628a-4e51-982c-ad427a1b5d7f",
+        "descripcion": "Pago pendiente mueble tocador jazmin",
+        "debe": 0,
+        "haber": 220,
+        "estado": 1,
+        "fecha_on": "2021-01-17T18:47:14",
+        "fecha_off": null,
+        "cancelado": false
+    }
+]

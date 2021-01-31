@@ -1,0 +1,4 @@
+#Sun Jan 31 07:58:46 BOT 2021
+base.0=/mnt/eaba75c6-2f35-4bbb-a7a1-c30544cb08e8/datos/git2/muebleNetII/meubleNetReactNativa/android/app/build/intermediates/dex/release/mergeDexRelease/out/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

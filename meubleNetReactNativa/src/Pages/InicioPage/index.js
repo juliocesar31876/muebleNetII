@@ -23,12 +23,22 @@ class InicioPage extends Component {
         var key_area_trabajo = usuario.persona.key_area_trabajo
         var url = myPropsJulio.images.urlImage + usuario.persona.ci + ".png" + `?tipo=${"persona"}`
         var areaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[key_area_trabajo].nombre
+        var admin = true
         arrayMenu = []
         if (areaTrabajo === "administrador") {
-            arrayMenu = ["realizar ventas", "productos", "personales", "reporte ventas", "compras", "salario","area trabajo"];
+            arrayMenu = ["realizar ventas",
+                "productos",
+                "personales",
+                "reporte ventas",
+                "compras",
+                "salario",
+               /*  "area trabajo", */
+            ];
+            var admin = true
         }
         if (areaTrabajo === "compras") {
             arrayMenu = ["compras"];
+
         }
         if (areaTrabajo === "ventas") {
             arrayMenu = ["ventas"];
@@ -40,6 +50,7 @@ class InicioPage extends Component {
             titulo: "Inicio",
             menu: arrayMenu,
             url,
+            admin,
             usuarioPersona: usuario.persona
         }
     }
@@ -64,11 +75,14 @@ class InicioPage extends Component {
             case "productos":
                 this.props.navigation.navigate("ProductosPage", { pagina: item })
                 return <View />
+            case "cuenta contable":
+                this.props.navigation.navigate("CuentaContablePage", { pagina: item })
+                return <View />
             case "area trabajo":
                 this.props.navigation.navigate("AreaTrabajoPage", { pagina: item })
                 return <View />
             case "salario":
-                this.props.navigation.navigate("PagoSalarioPage", { pagina: item })
+                this.props.navigation.navigate("PagoSalarioPage", { pagina: item, admin: this.state.admin })
                 return <View />
             case "personales":
                 this.props.navigation.navigate("PersonaPage", { pagina: item })
@@ -165,7 +179,7 @@ class InicioPage extends Component {
                     alignItems: 'center',
                     backgroundColor: "#000",
                 }}>
-                <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
+                {/* <Barra titulo={this.state.titulo} navigation={this.props.navigation} /> */}
                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', }}>
                     <View style={{ flex: 1, }}>
                         <Text style={{ color: "#fff", fontSize: 40, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>muebleNet</Text>

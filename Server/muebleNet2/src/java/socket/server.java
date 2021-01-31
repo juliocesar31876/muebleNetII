@@ -5,6 +5,7 @@ import components.Usuario;
 import components.Productos;
 import components.AreaTrabajo;
 import components.Compras;
+import components.CuentaContable;
 import components.Material;
 import components.Persona;
 import components.Trabajos;
@@ -76,6 +77,10 @@ public class server {
                     }
                     case "trabajos": {
                         new Trabajos(data, session);
+                        break;
+                    }
+                    case "cuentaContable": {
+                        new CuentaContable(data, session);
                         break;
                     }
                 }

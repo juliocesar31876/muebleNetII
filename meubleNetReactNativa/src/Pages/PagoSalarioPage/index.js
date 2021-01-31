@@ -7,7 +7,8 @@ import {
     StyleSheet,
     AsyncStorage,
     ScrollView,
-    FlatList
+    FlatList,
+    BackHandler
 } from 'react-native';
 import Barra from '../../Component/Barra';
 import Estado from '../../Component/Estado';
@@ -37,6 +38,8 @@ class PagoSalarioPage extends Component {
             verLista
         }
     }
+
+
     handleClick = (item) => {
         this.props.state.personaReducer.dataPagoAreaPendiente = false
         switch (item) {
@@ -118,6 +121,7 @@ class PagoSalarioPage extends Component {
                                 this.props.navigation.navigate("SalarioTrabajoPage", {
                                     pagina: "PagoSalarioPage",
                                     data: obj,
+                                    admin:this.props.navigation.state.params.admin
 
                                 })
                             }}
@@ -177,6 +181,46 @@ class PagoSalarioPage extends Component {
                         )}
 
                 </View>
+
+                {!this.state.verLista ?
+                    (
+                        <View />
+                    )
+                    :
+                    (
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.state.verLista = !this.state.verLista
+                                this.setState({ ...this.state })
+                                this.props.state.trabajoReducer.dataAreaPagoPendiente = false
+                            }}
+                            style={{
+                                width: 50,
+                                height: 50,
+                                borderRadius: 100,
+                                borderWidth: 2,
+                                borderColor: '#fff',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                position: 'absolute',
+                                right: 10,
+                                bottom: 10
+
+                            }}>
+                            <Text style={{
+                                color: "#fff",
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                borderBottomWidth: 2,
+                                borderColor: '#fff',
+
+                            }}>
+                                volver
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+
             </View>
         );
     }

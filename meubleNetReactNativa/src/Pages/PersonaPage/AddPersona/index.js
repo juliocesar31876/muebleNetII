@@ -329,7 +329,7 @@ const AddPersona = (props) => {
         }
         return (
             <TouchableOpacity onPress={() => agregarPersona()} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-                <Text style={{ color: "#fff", textAlign: "center", fontSize: 15, }}>Agreagar producto</Text>
+                <Text style={{ color: "#fff", textAlign: "center", fontSize: 15, }}>Agreagar Persona</Text>
             </TouchableOpacity>
         )
     }

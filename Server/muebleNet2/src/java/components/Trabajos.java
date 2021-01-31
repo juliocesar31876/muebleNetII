@@ -58,22 +58,34 @@ public class Trabajos {
     private void pagoSalarioCancelado(JSONObject data, Session session) throws SQLException, JSONException {
         JSONObject datat = data.getJSONObject("data");
         Conexion con = ConexionPostgres.getInstance();
-        JSONObject personaPago = new JSONObject();
-        personaPago.put("key", UUID.randomUUID());
-        personaPago.put("estado", 1);
-        personaPago.put("descripcion", datat.getString("descripcion"));
-        personaPago.put("key_persona", datat.getString("key_persona"));
-        personaPago.put("haber", datat.getInt("haber"));
-        personaPago.put("debe", datat.getInt("debe"));
-        personaPago.put("cancelado", true);
-        personaPago.put("fecha_on", datat.getString("fecha_on"));
+        //      JSONObject personaPago = new JSONObject();
+        //       personaPago.put("key", UUID.randomUUID());
+//        personaPago.put("estado", 1);
+//        personaPago.put("descripcion", datat.getString("descripcion"));
+//        personaPago.put("key_persona", datat.getString("key_persona"));
+//        personaPago.put("haber", datat.getInt("haber"));
+//        personaPago.put("debe", datat.getInt("debe"));
+//        personaPago.put("fecha_on", datat.getString("fecha_on"));
+//        personaPago.put("cancelado", true);
         String consulta = "UPDATE public.pago_salario\n"
                 + "SET cancelado=" + true
-                + " WHERE pago_salario.key='" + datat.getInt("key_pago_salario") + "'";
+                + " ,haber=0"
+                + " , debe=" + datat.getInt("debe")
+                + " WHERE pago_salario.key='" + datat.getString("key_pago_salario") + "'";
+        JSONObject libroCaja = new JSONObject();
+        libroCaja.put("key", UUID.randomUUID());
+        libroCaja.put("estado", 1);
+        libroCaja.put("descripcion", "se realizo un pago a " + datat.getString("nombre"));
+        libroCaja.put("key_persona", datat.getString("key_admin"));
+        libroCaja.put("haber", datat.getInt("debe"));
+        libroCaja.put("debe", datat.getInt("haber"));
+        libroCaja.put("cancelado", true);
+        libroCaja.put("fecha_on", datat.getString("fecha_on"));
         con.Transacction();
         try {
             boolean key = con.updateData(consulta);
-            String pago = con.insertar("pago_salario", new JSONArray().put(personaPago));
+            //         String pago = con.insertar("pago_salario", new JSONArray().put(personaPago));
+            String pagos = con.insertar("pago_salario", new JSONArray().put(libroCaja));
             con.commit();
         } catch (Exception e) {
             con.rollback();

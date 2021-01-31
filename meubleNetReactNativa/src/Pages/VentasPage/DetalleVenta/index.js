@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { ScrollView, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import Svg from '../../../Svg';
 const DetalleVenta = (props) => {
+
+    
     return (
         <ScrollView style={{
             flex: 1,

@@ -11,9 +11,22 @@ import {
 import * as productoActions from '../../../Actions/productoActions'
 import * as personaActions from '../../../Actions/personaActions'
 import * as popupActions from '../../../Actions/popupActions'
+import * as popupCalendarioActions from '../../../Actions/popupCalendarioActions'
 import * as areaTrabajoActions from '../../../Actions/areaTrabajoActions'
 import { connect } from 'react-redux';
 import MiCheckBox from '../../../Component/MiCheckBox';
+import moment from 'moment';
+const initStates = (state) => {
+    return { state }
+};
+const initActions = ({
+    ...personaActions,
+    ...areaTrabajoActions,
+    ...popupActions,
+    ...productoActions,
+    ...popupCalendarioActions
+
+});
 const TrabajoEmpleado = (props) => {
     const [state, setstate] = React.useState({
         cantidad: {
@@ -30,6 +43,11 @@ const TrabajoEmpleado = (props) => {
             error: false,
             data: false
         },
+        key_persona_limpieza: {
+            value: "Selecione ",
+            error: false,
+            data: false
+        },
         key_producto: {
             value: "Selecione Producto",
             error: false,
@@ -38,15 +56,24 @@ const TrabajoEmpleado = (props) => {
         producto_terminado: {
             value: false,
         },
+        fecha_entrega: {
+            value: "Selecion Fecha",
+        },
     })
     if (props.state.personaReducer.estado === "exito" && props.state.personaReducer.type === "addTrabajoEnpleado") {
         props.state.personaReducer.estado = ""
         props.state.personaReducer.type = ""
         state.cantidad.value = ""
-        state.key_persona.value = "Selecione Persona"
+        state.key_persona.value = "Selecione Armador"
         state.key_persona.data = false
         state.key_producto.value = "Selecione Producto"
         state.key_producto.data = false
+        state.key_persona_compra.value = "Selecione Persona Compra"
+        state.key_persona_compra.data = false
+        state.key_persona_limpieza.value = "Selecione Producto"
+        state.key_persona_limpieza.data = false
+        state.cantidad = ""
+        state.fecha_entrega = ""
         setstate({ ...state })
     }
 
@@ -101,7 +128,7 @@ const TrabajoEmpleado = (props) => {
                 </View>)
         })
     }
-    const popupPersona = (id) => {
+    const popupPersona = (id, titulo, area) => {
         const selecEmpleado = (objEmpleado) => {
             state[id].value = objEmpleado.nombre + " " + objEmpleado.paterno + " " + objEmpleado.materno + "  CI:" + objEmpleado.ci
             state[id].data = objEmpleado
@@ -130,28 +157,27 @@ const TrabajoEmpleado = (props) => {
                             {Object.keys(props.state.personaReducer.dataPersonas).map((key) => {
                                 var obj = props.state.personaReducer.dataPersonas[key]
                                 var area_trabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[obj.key_area_trabajo]
-                                console.log(area_trabajo);
-                                if (area_trabajo.nombre !== "armador mueble") {
-                                    return <View />
+                                if (area_trabajo.nombre === area) {
+                                    return (
+                                        <TouchableOpacity
+                                            onPress={() => selecEmpleado(obj)}
+                                            style={{
+                                                margin: 5,
+                                                width: "90%",
+                                                height: 50,
+                                                borderRadius: 10,
+                                                borderWidth: 3,
+                                                flexDirection: 'row',
+                                                borderColor: "#fff",
+                                                alignItems: 'center',
+                                                backgroundColor: "#000",
+                                            }}>
+                                            <Text style={{ margin: 4, color: "#fff", fontSize: 12, textAlign: "center", flex: 1, }}>{obj.nombre} {obj.materno} </Text>
+                                            <Text style={{ margin: 4, color: "#fff", fontSize: 12, textAlign: "center", flex: 1, }}> CI : {obj.ci} </Text>
+                                        </TouchableOpacity>
+                                    )
                                 }
-                                return (
-                                    <TouchableOpacity
-                                        onPress={() => selecEmpleado(obj)}
-                                        style={{
-                                            margin: 5,
-                                            width: "90%",
-                                            height: 50,
-                                            borderRadius: 10,
-                                            borderWidth: 3,
-                                            flexDirection: 'row',
-                                            borderColor: "#fff",
-                                            alignItems: 'center',
-                                            backgroundColor: "#000",
-                                        }}>
-                                        <Text style={{ margin: 4, color: "#fff", fontSize: 12, textAlign: "center", flex: 1, }}>{obj.nombre} {obj.materno} </Text>
-                                        <Text style={{ margin: 4, color: "#fff", fontSize: 12, textAlign: "center", flex: 1, }}> CI : {obj.ci} </Text>
-                                    </TouchableOpacity>
-                                )
+                                return <View />
                             })}
                         </View>
                     </ScrollView>
@@ -164,6 +190,14 @@ const TrabajoEmpleado = (props) => {
             error: false,
         }
         setstate({ ...state })
+    }
+    const popupCalendario = () => {
+        props.abrirPopupCalendario((fechaSelecionada) => {
+            hanlechage({ text: fechaSelecionada, id: "fecha_entrega" })
+            props.cerrarPopupCalendario()
+            return <View />
+        }, "dia", "actual")
+        return <View />
     }
     const addTrabajo = () => {
         var exito = true
@@ -179,6 +213,11 @@ const TrabajoEmpleado = (props) => {
             state.key_producto.error = true
             exito = false
         }
+        if (!state.fecha_entrega.value === "Selecion Fecha") {
+            exito = false
+            alert("selecion fecha")
+            return <View />
+        }
         setstate({ ...state })
         if (exito) {
             var num = Number(state.cantidad.value)
@@ -186,18 +225,27 @@ const TrabajoEmpleado = (props) => {
                 alert("Contiene simbolo")
                 return <View />
             }
+            var fecha = moment()
+                .format('YYYY-MM-DD');
+            var hora = moment()
+                .format('HH:mm:ss');
+            var fecha_on = fecha + "T" + hora
             var data = {
                 datos: {
                     key_persona_trabajo: state.key_persona.data.key,
-                    key_persona_compra: state.key_persona.data.key,
+                    key_persona_compra: state.key_persona_compra.data.key,
+                    key_persona_limpieza: state.key_persona_limpieza.data.key,
                     key_sucursal: state.key_persona.data.key_sucursal,
                     nombre: state.key_producto.data.nombre,
                     trabajo_precio: state.key_producto.data.precio_armador,
-                    producto_terminado: state.producto_terminado.value,
+                    producto_terminado: false,
                     pago_recibido: false,
-                    encargo_compra_pago: state.key_producto.data.encargo_compra_pago,
+                    pago_limpieza: state.key_producto.data.pago_limpieza,
+                    trabajo_limpieza_realizado: false,
                     pago_compra_recibido: false,
                     compra_realizado: false,
+                    fecha_entrega: state.fecha_entrega.value,
+                    fecha_on
                 },
                 cantidad_producto: num
             }
@@ -236,7 +284,7 @@ const TrabajoEmpleado = (props) => {
                     <View style={{ width: "100%", flexDirection: 'column', }}>
                         <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Persona</Text>
                         <TouchableOpacity
-                            onPress={() => popupPersona("key_persona")}
+                            onPress={() => popupPersona("key_persona", "Armadores", "armador mueble")}
                             style={(state.key_persona.error ? styles.error : styles.touc)}>
                             <Text style={{ fontSize: 13, color: "#666", }}>{state.key_persona.value.toUpperCase()}  </Text>
                         </TouchableOpacity>
@@ -244,19 +292,35 @@ const TrabajoEmpleado = (props) => {
                     <View style={{ width: "100%", flexDirection: 'column', }}>
                         <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Persona compra</Text>
                         <TouchableOpacity
-                            onPress={() => popupPersona("key_persona_compra")}
+                            onPress={() => popupPersona("key_persona_compra", "Compras", "compras")}
                             style={(state.key_persona_compra.error ? styles.error : styles.touc)}>
                             <Text style={{ fontSize: 13, color: "#666", }}>{state.key_persona_compra.value.toUpperCase()}  </Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={{ width: "100%", flexDirection: 'row', margin: 5, }}>
+                    <View style={{ width: "100%", flexDirection: 'column', }}>
+                        <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Persona limpieza</Text>
+                        <TouchableOpacity
+                            onPress={() => popupPersona("key_persona_limpieza", "Limpieza", "limpieza")}
+                            style={(state.key_persona_limpieza.error ? styles.error : styles.touc)}>
+                            <Text style={{ fontSize: 13, color: "#666", }}>{state.key_persona_limpieza.value.toUpperCase()}  </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ width: "100%", flexDirection: 'column', }}>
+                        <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Fecha entrega</Text>
+                        <TouchableOpacity onPress={() => popupCalendario()}
+                            style={(state.fecha_entrega.error ? styles.error : styles.touc)}>
+                            <Text style={{ fontSize: 10, color: "#666", }}>
+                                {state.fecha_entrega.value}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {/*   <View style={{ width: "100%", flexDirection: 'row', margin: 5, }}>
                         <View style={{ flex: 1, alignItems: 'center', }}>
                             <MiCheckBox ischeck={state.producto_terminado.value} id={"producto_terminado"}
                                 onChange={text => hanlechage({ text: text, id: "producto_terminado" })}
                             />
                             <Text style={{ margin: 4, color: "#fff", fontSize: 12, fontWeight: 'bold', }}>producto terminado</Text>
                         </View>
-                    </View>
+                    </View> */}
                     <View
                         style={{
                             marginTop: 30,
@@ -315,14 +379,5 @@ const styles = StyleSheet.create({
         height: 40,
     },
 });
-const initStates = (state) => {
-    return { state }
-};
-const initActions = ({
-    ...personaActions,
-    ...areaTrabajoActions,
-    ...popupActions,
-    ...productoActions
 
-});
 export default connect(initStates, initActions)(TrabajoEmpleado);

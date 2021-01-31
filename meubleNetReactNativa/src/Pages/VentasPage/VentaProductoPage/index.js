@@ -52,6 +52,7 @@ class VentaProductoPage extends Component {
             precio_produccion: objProducto.totalCosteProduccion,
             key_producto: objProducto.key,
             precio_armador: objProducto.precio_armador,
+            pago_limpieza: objProducto.pago_limpieza,
             encargado_compra: objProducto.encargado_compra,
             descuento: objProducto.descuento,
         }

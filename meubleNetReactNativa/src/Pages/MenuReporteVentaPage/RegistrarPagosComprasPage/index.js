@@ -9,11 +9,19 @@ import {
     TextInput
 } from 'react-native';
 import Svg from '../../../Svg';
-import * as usuarioActions from '../../../Actions/usuarioActions'
+import * as comprasActions from '../../../Actions/comprasActions'
 import * as popupActions from '../../../Actions/popupActions'
 import Barra from '../../../Component/Barra';
-import moment from 'moment';
 import MiCheckBox from '../../../Component/MiCheckBox';
+import Estado from '../../../Component/Estado';
+
+const initActions = ({
+    ...comprasActions,
+    ...popupActions
+});
+const initStates = (state) => {
+    return { state }
+};
 class RegistrarPagosComprasPage extends Component {
     static navigationOptions = {
         headerShown: false,
@@ -78,6 +86,8 @@ class RegistrarPagosComprasPage extends Component {
 
     }
     render() {
+
+       
         return (
             <View style={{
                 flex: 1,
@@ -88,7 +98,7 @@ class RegistrarPagosComprasPage extends Component {
                 <ScrollView style={{ flex: 1, width: "100%", }}>
                     <View style={{ width: "100%", margin: 5, flex: 1, alignItems: 'center', }}>
                         <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}> Cancelar saldo para compras </Text>
-                        
+
                         {Object.keys(this.props.state.personaReducer.dataPersonas).map((key) => {
                             var persona = this.props.state.personaReducer.dataPersonas[key]
                             var area = this.props.state.areaTrabajoReducer.dataAreaTrabajo[persona.key_area_trabajo].nombre
@@ -98,9 +108,9 @@ class RegistrarPagosComprasPage extends Component {
                             return (
                                 <TouchableOpacity
                                     onPress={() => this.props.navigation.navigate("VerLibroComprasPage", { persona, area })}
-                                    style={{ width: "90%", borderBottomWidth: 2, borderColor: "#666", margin: 2, borderRadius: 10, padding:5}}>
-                                    <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5,}}>  {persona.nombre.toUpperCase() + " " + persona.paterno.toUpperCase()}</Text>
-                                    <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5,}}> CI :  {persona.ci}</Text>
+                                    style={{ width: "90%", borderBottomWidth: 2, borderColor: "#666", margin: 2, borderRadius: 10, padding: 5 }}>
+                                    <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5, }}>  {persona.nombre.toUpperCase() + " " + persona.paterno.toUpperCase()}</Text>
+                                    <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5, }}> CI :  {persona.ci}</Text>
                                 </TouchableOpacity>
                             )
                         })}
@@ -130,11 +140,5 @@ const styles = StyleSheet.create({
         height: 40,
     },
 });
-const initActions = ({
-    ...usuarioActions,
-    ...popupActions
-});
-const initStates = (state) => {
-    return { state }
-};
+
 export default connect(initStates, initActions)(RegistrarPagosComprasPage);

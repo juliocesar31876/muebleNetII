@@ -6,13 +6,17 @@ import {
     TouchableOpacity,
     ScrollView,
     TextInput,
+    Dimensions,
 } from 'react-native';
 import Barra from '../../../Component/Barra';
 import * as popupActions from '../../../Actions/popupActions'
 import * as personaActions from '../../../Actions/personaActions'
+import * as trabajoActions from '../../../Actions/trabajoActions'
 import * as popupCalendarioActions from '../../../Actions/popupCalendarioActions'
 import moment from 'moment';
 import SwipeableViews from 'react-swipeable-views-native';
+import Estado from '../../../Component/Estado';
+import Svg from '../../../Svg';
 
 class SalarioTrabajoPage extends Component {
     static navigationOptions = {
@@ -30,7 +34,8 @@ class SalarioTrabajoPage extends Component {
         var debe = 0
         var personaLibro = {}
         if (props.navigation.state.params.pagina === "PagoSalarioPage") {
-            dataPagoSalarioPersona.dataPago = props.navigation.state.params.data.pago_salario
+            personaLibro = props.navigation.state.params.data
+            dataPagoSalarioPersona.dataPago = personaLibro.pago_salario
             Object.keys(dataPagoSalarioPersona.dataPago).map((key) => {
                 var obj = dataPagoSalarioPersona.dataPago[key]
                 haber = haber + obj.haber
@@ -71,7 +76,7 @@ class SalarioTrabajoPage extends Component {
         return (
             <ScrollView style={{ flex: 1, width: '95%', }}>
 
-                <View style={{ flex: 1, alignItems: 'center', width: '100%', }}>
+                <View style={{ flex: 1, alignItems: 'center', width: '100%', justifyContent: 'center', }}>
 
                     <View style={{ width: '100%', height: 50, flexDirection: 'row', }}>
                         <View style={{ width: '100%', flex: 1, }}>
@@ -82,7 +87,7 @@ class SalarioTrabajoPage extends Component {
                                 margin: 2,
                                 fontWeight: 'bold',
                             }}>
-                                Total debe :  {this.state.debe} Bs
+                                Total ingreso :  {this.state.debe} Bs
                         </Text>
                             <Text style={{
                                 color: "#fff",
@@ -91,7 +96,7 @@ class SalarioTrabajoPage extends Component {
                                 margin: 2,
                                 fontWeight: 'bold',
                             }}>
-                                Total haber : {this.state.haber} Bs
+                                Total egreso : {this.state.haber} Bs
                         </Text>
 
                         </View>
@@ -105,15 +110,7 @@ class SalarioTrabajoPage extends Component {
                             }}>
                                 Saldo pendiente :  {this.state.saldoPendiente} Bs
                         </Text>
-                            <Text style={{
-                                color: "#fff",
-                                fontSize: 14,
-                                textAlign: 'left',
-                                margin: 2,
-                                fontWeight: 'bold',
-                            }}>
-                                Saldo debiendo :  {this.state.saldoDebiendo} Bs
-                        </Text>
+
 
                         </View>
                     </View>
@@ -166,7 +163,6 @@ class SalarioTrabajoPage extends Component {
 
                     {Object.keys(this.state.dataPagoSalarioPersona.dataPago).map((key) => {
                         var obj = this.state.dataPagoSalarioPersona.dataPago[key]
-                        console.log(obj);
                         var fecha = obj.fecha_on.split("T")[0]
                         var hora = obj.fecha_on.split("T")[1]
                         var fechas = moment(fecha, "YYYY-MM-DD").format("DD-MM-YYYY");
@@ -176,56 +172,82 @@ class SalarioTrabajoPage extends Component {
                         }
                         return (
                             <TouchableOpacity
-                                onPress={() => this.popupAceptacion(obj)}
+                                onPress={() => {
+                                    if (!obj.cancelado) {
+                                        if (this.props.navigation.state.params.admin) {
+                                            this.popupAceptacion(obj)
+                                        }
+                                    }
+
+                                }}
                                 style={{
                                     width: '100%',
                                     borderBottomWidth: 1,
+                                    borderColor: '#fff',
+                                    height: 70,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
+                                <View style={{
+                                    width: '100%',
                                     borderColor: '#fff',
                                     height: 50,
                                     flexDirection: 'row',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                 }}>
-                                <Text style={{
-                                    color: "#fff",
-                                    fontSize: 12,
-                                    textAlign: 'center',
-                                    margin: 2,
-                                    fontWeight: 'bold',
-                                    flex: 0.2,
-                                }}>
-                                    {fecha}
+                                    <Text style={{
+                                        color: "#fff",
+                                        fontSize: 12,
+                                        textAlign: 'center',
+                                        margin: 2,
+                                        fontWeight: 'bold',
+                                        flex: 0.2,
+                                    }}>
+                                        {fecha}
 
-                                </Text>
-                                <Text style={{
-                                    color: color,
-                                    fontSize: 12,
-                                    flex: 0.6,
-                                    textAlign: 'left',
-                                    margin: 2,
-                                    fontWeight: 'bold',
-                                }}>
-                                    {obj.descripcion}
+                                    </Text>
+                                    <Text style={{
+                                        color: color,
+                                        fontSize: 12,
+                                        flex: 0.6,
+                                        textAlign: 'left',
+                                        margin: 2,
+                                        fontWeight: 'bold',
+                                    }}>
+                                        {obj.descripcion}
 
+                                    </Text>
+                                    <Text style={{
+                                        textAlign: 'center',
+                                        color: "#fff",
+                                        fontSize: 12,
+                                        flex: 0.1,
+                                        fontWeight: 'bold',
+                                    }}>
+                                        {obj.debe} bs
                                 </Text>
-                                <Text style={{
-                                    textAlign: 'center',
-                                    color: "#fff",
-                                    fontSize: 12,
-                                    flex: 0.1,
-                                    fontWeight: 'bold',
-                                }}>
-                                    {obj.debe} bs
+                                    <Text style={{
+                                        color: "#999",
+                                        fontSize: 12,
+                                        flex: 0.1,
+                                        textAlign: 'center',
+                                        fontWeight: 'bold',
+                                    }}>
+                                        {obj.haber} bs
                                 </Text>
-                                <Text style={{
-                                    color: "#999",
-                                    fontSize: 12,
-                                    flex: 0.1,
-                                    textAlign: 'center',
-                                    fontWeight: 'bold',
-                                }}>
-                                    {obj.haber} bs
-                                </Text>
+                                </View>
+                                {obj.cancelado ?
+                                    (
+                                        <Text style={{
+                                            color: "green",
+                                            fontSize: 15,
+                                            textAlign: 'right',
+                                            fontWeight: 'bold',
+                                        }}>
+                                            Cancelado
+                                        </Text>
+                                    ) : <View />}
                             </TouchableOpacity>
 
                         )
@@ -240,20 +262,26 @@ class SalarioTrabajoPage extends Component {
         var descripcion = "cancelado el " + objPago.descripcion
         var tex = ""
         const aceptarPago = () => {
-            if (tex === "") {
-                return <View />
-            }
+            /*  if (tex === "") {
+                 return <View />
+             } */
             var fecha = moment()
                 .format('YYYY-MM-DD');
             var hora = moment()
                 .format('HH:mm:ss');
             var fecha_on = fecha + "T" + hora
+            this.state.saldoPendiente = this.state.saldoPendiente - objPago.haber
+            this.setState({ ...this.state })
             this.props.pagoSalarioCancelado(this.props.state.socketReducer.socket, {
                 descripcion: descripcion + " " + tex,
-                key_pago_salario: obj.key,
+                key_pago_salario: objPago.key,
                 fecha_on,
                 debe: objPago.haber,
                 haber: 0,
+                cancelado: true,
+                nombre: this.state.personaLibro.nombre + " " +
+                    this.state.personaLibro.paterno + " " + this.state.personaLibro.materno,
+                key_admin: this.state.usuarioPersona.key,
                 key_persona: objPago.key_persona,
             })
 
@@ -299,7 +327,7 @@ class SalarioTrabajoPage extends Component {
                     </Text>
 
                     </View>
-                    <View style={{
+                    {/*   <View style={{
                         width: '100%', height: 40, flexDirection: 'row', margin: 10,
                         marginTop: 10,
                         justifyContent: 'center',
@@ -322,7 +350,7 @@ class SalarioTrabajoPage extends Component {
                                 tex = text
                             }}
                         />
-                    </View >
+                    </View > */}
                     <View style={{
                         width: '100%', flexDirection: 'row',
                         alignItems: 'center', position: 'absolute', bottom: 0
@@ -349,7 +377,7 @@ class SalarioTrabajoPage extends Component {
                                 Aceptar
                     </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
+                        <TouchableOpacity onPress={() => this.props.cerrarPopup()}
                             style={{
                                 flex: 1,
                                 margin: 10,
@@ -426,18 +454,25 @@ class SalarioTrabajoPage extends Component {
         )
     }
     render() {
+        if (this.props.state.personaReducer.estado === "cargando" && this.props.state.personaReducer.type === "getPagoSalario") {
+            return <Estado estado={"cargando"} />
+        }
+        if (this.props.state.trabajoReducer.estado === "exito" && this.props.state.trabajoReducer.type === "pagoSalarioCancelado") {
+            this.props.cerrarPopup()
+            this.props.state.trabajoReducer.estado = ""
+            this.props.state.trabajoReducer.type = ""
+        }
         return (
             <View
                 style={{
                     flex: 1,
-                    width: "100%",
+                    width: Dimensions.get("window").width,
+                    height: Dimensions.get("window").height,
                     alignItems: 'center',
                     backgroundColor: "#000",
                 }}>
                 <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
-
-
-                <SwipeableViews style={{ flex: 1, width: "100%", }} onChangeIndex={this.handleChanges} index={this.state.index} >
+                <SwipeableViews style={{ flex: 1, width: "100%", }} /* onChangeIndex={this.handleChanges} index={this.state.index} */ >
                     <View style={{
                         flex: 1,
                         width: '100%',
@@ -453,8 +488,28 @@ class SalarioTrabajoPage extends Component {
                             Control de pagos
                     </Text>
                         {this.pagosPendiente()}
+
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                if (this.props.navigation.state.params.pagina !== "PagoSalarioPage") {
+                                    this.props.getPagoSalario(this.props.state.socketReducer.socket,
+                                        { key_persona: this.props.state.usuarioReducer.usuarioLog.persona.key });
+                                }
+
+                            }}
+                            style={{ width: 40, height: 40, position: "absolute", top: 4, right: 10 }}>
+                            <Svg name={"actualizarVista"}
+                                style={{
+                                    width: 30,
+                                    height: 30,
+                                    fill: "#fff",
+                                    margin: 5,
+                                }} />
+                        </TouchableOpacity>
                     </View>
-                    <View style={{
+
+                    {/* <View style={{
                         flex: 1,
                         width: '100%',
                         alignItems: 'center',
@@ -468,7 +523,7 @@ class SalarioTrabajoPage extends Component {
                             Pagos realizado
                     </Text>
                         {this.verMisPagos()}
-                    </View>
+                    </View> */}
                 </SwipeableViews>
             </View>
         );
@@ -480,6 +535,7 @@ const initStates = (state) => {
 const initActions = ({
     ...personaActions,
     ...popupCalendarioActions,
-    ...popupActions
+    ...popupActions,
+    ...trabajoActions
 });
 export default connect(initStates, initActions)(SalarioTrabajoPage);

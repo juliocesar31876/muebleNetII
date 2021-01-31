@@ -13,6 +13,7 @@ import comprasReducer from './comprasReducer';
 import materialReducer from './materialReducer';
 import ventaReducer from './ventaReducer';
 import trabajoReducer from './trabajoReducer';
+import cuentaContableReducer from './cuentaContableReducer';
 export default combineReducers({
     navigationReducer,
     socketReducer,
@@ -27,5 +28,6 @@ export default combineReducers({
     comprasReducer,
     materialReducer,
     ventaReducer,
-    trabajoReducer
+    trabajoReducer,
+    cuentaContableReducer,
 });

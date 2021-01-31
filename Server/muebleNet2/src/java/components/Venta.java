@@ -4,7 +4,6 @@ import conexion.Conexion;
 import conexion.ConexionPostgres;
 import java.io.IOException;
 import java.sql.SQLException;
-import static java.time.Instant.now;
 import java.util.UUID;
 import javax.websocket.Session;
 import org.json.JSONArray;
@@ -17,10 +16,7 @@ public class Venta {
         try {
             if (!data.isNull("type")) {
                 switch (data.getString("type")) {
-                    case "addVenta": {
-                        addVenta(data, session);
-                        break;
-                    }
+
                     case "addVentaTrabajo": {
                         addVentaTrabajo(data, session);
                         break;
@@ -53,7 +49,10 @@ public class Venta {
                         getVentaFecha(data, session);
                         break;
                     }
-
+                    case "addVenta": {
+                        addVenta(data, session);
+                        break;
+                    }
                 }
             } else {
                 data.put("error", "No existe el campo type");
@@ -210,7 +209,7 @@ public class Venta {
             for (int j = 0; j < armador.length(); j++) {
                 String key = (j + 1) + "";
                 JSONObject objArmador = (JSONObject) armador.get(key);
-                addTrabajoVenta(objArmador, producto.getString("nombre_producto"), datat, compras);
+                addTrabajoVenta(objArmador, producto, datat, compras);
             }
 
         }
@@ -244,14 +243,17 @@ public class Venta {
         return;
     }
 
-    private void addTrabajoVenta(JSONObject objArmador, String nombre_producto, JSONObject datat, JSONObject compras) throws JSONException, SQLException {
+    private void addTrabajoVenta(JSONObject objArmador, JSONObject producto, JSONObject datat, JSONObject compras) throws JSONException, SQLException {
         Conexion conPg = ConexionPostgres.getInstance();
+        String nombre_producto = producto.getString("nombre_producto");
         int cantidad = objArmador.getInt("cantidad");
+        JSONObject objLimpieza = datat.getJSONObject("limpieza");
         String consulta2 = "select json_agg(row_to_json(venta.*)) as json  from(\n"
                 + "select * from trabajo_producto\n"
                 + "where fecha_off isnull\n"
                 + "and estado =1\n"
                 + "and key_persona_trabajo ='" + objArmador.getString("key_persona") + "'\n"
+                + "and producto_terminado = false \n"
                 + "and nombre = '" + nombre_producto + "'\n"
                 + "	) venta";
         JSONArray arr = conPg.ejecutarConsultaArray(consulta2);
@@ -309,14 +311,21 @@ public class Venta {
                 JSONObject objTrabajoProducto = new JSONObject();
                 objTrabajoProducto.put("key", UUID.randomUUID());
                 objTrabajoProducto.put("key_persona_trabajo", objArmador.get("key_persona"));
+                objTrabajoProducto.put("trabajo_precio", objproducto.get("precio_armador"));
+                objTrabajoProducto.put("producto_terminado", false);
+
                 objTrabajoProducto.put("key_persona_compra", compras.get("key_persona"));
+                objTrabajoProducto.put("compra_realizado", false);
+                objTrabajoProducto.put("encargado_compra_pago", objproducto.get("encargado_compra"));
+                objTrabajoProducto.put("pago_compra_recibido", false);
+
+                objTrabajoProducto.put("key_persona_limpieza", objLimpieza.getString("key_persona"));
+                objTrabajoProducto.put("trabajo_limpieza_realizado", false);
+                objTrabajoProducto.put("pago_limpieza", producto.getInt("pago_limpieza"));
+
                 objTrabajoProducto.put("key_sucursal", objpersona.get("key_sucursal"));
                 objTrabajoProducto.put("nombre", nombre_producto);
-                objTrabajoProducto.put("trabajo_precio", objproducto.get("precio_armador"));
-                objTrabajoProducto.put("encargado_compra_pago", objproducto.get("encargado_compra"));
-                objTrabajoProducto.put("compra_realizado", false);
-                objTrabajoProducto.put("pago_compra_recibido", false);
-                objTrabajoProducto.put("producto_terminado", false);
+                objTrabajoProducto.put("pago_recibido", false);
                 objTrabajoProducto.put("pago_recibido", false);
                 objTrabajoProducto.put("estado", 1);
                 objTrabajoProducto.put("fecha_on", datat.getString("fecha_on"));
@@ -350,6 +359,9 @@ public class Venta {
         JSONArray dataDetalle = data.getJSONObject("data").getJSONArray("detalle");
         Conexion conPg = ConexionPostgres.getInstance();
         String key_venta = null;
+        if (dataVenta.getInt("descuento") > 0) {
+
+        }
         conPg.Transacction();
         try {
             key_venta = conPg.insertar("ventas", new JSONArray().put(dataVenta));

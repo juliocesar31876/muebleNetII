@@ -187,8 +187,20 @@ const terminarTrabajoPendiente = (state, action) => {
                 state.dataPagoTrabajoPersonaPendiente[obj.key] = obj
             }
         })
+       /*  var totalDebe = state.dataPagoSalarioPersona.totalDebe
+        var totalHaber = state.dataPagoSalarioPersona.totalHaber
+        if (!state.dataPagoSalarioPersona.dataPago || action.data.length === 0) {
+            state.dataPagoSalarioPersona.dataPago = {}
+        }
+        totalDebe = totalDebe + action.data.objTrabajo.debe
+        totalHaber = totalHaber + action.data.objTrabajo.haber
+        state.dataPagoSalarioPersona.totalDebe = totalDebe
+        state.dataPagoSalarioPersona.totalHaber = totalHaber
+        state.dataPagoSalarioPersona.dataPago[action.data.objTrabajo.key] = action.data.objTrabajo */
         state.dataTrabajoPersonaPendiente = data
+
     }
+
 }
 const PagoTrabajoPendiente = (state, action) => {
     state.estado = action.estado

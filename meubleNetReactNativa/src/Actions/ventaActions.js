@@ -187,3 +187,12 @@ export const getAllCompraPendienteVenta = (socket,data) => async (dispatch) => {
         estado: "cargando"
     })
 }
+export const vaciarDataVentaProducto = () => async (dispatch) => {
+    var objToSend = {
+        component: "venta",
+        type: "vaciarDataVentaProducto",
+    };
+    dispatch({
+        ...objToSend,
+    })
+}

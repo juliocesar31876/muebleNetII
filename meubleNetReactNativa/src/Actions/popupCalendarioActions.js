@@ -8,13 +8,14 @@ export const cerrarPopupCalendario = () => async (dispatch) =>{
     })
 
 }
-export const abrirPopupCalendario = (obj,tipos) => async (dispatch) =>{
+export const abrirPopupCalendario = (obj,tipos,actual) => async (dispatch) =>{
     dispatch({
         component:"popupCalendario", 
         estado:true,
         type:"abrirPopupCalendario",
         onChange:obj,
-        tipo:tipos
+        tipo:tipos,
+        actual
     })
 
 }

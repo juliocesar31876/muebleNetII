@@ -39,6 +39,6 @@ const pagoSalarioCancelado = (state, action) => {
     state.estado = action.estado
     state.type = action.type
     if (action.estado === "exito") {
-        state.dataAreaPagoPendiente[action.data.key_persona][action.data.key_pago_salario].cancelado = true
+        state.dataAreaPagoPendiente[action.data.key_persona].pago_salario[action.data.key_pago_salario].cancelado = true
     }
 }

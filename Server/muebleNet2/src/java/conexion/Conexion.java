@@ -35,7 +35,7 @@ public class Conexion {
             this.baseDatos = "mueble_net2";
             this.puerto = "5432";
        //    this.ip = "194.62.96.86";
-              this.ip = "192.168.0.32";
+              this.ip = "192.168.0.4";
             Conectar();
         } else {
             con = ConexionConectada.getConnection();

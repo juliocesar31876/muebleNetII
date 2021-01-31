@@ -11,6 +11,7 @@ import {
 import * as usuarioActions from '../../Actions/usuarioActions'
 import * as ventaActions from '../../Actions/ventaActions'
 import Barra from '../../Component/Barra';
+import Estado from '../../Component/Estado';
 import Svg from '../../Svg';
 import moment from 'moment';
 class RellenarDatoVentaPage extends Component {
@@ -24,8 +25,13 @@ class RellenarDatoVentaPage extends Component {
         }
     }
     render() {
-
-        
+        if (this.props.state.ventaReducer.estado === "cargando" && this.props.state.ventaReducer.type === "getVentaDatosRellenar") {
+            return <Estado estado={"cargando"}/>
+        }
+        if (!this.props.state.ventaReducer.dataVentaDatosPendiente) {
+            this.props.getVentaDatosRellenar(this.props.state.socketReducer.socket);
+            return <Estado estado={"cargando"}/>
+        }
         return (
             <View style={{
                 flex: 1,
@@ -52,7 +58,7 @@ class RellenarDatoVentaPage extends Component {
                             var fecha = moment(obj.fecha_on, "YYYY-MM-DD").format("DD/MM/YYYY");
                             return (
                                 <TouchableOpacity
-                                    onPress={() => this.props.navigation.navigate("MenuDatoVentaPage", { venta: obj ,mostrar:true})}
+                                    onPress={() => this.props.navigation.navigate("MenuDatoVentaPage", { venta: obj, mostrar: true })}
                                     style={{ width: "90%", borderBottomWidth: 2, borderColor: "#666", margin: 5, borderRadius: 10, flexDirection: 'row', }}>
                                     <View style={{ flex: 1, }}>
                                         <Text style={{ color: "#fff", fontSize: 11, flex: 1, margin: 5, }}> Cliente :   {obj.cliente} </Text>

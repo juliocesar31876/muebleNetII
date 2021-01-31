@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/mnt/eaba75c6-2f35-4bbb-a7a1-c30544cb08e8/datos/git2/muebleNet2/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-bg/values-bg.xml",
+            "outputFile": "/mnt/eaba75c6-2f35-4bbb-a7a1-c30544cb08e8/datos/git2/muebleNetII/meubleNetReactNativa/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-bg/values-bg.xml",
             "map": [
                 {
                     "source": "/root/.gradle/caches/transforms-2/files-2.1/639e914bfc1efa21e36199d3ff2c5eef/core-1.1.0/res/values-bg/values-bg.xml",

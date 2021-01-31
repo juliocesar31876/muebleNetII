@@ -28,7 +28,7 @@ class VentasPage extends Component {
             isOpen: false,
             index: 0,
             titulo: "Ventas",
-            obj: {
+          /*   obj: {
                 cliente: {
                     value: "",
                     error: false
@@ -60,7 +60,7 @@ class VentasPage extends Component {
                 entrega: {
                     value: false,
                 }
-            },
+            }, */
             dataVentaProducto: {},
             total: 0
         }
@@ -83,10 +83,10 @@ class VentasPage extends Component {
         this.state.obj.key_sucursal["data"] = obj
         this.props.cerrarPopup()
     } */
-    actualizar = (data) => {
+   /*  actualizar = (data) => {
         this.state.obj = data
         this.setState({ ...this.state })
-    }
+    } */
     handleChanges = (index) => {
         this.state.index = index;
         this.setState({ ...this.state })
@@ -133,7 +133,7 @@ class VentasPage extends Component {
                         alignItems: 'center',
                     }}>
                         <Text style={{ color: "#fff", fontWeight: 'bold', fontSize: 20, }}>DETALLE VENTAS</Text>
-                        <DetalleVenta eliminarProductoVenta={this.eliminarProductoVenta} dataVentaProducto={this.state.dataVentaProducto} />
+                        <DetalleVenta eliminarProductoVenta={this.eliminarProductoVenta} />
                         <View style={{ alignItems: 'center', justifyContent: 'center', width: "80%", flexDirection: 'row', }}>
                             <Text style={{ color: "#fff", fontSize: 18, }}>TOTAL : {this.state.total} Bs</Text>
                         </View>

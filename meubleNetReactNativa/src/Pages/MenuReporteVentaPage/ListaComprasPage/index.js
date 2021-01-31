@@ -55,7 +55,7 @@ class ListaComprasPage extends Component {
             this.props.state.comprasReducer.type = ""
             this.props.navigation.goBack()
         }
-          if (this.props.state.comprasReducer.estado === "actualizar" && this.props.state.comprasReducer.type === "finalizarLibroComprasIngreso") {
+        if (this.props.state.comprasReducer.estado === "actualizar" && this.props.state.comprasReducer.type === "finalizarLibroComprasIngreso") {
             this.props.state.comprasReducer.estado = ""
             this.props.state.comprasReducer.type = ""
             this.props.navigation.goBack()
@@ -70,14 +70,14 @@ class ListaComprasPage extends Component {
                 <ScrollView style={{ flex: 1, width: "100%", }}>
                     <View style={{ width: "100%", margin: 5, flex: 1, alignItems: 'center', }}>
                         <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}> Muestra el libro de compras</Text>
-                        <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
+                        <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 13, margin: 5, width: '100%', }}>
                             Saldo disponible : {(this.state.comprasLibro.totalIngreso - this.state.comprasLibro.totalCompras)}  Bs</Text>
 
-                        <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
+                        <Text style={{ color: '#999', fontWeight: 'bold', fontSize: 13, margin: 5, width: '100%', }}>
                             Total Ingreso {this.state.comprasLibro.totalIngreso}  Bs</Text>
-                        <Text style={{ color: '#999', textAlign: 'left', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
+                        <Text style={{ color: '#999', textAlign: 'left', fontWeight: 'bold', fontSize: 13, margin: 5, width: '100%', }}>
                             Total Egreso {this.state.comprasLibro.totalCompras} Bs</Text>
-                        <Text style={{ color: '#999', textAlign: 'center', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
+                        <Text style={{ color: '#999', textAlign: 'center', fontWeight: 'bold', fontSize: 13, margin: 5, width: '100%', }}>
                             Fecha ingresado saldo  </Text>
                         {this.state.ingreso.map((ingreso, key) => {
                             var pago = "efectivo"
@@ -89,7 +89,8 @@ class ListaComprasPage extends Component {
                             var hora = ingreso.fecha_on.split("T")[1]
                             return (
                                 <TouchableOpacity
-                                    style={{ width: "100%", borderBottomWidth: 2, borderColor: "#666", margin: 5, borderRadius: 10, height: 50, alignItems: 'center', justifyContent: 'center', }}>
+                                    style={{ width: "100%", borderBottomWidth: 2, borderColor: "#666", margin: 5, borderRadius: 10, height: 50,
+                                     alignItems: 'center', justifyContent: 'center', }}>
                                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center', }}>
                                         <View style={{ flex: 1, width: '100%', flexDirection: 'row', }}>
                                             <Text style={{ flex: 0.6, color: '#fff', fontWeight: 'bold', margin: 5, fontSize: 12, }}> {fecha}  {pago}  </Text>
@@ -107,17 +108,17 @@ class ListaComprasPage extends Component {
                                 </TouchableOpacity>
                             )
                         })}
-                        <Text style={{ color: '#999', textAlign: 'center', fontWeight: 'bold', fontSize: 15, margin: 5, width: '100%', }}>
+                        <Text style={{ color: '#999', textAlign: 'center', fontWeight: 'bold', fontSize: 12, margin: 5, width: '100%', }}>
                             Compras Ingreo - egreso</Text>
 
                         <View style={{ width: '100%', flexDirection: 'row', marginTop: 10, alignItems: 'center', }}>
 
                             <View style={{ flex: 0.6, flexDirection: 'row', alignItems: 'center', }}>
-                                <Text style={{ color: '#999', fontWeight: 'bold', textAlign: 'center', fontSize: 15, width: '100%', }}>
+                                <Text style={{ color: '#999', fontWeight: 'bold', textAlign: 'center', fontSize: 12, width: '100%', }}>
                                     Detalle  </Text>
                             </View>
                             <View style={{ flex: 0.2, flexDirection: 'row', alignItems: 'center', }}>
-                                <Text style={{ width: '100%', color: '#999', fontWeight: 'bold', fontSize: 15, margin: 5, }}>
+                                <Text style={{ width: '100%', color: '#999', fontWeight: 'bold', fontSize: 12, margin: 5, }}>
                                     ingreso </Text>
                             </View>
                             <View style={{ flex: 0.2, flexDirection: 'row', alignItems: 'center', }}>
@@ -146,19 +147,19 @@ class ListaComprasPage extends Component {
                                 detalleCompra = "  Cantidad : " + cantidad + "   Precio/U : " + precio
                             }
                             return (
-                                <TouchableOpacity
-                                    style={{ width: "95%", borderBottomWidth: 2, borderColor: colors, margin: 5, height: 50, alignItems: 'center', justifyContent: 'center', }}>
+                                <View
+                                    style={{ width: "95%", borderBottomWidth: 2, borderColor: colors, margin: 5, alignItems: 'center', justifyContent: 'center', }}>
                                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center', }}>
                                         <View style={{ flex: 1, width: '100%', flexDirection: 'row', }}>
                                             <View style={{ flex: 0.6, }}>
-                                                <Text style={{ fontSize: 13, color: '#fff', fontWeight: 'bold', margin: 5, }}
+                                                <Text style={{ fontSize: 11, color: '#fff', fontWeight: 'bold', margin: 5, }}
                                                 >{numero}.-  {fecha}  {compras.detalle}  </Text>
-                                                <Text style={{ fontSize: 13, color: '#fff', fontWeight: 'bold', }}
+                                                <Text style={{ fontSize: 11, color: '#fff', fontWeight: 'bold', }}
                                                 >      {detalleCompra} </Text>
                                             </View>
                                             <Text style={{
                                                 flex: 0.2, color: '#fff', fontWeight: 'bold', margin: 5,
-                                                textAlign: 'right', fontSize: 12,
+                                                textAlign: 'right', fontSize: 11,
                                             }}>{ingreso} Bs    </Text>
                                             <Text style={{
                                                 flex: 0.2, color: '#fff', fontWeight: 'bold', margin: 5
@@ -168,7 +169,7 @@ class ListaComprasPage extends Component {
                                         </View>
 
                                     </View>
-                                </TouchableOpacity>
+                                </View>
                             )
                         })}
                     </View>

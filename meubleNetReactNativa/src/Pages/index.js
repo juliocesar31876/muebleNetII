@@ -31,6 +31,7 @@ import PagoSalarioPage from './PagoSalarioPage';
 import TrabajosArmadorPage from './InicioArmadorPage/TrabajosArmadorPage';
 import SalarioTrabajoPage from './InicioArmadorPage/SalarioTrabajoPage';
 import ListaPagosPage from './PagoSalarioPage/ListaPagosPage';
+import CuentaContablePage from './CuentaContablePage';
 export const getPages = () => {
     return {
         CargaPage,
@@ -64,6 +65,7 @@ export const getPages = () => {
         TrabajosArmadorPage,
         SalarioTrabajoPage,
         PagoSalarioPage,
-        ListaPagosPage
+        ListaPagosPage,
+        CuentaContablePage
     }
 }

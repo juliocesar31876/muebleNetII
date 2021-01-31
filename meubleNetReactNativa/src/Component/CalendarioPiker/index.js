@@ -6,20 +6,21 @@ import ModeloDia from './ModeloDia';
 import ModeloOtro from './ModeloOtro';
 import * as calendarioActions from '../../Actions/calendarioActions'
 
-
 const initActions = ({
     ...calendarioActions
 });
-
-
-
-
+const initStates = (state) => {
+    return { state }
+};
 const CalendarioPiker = (props) => {
-
 
     const [obj, setObj] = React.useState({
         moment: Moment("April 1st, 1996", "MMM-DD-YYYY")
     });
+    if (props.state.popupCalendarioReducer.actual === "actual") {
+        props.state.popupCalendarioReducer.actual=""
+        obj.moment = Moment()
+    }
     const masAños = () => {
         obj.moment.add(1, 'year')
         props.state.calendarioReducer.estado = false;
@@ -174,7 +175,5 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
 });
-const initStates = (state) => {
-    return { state }
-};
+
 export default connect(initStates, initActions)(CalendarioPiker);

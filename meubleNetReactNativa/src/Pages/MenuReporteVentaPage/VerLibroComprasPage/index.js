@@ -6,12 +6,14 @@ import {
     ScrollView,
     TouchableOpacity,
     Text,
-    TextInput
+    TextInput,
+    Dimensions
 } from 'react-native';
 import Svg from '../../../Svg';
-import * as usuarioActions from '../../../Actions/usuarioActions'
+import * as comprasActions from '../../../Actions/comprasActions'
 import * as popupActions from '../../../Actions/popupActions'
 import Barra from '../../../Component/Barra';
+import Estado from '../../../Component/Estado';
 class VerLibroComprasPage extends Component {
     static navigationOptions = {
         headerShown: false,
@@ -32,6 +34,13 @@ class VerLibroComprasPage extends Component {
     }
 
     render() {
+        if (this.props.state.comprasReducer.estado === "cargando" && this.props.state.comprasReducer.type === "getAllLibroComprasPendiente") {
+            return <Estado estado={"cargando"} />
+        }
+        if (!this.props.state.comprasReducer.dataLibroComprasPendiente) {
+            this.props.getAllLibroComprasPendiente(this.props.state.socketReducer.socket);
+            return <Estado estado={"cargando"} />
+        }
         return (
             <View style={{
                 flex: 1,
@@ -59,10 +68,13 @@ class VerLibroComprasPage extends Component {
                                         comprasLibro: obj,
 
                                     })}
-                                    style={{ width: "90%", borderBottomWidth: 2, borderColor: "#666", margin: 5, borderRadius: 10, height: 50, alignItems: 'center', justifyContent: 'center', }}>
+                                    style={{
+                                        width: "90%", borderBottomWidth: 2, borderColor: "#666", margin: 5, borderRadius: 10,
+                                        height: 50, alignItems: 'center', justifyContent: 'center',
+                                    }}>
                                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center', }}>
                                         <View style={{ flex: 1, justifyContent: 'center', }}>
-                                            <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5, }}> Fecha:  {fecha}   </Text>
+                                            <Text style={{ color: '#fff', fontWeight: 'bold', margin: 5, fontSize: 12 }}> Fecha:  {fecha}   </Text>
 
                                         </View>
                                         <View>
@@ -117,7 +129,7 @@ const styles = StyleSheet.create({
     },
 });
 const initActions = ({
-    ...usuarioActions,
+    ...comprasActions,
     ...popupActions
 });
 const initStates = (state) => {

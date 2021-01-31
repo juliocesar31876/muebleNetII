@@ -8,7 +8,8 @@ import {
     ScrollView,
     FlatList,
     Image,
-    TouchableHighlight
+    TouchableHighlight,
+    ActivityIndicator
 } from 'react-native';
 import Barra from '../../../Component/Barra';
 import Svg from '../../../Svg';
@@ -16,6 +17,7 @@ import myPropsJulio from '../../../nativeSocket/myPropsServer.json';
 import * as personaActions from '../../../Actions/personaActions'
 import Swipeable from 'react-native-swipeable';
 import moment from 'moment';
+import Estado from '../../../Component/Estado';
 
 class TrabajosArmadorPage extends Component {
     static navigationOptions = {
@@ -25,6 +27,7 @@ class TrabajosArmadorPage extends Component {
         super(props);
         arrayMenu = []
         arrayMenu = ["trabajos", "salario"];
+        areaTrabajo = props.navigation.state.params.areaTrabajo;
 
 
         var usuarioPersona = props.state.usuarioReducer.usuarioLog.persona
@@ -32,6 +35,7 @@ class TrabajosArmadorPage extends Component {
             titulo: "Trabajo armador  ",
             menu: arrayMenu,
             usuarioPersona,
+            areaTrabajo
         }
     }
     terminarTrabajo(obj) {
@@ -40,20 +44,27 @@ class TrabajosArmadorPage extends Component {
         var hora = moment()
             .format('HH:mm:ss');
         var fecha_on = fecha + "T" + hora
+        var key_persona_trabajo = obj.key_persona_trabajo
+        if (this.state.areaTrabajo === "limpieza") {
+            key_persona_trabajo = obj.key_persona_limpieza
+        }
         this.props.terminarTrabajoPendiente(this.props.state.socketReducer.socket, {
             key_trabajo_producto: obj.key,
             fecha_on,
             trabajo_precio: obj.trabajo_precio,
             encargado_compra_pago: obj.encargado_compra_pago,
             nombre_producto: obj.nombre,
-            key_persona_trabajo: obj.key_persona_trabajo,
-            key_persona_compra: obj.key_persona_compra
+            key_persona_trabajo,
+            key_persona_compra: obj.key_persona_compra,
+            areaTrabajo: this.state.areaTrabajo
         })
         return <View />
     }
     render() {
 
-
+        if (this.props.state.personaReducer.estado === "cargando" && this.props.state.personaReducer.type === "getTrabajoPendiente") {
+            return <Estado estado={"cargando"} />
+        }
         return (
             <View
                 style={{
@@ -64,6 +75,24 @@ class TrabajosArmadorPage extends Component {
                 }}>
                 <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
 
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.getTrabajoPendiente(this.props.state.socketReducer.socket,
+                            {
+                                key_persona: this.props.state.usuarioReducer.usuarioLog.persona.key,
+                                area: this.state.areaTrabajo
+                            });
+
+                    }}
+                    style={{ width: 40, height: 40, position: "absolute", top: 4, right: 10 }}>
+                    <Svg name={"actualizarVista"}
+                        style={{
+                            width: 30,
+                            height: 30,
+                            fill: "#fff",
+                            margin: 5,
+                        }} />
+                </TouchableOpacity>
                 <Text style={{
                     color: "#fff",
                     fontSize: 30,
@@ -93,8 +122,50 @@ class TrabajosArmadorPage extends Component {
                                             height: 60,
                                             justifyContent: 'center',
                                         }}>
+
+
+                                            {this.props.state.personaReducer.estado === "cargando" && this.props.state.personaReducer.type === "terminarTrabajoPendiente" ? (
+                                                <TouchableOpacity
+                                                    style={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                        width: '100%',
+                                                        alignItems: 'flex-start',
+                                                    }}>
+                                                    <ActivityIndicator size="small" color="#fff" />
+                                                </TouchableOpacity>
+                                            ) : (
+                                                    <TouchableOpacity
+                                                        onPress={() => this.terminarTrabajo(obj)}
+                                                        style={{
+                                                            flex: 1,
+                                                            justifyContent: 'center',
+                                                            width: '100%',
+                                                        }}>
+                                                        <Svg name={"terminarmueble"}
+                                                            style={{
+                                                                width: 35,
+                                                                height: 35,
+                                                                fill: "#fff",
+                                                                margin: 5,
+                                                            }} />
+                                                        <Text style={{
+                                                            color: "#fff",
+                                                            fontSize: 10,
+                                                            marginLeft: 1,
+                                                            fontWeight: 'bold',
+                                                        }}>
+                                                            Finalizar
+                                                </Text>
+                                                    </TouchableOpacity>
+                                                )
+                                            }
+                                            {/* 
                                             <TouchableOpacity
-                                                onPress={() => this.terminarTrabajo(obj)}
+                                                onPress={() => {
+
+                                                    this.terminarTrabajo(obj)
+                                                }}
                                                 style={{
                                                     flex: 1,
                                                     justifyContent: 'center',
@@ -115,7 +186,7 @@ class TrabajosArmadorPage extends Component {
                                                 }}>
                                                     Finalizar
                                                 </Text>
-                                            </TouchableOpacity>
+                                            </TouchableOpacity> */}
                                         </TouchableHighlight>
                                     ]
                                 }>

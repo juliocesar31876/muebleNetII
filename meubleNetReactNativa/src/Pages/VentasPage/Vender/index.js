@@ -1,12 +1,21 @@
 import React from 'react';
-import { ScrollView, TextInput, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { ScrollView, TextInput, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions } from 'react-native';
 import MiCheckBox from '../../../Component/MiCheckBox';
 import * as popupActions from '../../../Actions/popupActions'
+import * as popupCalendarioActions from '../../../Actions/popupCalendarioActions'
 import * as productoActions from '../../../Actions/productoActions'
 import * as ventaActions from '../../../Actions/ventaActions'
 import moment from 'moment';
-
 import { connect } from 'react-redux';
+const initState = (state) => {
+    return { state }
+}
+const initActions = ({
+    ...popupCalendarioActions,
+    ...popupActions,
+    ...productoActions,
+    ...ventaActions
+});
 const Vender = (props) => {
     const [state, setState] = React.useState({
         obj: {
@@ -34,10 +43,14 @@ const Vender = (props) => {
                 value: "0",
                 error: false
             },
-            key_sucursal: {
-                value: "Selecion sucursal",
+            fecha_entrega: {
+                value: "selecione Fecha entrega",
                 error: false
             },
+            /* key_sucursal: {
+                value: "Selecion sucursal",
+                error: false
+            }, */
             entrega: {
                 value: false,
             }
@@ -67,13 +80,18 @@ const Vender = (props) => {
                 value: "0",
                 error: false
             },
-            key_sucursal: {
-                value: "Selecion sucursal",
+            fecha_entrega: {
+                value: "selecione Fecha entrega",
                 error: false
             },
+            /* key_sucursal: {
+                value: "Selecion sucursal",
+                error: false
+            }, */
             entrega: {
                 value: false,
-            }
+            },
+
         },
     })
     const selecSucursal = (obj) => {
@@ -86,6 +104,7 @@ const Vender = (props) => {
         var exito = true
         var data = {}
         var objventa = {}
+        var usuarioKeyPersona = props.state.usuarioReducer.usuarioLog.key_persona
         for (const key in state.obj) {
             var obj = state.obj[key]
             if (key === "entrega") {
@@ -120,18 +139,21 @@ const Vender = (props) => {
             var hora = moment()
                 .format('HH:mm:ss');
             data["fecha_on"] = fecha + "T" + hora
+            data["key_persona_venta"] = usuarioKeyPersona
             var array = []
             for (const key in props.state.ventaReducer.dataVentaProducto) {
                 var obj = props.state.ventaReducer.dataVentaProducto[key]
                 if (!obj) {
                     continue
                 }
-                array.push(props.state.ventaReducer.dataVentaProducto[key])
+                array.push(obj)
             }
             data["datos_completo"] = false
+            data["key_sucursal"] = props.state.usuarioReducer.usuarioLog.persona.key_sucursal
             objventa = {
                 venta: data,
-                detalle: array
+                detalle: array,
+                key_persona_usuario: usuarioKeyPersona,
             }
             props.addVenta(props.state.socketReducer.socket, objventa)
             return <View />
@@ -140,10 +162,9 @@ const Vender = (props) => {
     }
     if (props.state.ventaReducer.estado === "exito" && props.state.ventaReducer.type === "addVenta") {
         props.state.ventaReducer.estado = "",
-        props.getVentaDatosRellenar(props.state.socketReducer.socket);
-        props.state.ventaReducer.data.detalle.map((item) => {
-            props.actualizarProducto(item)
-        })
+            props.getVentaDatosRellenar(props.state.socketReducer.socket);
+        props.update({}, "dataVentaProducto")
+
         var data = state.obj2
         state.obj = data
         setState({ ...state })
@@ -153,8 +174,8 @@ const Vender = (props) => {
             value: data.text,
             error: false,
         }
-        props.hanlechage(data)
-        setState({ ...state })
+/*         props.hanlechage(data)
+ */        setState({ ...state })
     }
     const popupSucursal = () => {
         props.abrirPopup(() => {
@@ -201,10 +222,19 @@ const Vender = (props) => {
 
         })
     }
+    const popupCalendario = () => {
+        props.abrirPopupCalendario((fechaSelecionada) => {
+            hanlechages({ text: fechaSelecionada, id: "fecha_entrega" })
+            props.cerrarPopupCalendario()
+            return <View />
+        }, "dia", "actual")
+        return <View />
+    }
     return (
         <View style={{
             flex: 1,
-            width: "100%",
+            width: Dimensions.get("window").width,
+            height: Dimensions.get("window").height,
             backgroundColor: "#000",
             alignItems: 'center',
         }}>
@@ -237,6 +267,24 @@ const Vender = (props) => {
                                 </View>
                             )
                         }
+                        if (key === "fecha_entrega") {
+                            return (
+                                <View style={{
+                                    width: "80%",
+                                    margin: 10,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
+                                    <Text style={{ fontSize: 12, color: "#fff", textAlign: 'left', width: '100%', }}>FECHA ENTREGA</Text>
+
+                                    <TouchableOpacity onPress={() => popupCalendario()}
+                                        style={(data.error ? styles.error : styles.touc)}>
+                                        <Text style={{ fontSize: 10, color: "#666", }}>
+                                            {data.value}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        }
                         if (key === "key_sucursal") {
                             return (
                                 <View style={{
@@ -247,7 +295,8 @@ const Vender = (props) => {
                                     <TouchableOpacity
                                         onPress={() => popupSucursal()}
                                         style={(data.error ? styles.error : styles.touc)}>
-                                        <Text style={{ fontSize: 10, color: "#666", }}>{data.value.toUpperCase()}</Text>
+                                        <Text style={{ fontSize: 10, color: "#666", }}>
+                                            {data.value.toUpperCase()}</Text>
                                     </TouchableOpacity>
                                 </View>
                             )
@@ -267,24 +316,24 @@ const Vender = (props) => {
                             </View>
                         )
                     })}
-                </View>
-            </ScrollView>
-            <View style={{ width: "80%", flexDirection: 'row', alignItems: 'center', justifyContent: 'center', }}>
-
-                {props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "addVenta" ? (
-                    <TouchableOpacity
-                        style={{ justifyContent: 'center', alignItems: 'center', flex: 1, height: 50, margin: 10, borderWidth: 2, borderColor: "#fff", borderRadius: 10, }}>
-                        <ActivityIndicator size="small" color="#fff" />
-                    </TouchableOpacity>
-                ) : (
+                    {props.state.ventaReducer.estado === "cargando" && props.state.ventaReducer.type === "addVenta" ? (
                         <TouchableOpacity
-                            onPress={() => venderDetalle()}
                             style={{ justifyContent: 'center', alignItems: 'center', flex: 1, height: 50, margin: 10, borderWidth: 2, borderColor: "#fff", borderRadius: 10, }}>
-                            <Text style={{ color: "#fff", }}>Agregar venta</Text>
+                            <ActivityIndicator size="small" color="#fff" />
                         </TouchableOpacity>
-                    )
-                }
-            </View>
+                    ) : (
+                            <TouchableOpacity
+                                onPress={() => venderDetalle()}
+                                style={{ justifyContent: 'center', alignItems: 'center', width: '50%', height: 50, margin: 10, borderWidth: 2, borderColor: "#fff", borderRadius: 10, }}>
+                                <Text style={{ color: "#fff", }}>Agregar venta</Text>
+                            </TouchableOpacity>
+                        )
+                    }
+                </View>
+
+
+            </ScrollView>
+
         </View>
     )
 }
@@ -321,12 +370,5 @@ const styles = StyleSheet.create({
         height: 40,
     },
 });
-const initState = (state) => {
-    return { state }
-}
-const initActions = ({
-    ...popupActions,
-    ...productoActions,
-    ...ventaActions
-});
+
 export default connect(initState, initActions)(Vender);
