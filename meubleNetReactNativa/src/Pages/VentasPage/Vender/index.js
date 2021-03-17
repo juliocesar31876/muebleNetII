@@ -20,19 +20,19 @@ const Vender = (props) => {
     const [state, setState] = React.useState({
         obj: {
             cliente: {
-                value: "----------",
+                value: "",
                 error: false
             },
             direccion: {
-                value: "----------",
+                value: "",
                 error: false
             },
             telefono: {
-                value: "76031878",
+                value: "",
                 error: false
             },
             nit: {
-                value: "465465456",
+                value: "",
                 error: false
             },
             descuento: {
@@ -57,19 +57,19 @@ const Vender = (props) => {
         },
         obj2: {
             cliente: {
-                value: "----------",
+                value: "",
                 error: false
             },
             direccion: {
-                value: "----------",
+                value: "",
                 error: false
             },
             telefono: {
-                value: "76031878",
+                value: "",
                 error: false
             },
             nit: {
-                value: "465465456",
+                value: "",
                 error: false
             },
             descuento: {
@@ -138,7 +138,8 @@ const Vender = (props) => {
                 .format('YYYY-MM-DD');
             var hora = moment()
                 .format('HH:mm:ss');
-            data["fecha_on"] = fecha + "T" + hora
+            var fecha_on = fecha + "T" + hora
+            data["fecha_on"] = fecha_on
             data["key_persona_venta"] = usuarioKeyPersona
             var array = []
             for (const key in props.state.ventaReducer.dataVentaProducto) {
@@ -154,6 +155,8 @@ const Vender = (props) => {
                 venta: data,
                 detalle: array,
                 key_persona_usuario: usuarioKeyPersona,
+                nit: state.obj.nit.value,
+                fecha_on
             }
             props.addVenta(props.state.socketReducer.socket, objventa)
             return <View />
@@ -162,7 +165,7 @@ const Vender = (props) => {
     }
     if (props.state.ventaReducer.estado === "exito" && props.state.ventaReducer.type === "addVenta") {
         props.state.ventaReducer.estado = "",
-            props.getVentaDatosRellenar(props.state.socketReducer.socket);
+        props.getVentaDatosRellenar(props.state.socketReducer.socket);
         props.update({}, "dataVentaProducto")
 
         var data = state.obj2

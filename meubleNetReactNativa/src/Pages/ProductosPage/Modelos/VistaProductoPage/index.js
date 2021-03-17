@@ -19,6 +19,12 @@ class VistaProductoPage extends Component {
     constructor(props) {
         super(props);
         var url = myPropsJulio.images.urlImage + props.navigation.state.params.producto.key + ".png" + `?tipo=${"producto"}&date=${Date.now()}`
+         ////back handler
+         props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+         props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+         props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+         props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+         ////
         this.state = {
             titulo: props.navigation.state.params.pagina,
             producto: props.navigation.state.params.producto,
@@ -50,7 +56,7 @@ class VistaProductoPage extends Component {
 
                         <View style={{ width: '100%', alignItems: 'center', marginTop: 50, }}>
 
-                            <TouchableOpacity
+                           {/*  <TouchableOpacity
                                 onPress={() => this.props.navigation.navigate("CosteProduccionPage", { producto: this.state.producto, pagina: "Coste Produccion" })}
                                 style={{
                                     alignItems: 'center',
@@ -71,7 +77,7 @@ class VistaProductoPage extends Component {
 
                                 <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 10, textAlign: 'center' }
                                 }>COSTE PRODUCCION</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}>{this.state.producto.nombre.toUpperCase()}</Text>
                             <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 15, }}>Precio Venta : {this.state.producto.precio_venta} Bs</Text>
                             <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 15, }}>Precio Produccion: {this.state.producto.precio_produccion} Bs</Text>

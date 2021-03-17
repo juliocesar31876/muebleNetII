@@ -10,10 +10,12 @@ const Popup = (props) => {
     if (!props.state.popupReducer.estado) {
         return <View />
     }
+
     const cerrarVentana = () => {
         props.cerrarPopup();
         return <View />
     }
+
     return (
         <View style={{
             position: "absolute",
@@ -32,11 +34,10 @@ const Popup = (props) => {
             <View style={{
                 width: "94%",
                 minHeight: "80%",
-                maxHeight: "90%",
+                maxHeight: "80%",
                 overflow: "hidden",
                 borderRadius: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
+                alignItems: 'center', marginTop: 150,
             }}>
                 <props.state.popupReducer.element />
             </View>

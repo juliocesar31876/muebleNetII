@@ -5,6 +5,8 @@ import {
     View,
     TouchableOpacity,
     ActivityIndicator,
+    Dimensions,
+    BackHandler,
 } from 'react-native';
 import SwipeableViews from 'react-swipeable-views-native';
 import Barra from '../../Component/Barra';
@@ -23,49 +25,24 @@ class VentasPage extends Component {
     }
     constructor(props) {
         super(props);
+
+        ////back handler
+        props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ////
+
         this.state = {
             index: 0,
             isOpen: false,
             index: 0,
             titulo: "Ventas",
-          /*   obj: {
-                cliente: {
-                    value: "",
-                    error: false
-                },
-                direccion: {
-                    value: "",
-                    error: false
-                },
-                telefono: {
-                    value: "",
-                    error: false
-                },
-                nit: {
-                    value: "",
-                    error: false
-                },
-                descuento: {
-                    value: "",
-                    error: false
-                },
-                adelanto: {
-                    value: "",
-                    error: false
-                },
-                key_sucursal: {
-                    value: "Selecion sucursal",
-                    error: false
-                },
-                entrega: {
-                    value: false,
-                }
-            }, */
             dataVentaProducto: {},
             total: 0
         }
     }
-  
+
     eliminarProductoVenta = (key) => {
         this.props.state.ventaReducer.dataVentaProducto[key] = false
         this.props.update(this.props.state.ventaReducer.dataVentaProducto, "dataVentaProducto")
@@ -77,16 +54,6 @@ class VentasPage extends Component {
         }
         this.setState({ ...this.state })
     }
-  /*   selecSucursal = (obj) => {
-        this.state.obj.key_sucursal.value = obj.direccion
-        this.state.obj.key_sucursal.error = false
-        this.state.obj.key_sucursal["data"] = obj
-        this.props.cerrarPopup()
-    } */
-   /*  actualizar = (data) => {
-        this.state.obj = data
-        this.setState({ ...this.state })
-    } */
     handleChanges = (index) => {
         this.state.index = index;
         this.setState({ ...this.state })
@@ -104,7 +71,8 @@ class VentasPage extends Component {
             <View
                 style={{
                     flex: 1,
-                    width: "100%",
+                    width: Dimensions.get("window").width,
+                    height: Dimensions.get("window").height,
                     alignItems: 'center',
                     backgroundColor: "#000",
                 }}>
@@ -134,9 +102,7 @@ class VentasPage extends Component {
                     }}>
                         <Text style={{ color: "#fff", fontWeight: 'bold', fontSize: 20, }}>DETALLE VENTAS</Text>
                         <DetalleVenta eliminarProductoVenta={this.eliminarProductoVenta} />
-                        <View style={{ alignItems: 'center', justifyContent: 'center', width: "80%", flexDirection: 'row', }}>
-                            <Text style={{ color: "#fff", fontSize: 18, }}>TOTAL : {this.state.total} Bs</Text>
-                        </View>
+
                     </View>
                     <View style={{
                         flex: 1,
@@ -145,17 +111,17 @@ class VentasPage extends Component {
                     }}>
                         <Text style={{ color: "#fff", fontWeight: 'bold', fontSize: 20, }}>REGISTRO ClIENTE</Text>
                         <Vender obj={this.state.obj} hanlechage={this.hanlechage} actualizar={this.actualizar} selecSucursal={this.selecSucursal} />
-                        
+
                     </View>
                 </SwipeableViews>
-                <View style={{ width: "100%", backgroundColor: "#000", height: 75, flexDirection: 'row', }}>
+                <View style={{ width: "100%", backgroundColor: "#000", flex: 0.23, flexDirection: 'row', }}>
                     <TouchableOpacity
                         onPress={() => this.handleChanges(0)}
                         style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
                         <Svg name={"addVenta"}
                             style={{
-                                width: 50,
-                                height: 50,
+                                width: 35,
+                                height: 35,
                                 fill: "#fff",
                                 margin: 5,
                             }} />
@@ -166,8 +132,8 @@ class VentasPage extends Component {
                         style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
                         <Svg name={"totalVenta"}
                             style={{
-                                width: 50,
-                                height: 50,
+                                width: 35,
+                                height: 35,
                                 fill: "#fff",
                                 margin: 5,
                             }} />
@@ -178,8 +144,8 @@ class VentasPage extends Component {
                         style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
                         <Svg name={"ventasProducto"}
                             style={{
-                                width: 50,
-                                height: 50,
+                                width: 35,
+                                height: 35,
                                 fill: "#fff",
                                 margin: 5,
                             }} />

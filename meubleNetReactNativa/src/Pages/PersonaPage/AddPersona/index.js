@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
-        height: 40,
+        height: 35,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
-        height: 40,
+        height: 35,
     },
     error: {
         borderWidth: 2,
@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
-        height: 40,
+        height: 35,
     },
 });
 const initStates = (state) => {

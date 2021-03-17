@@ -1,23 +1,31 @@
 import React from 'react';
 import { Image } from 'react-native';
 import { connect } from 'react-redux';
-import Props from '../../nativeSocket/myPropsJulio.json'
+import Props from '../../nativeSocket/myPropsServer.json'
 const Foto = (props) => {
   var fotFin = false;
-  props.state.fotoReducer.fotos.map((obj, key) => {
+  var nombre = ""
+  var foto = false
+
+  for (const key in props.state.fotoReducer.fotos) {
+    var obj = props.state.fotoReducer.fotos[key]
     if (obj.nombre === props.nombre) {
-      fotFin = obj.foto;
       if (obj.estado === "cambio") {
-        const foto = (<Image source={{ uri: Props.images.urlImage + props.nombre+`?tipo=${props.tipo}&date=${Date.now()}` }} style={{ width: "100%", height: "100%" ,fill:"#000"}} />);
+        foto = (<Image source={{ uri: Props.images.urlImage + props.nombre + `?tipo=${props.tipo}&date=${Date.now()}` }} style={{ width: "100%", height: "100%", fill: "#000" }} />);
+        nombre = props.nombre;
+        fotFin = foto;
         var obj = { nombre: props.nombre, foto: foto, estado: "exito" };
         props.state.fotoReducer.fotos[key] = obj;
         fotFin = foto;
       }
     }
-  })
+  }
+
   if (!fotFin) {
-    const foto = (<Image source={{ uri: Props.images.urlImage + props.nombre+`?tipo=${props.tipo}` }} style={{ width: "100%", height: "100%",fill:"#000" }} />);
-    var obj = { nombre: props.nombre, foto: foto, estado: "exito" };
+    foto = (<Image
+      source={{ uri: Props.images.urlImage + props.nombre + `?tipo=${props.tipo}&date=${Date.now()}` }}
+      style={{ width: "100%", height: "100%", fill: "#000" }} />);
+    var obj = { nombre: props.nombre, foto: foto, estado: "exito", };
     props.state.fotoReducer.fotos.push(obj);
     fotFin = foto;
   }

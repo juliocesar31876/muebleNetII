@@ -8,19 +8,38 @@ import {
     AsyncStorage,
     ScrollView,
     FlatList,
-    Image
+    Image,
+    BackHandler
 } from 'react-native';
 import Barra from '../../Component/Barra';
 import Svg from '../../Svg';
-import myPropsJulio from '../../nativeSocket/myPropsServer.json';
+import myPropsJulio from '../../nativeSocket/myPropsJulio.json';
+///import myPropsServer from '../../nativeSocket/myPropsJulio.json';
+import * as popupActions from '../../Actions/popupActions'
+import Foto from '../../Component/Foto';
+
+const initActions = ({
+    ...popupActions
+});
+const initStates = (state) => {
+    return { state }
+};
+
 class InicioPage extends Component {
     static navigationOptions = {
         headerShown: false,
     }
     constructor(props) {
         super(props);
+        ///////////
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.state.paginaReducer.objNavigation = {}
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ///////////
         var usuario = props.state.usuarioReducer.usuarioLog
         var key_area_trabajo = usuario.persona.key_area_trabajo
+        props.state.paginaReducer.data = this.props.navigation.state
+        props.state.paginaReducer.navigation = this.props.navigation
         var url = myPropsJulio.images.urlImage + usuario.persona.ci + ".png" + `?tipo=${"persona"}`
         var areaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[key_area_trabajo].nombre
         var admin = true
@@ -32,7 +51,7 @@ class InicioPage extends Component {
                 "reporte ventas",
                 "compras",
                 "salario",
-               /*  "area trabajo", */
+                /*  "area trabajo", */
             ];
             var admin = true
         }
@@ -51,6 +70,7 @@ class InicioPage extends Component {
             menu: arrayMenu,
             url,
             admin,
+            usuario,
             usuarioPersona: usuario.persona
         }
     }
@@ -123,7 +143,7 @@ class InicioPage extends Component {
                             onPress={() => { this.handleClick(item) }}
                             style={{
                                 flex: 1,
-                                height: 120,
+                                height: 100,
                                 margin: 10,
                                 justifyContent: 'center',
                                 borderWidth: 2,
@@ -170,6 +190,37 @@ class InicioPage extends Component {
             </View>
         )
     }
+    verificar(text) {
+        var pagina = this.props.state.paginaReducer.paginaActual
+        var objNavigation = this.props.state.paginaReducer.objNavigation
+        if (pagina === "InicioPage") {
+            BackHandler.exitApp()
+            return <View />
+        }
+        for (const key in objNavigation) {
+            var navigation = objNavigation[key]
+            if (key === pagina) {
+                navigation.goBack()
+                this.props.state.paginaReducer.paginaActual = navigation.paginaAnterior
+            }
+        }
+        return <View />
+
+    }
+    componentWillMount() {
+        const handleBackButtonClick = () => {
+            this.verificar()
+            return true;
+        }
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    }
+    componentWillUnmount() {
+        const handleBackButtonClick = () => {
+            this.verificar()
+            return true;
+        }
+        BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+    }
     render() {
         return (
             <View
@@ -179,27 +230,33 @@ class InicioPage extends Component {
                     alignItems: 'center',
                     backgroundColor: "#000",
                 }}>
-                {/* <Barra titulo={this.state.titulo} navigation={this.props.navigation} /> */}
-                <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', }}>
-                    <View style={{ flex: 1, }}>
-                        <Text style={{ color: "#fff", fontSize: 40, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>muebleNet</Text>
-                        <Text style={{ color: "#fff", fontSize: 15, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>Administrador</Text>
-
-                    </View>
-                    <View style={{ flex: 0.4, alignItems: 'center', }}>
-                        <View style={{ borderColor: "#999", borderWidth: 1, width: 70, height: 70, borderRadius: 100, overflow: 'hidden', alignItems: 'center', }}>
-                            <Image source={{ uri: this.state.url }} style={{ width: "100%", height: "100%", fill: "#000" }} />
-                        </View>
-                        <Text style={{
-                            color: "#fff", fontSize: 15,
-                            fontWeight: 'bold', margin: 5,
-                        }}>{this.state.usuarioPersona.nombre}</Text>
-                    </View>
-                </View>
                 <ScrollView style={{
                     flex: 1,
                     width: "100%",
+                    marginBottom: 20,
                 }}>
+                    <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', }}>
+                        <View style={{ flex: 1, }}>
+                            <Text style={{ color: "#fff", fontSize: 40, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>muebleNet</Text>
+                            <Text style={{ color: "#fff", fontSize: 15, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>Administrador</Text>
+
+                        </View>
+                        <View style={{ flex: 0.4, alignItems: 'center', }}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.navigate("PerfilPage")
+                                }}
+                                style={{ marginTop: 10, borderColor: "#999", borderWidth: 1, width: 70, height: 70, borderRadius: 100, overflow: 'hidden', alignItems: 'center', }}>
+                                <Foto nombre={this.state.usuario.persona.key + ".png"} tipo={"persona"} />
+                            </TouchableOpacity>
+                            <Text style={{
+                                color: "#fff", fontSize: 12,
+                                fontWeight: 'bold', margin: 10,
+                                textAlign: 'center'
+                            }}>{this.state.usuarioPersona.nombre}</Text>
+                        </View>
+                    </View>
+
                     <View style={{
                         flex: 1,
                         width: "100%",
@@ -255,8 +312,5 @@ const styles = StyleSheet.create({
     },
 
 });
-const initStates = (state) => {
-    return { state }
-};
 
-export default connect(initStates)(InicioPage);
+export default connect(initStates, initActions)(InicioPage);

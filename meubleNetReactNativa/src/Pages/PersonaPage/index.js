@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     ScrollView,
+    BackHandler,
 } from 'react-native';
 import Svg from '../../Svg';
 import * as usuarioActions from '../../Actions/usuarioActions'
@@ -22,11 +23,18 @@ class PersonaPage extends Component {
     }
     constructor(props) {
         super(props);
+        ////back handler
+        props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ////
         this.state = {
             titulo: props.navigation.state.params.pagina,
             componet: "Agregar personales"
         }
     }
+
     selectComponet() {
         switch (this.state.componet) {
             case "Agregar personales":
@@ -53,46 +61,43 @@ class PersonaPage extends Component {
         return (
             <View style={{
                 width: "100%",
-                height: 60,
+                height: 100,
                 alignItems: 'center',
                 flexDirection: 'row',
                 justifyContent: 'center',
                 backgroundColor: "#000",
             }}>
-                <ScrollView horizontal={true}  >
-                    {["Agregar personales","Trabajos", "Ver personales",].map((text) => {
-                        var color = "#fff"
-                        if (this.state.componet === text) {
-                            color = "#666"
-                        }
-                        return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.select(text)
-                                }}
-                                style={{
-                                    flex: 1,
-                                    height: 50,
-                                    margin: 5,
-                                    width: 120,
-                                    borderWidth: 1,
-                                    borderRadius: 10,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderColor: color,
-                                }}>
-                                <Text style={{
-                                    color: color,
-                                    fontSize: 9,
-                                    textAlign: "center",
-                                    fontWeight: 'bold',
-                                }}>{text}</Text>
-                            </TouchableOpacity>
-                        )
-                    })
+                {["Agregar personales", "Trabajos", "Ver personales",].map((text) => {
+                    var color = "#fff"
+                    if (this.state.componet === text) {
+                        color = "#666"
                     }
-                </ScrollView>
-
+                    return (
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.select(text)
+                            }}
+                            style={{
+                                flex: 1,
+                                height: 40,
+                                margin: 5,
+                                width: 120,
+                                borderWidth: 1,
+                                borderRadius: 10,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderColor: color,
+                            }}>
+                            <Text style={{
+                                color: color,
+                                fontSize: 9,
+                                textAlign: "center",
+                                fontWeight: 'bold',
+                            }}>{text}</Text>
+                        </TouchableOpacity>
+                    )
+                })
+                }
             </View>
         )
     }

@@ -8,11 +8,13 @@ import {
     AsyncStorage,
     ScrollView,
     FlatList,
-    Image
+    Image,
+    BackHandler
 } from 'react-native';
 import Barra from '../../Component/Barra';
 import Svg from '../../Svg';
-import myPropsJulio from '../../nativeSocket/myPropsServer.json';
+import myPropsJulio from '../../nativeSocket/myPropsJulio.json';
+import Foto from '../../Component/Foto';
 class InicioCompraPage extends Component {
     static navigationOptions = {
         headerShown: false,
@@ -21,6 +23,11 @@ class InicioCompraPage extends Component {
         super(props);
         var usuario = props.state.usuarioReducer.usuarioLog
         var key_area_trabajo = usuario.persona.key_area_trabajo
+        ///////////InicioBack
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.state.paginaReducer.objNavigation = {}
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ///////////
         var url = myPropsJulio.images.urlImage + usuario.persona.ci + ".png" + `?tipo=${"persona"}&date=${Date.now()}`
         var areaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[key_area_trabajo].nombre
         arrayMenu = []
@@ -150,6 +157,37 @@ class InicioCompraPage extends Component {
             </View>
         )
     }
+    verificar() {
+        var pagina = this.props.state.paginaReducer.paginaActual
+        var objNavigation = this.props.state.paginaReducer.objNavigation
+        if (pagina === "InicioCompraPage") {
+            BackHandler.exitApp()
+            return <View />
+        }
+        for (const key in objNavigation) {
+            var navigation = objNavigation[key]
+            if (key === pagina) {
+                navigation.goBack()
+                this.props.state.paginaReducer.paginaActual = navigation.paginaAnterior
+            }
+        }
+        return <View />
+
+    }
+    componentWillMount() {
+        const handleBackButtonClick = () => {
+            this.verificar()
+            return true;
+        }
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    }
+    componentWillUnmount() {
+        const handleBackButtonClick = () => {
+            this.verificar()
+            return true;
+        }
+        BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+    }
     render() {
         return (
             <View
@@ -166,9 +204,12 @@ class InicioCompraPage extends Component {
 
                     </View>
                     <View style={{ flex: 0.4, alignItems: 'center', }}>
-                        <View style={{ borderColor: "#999", borderWidth: 1, width: 70, height: 70, borderRadius: 100, overflow: 'hidden', alignItems: 'center', }}>
-                            <Image source={{ uri: this.state.url }} style={{ width: "100%", height: "100%", fill: "#000" }} />
-                        </View>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.props.navigation.navigate("PerfilPage")
+                            }} style={{ borderColor: "#999", borderWidth: 1, width: 70, height: 70, borderRadius: 100, overflow: 'hidden', alignItems: 'center', }}>
+                            <Foto nombre={this.state.usuarioPersona.key + ".png"} tipo={"persona"} />
+                        </TouchableOpacity>
                         <Text style={{
                             color: "#fff", fontSize: 15,
                             fontWeight: 'bold', margin: 5,

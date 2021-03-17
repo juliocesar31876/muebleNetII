@@ -6,7 +6,8 @@ import {
     TouchableOpacity,
     TextInput,
     StyleSheet,
-    ScrollView
+    ScrollView,
+    BackHandler
 } from 'react-native';
 import * as usuarioActions from '../../Actions/usuarioActions'
 import * as ventaActions from '../../Actions/ventaActions'
@@ -20,17 +21,24 @@ class RellenarDatoVentaPage extends Component {
     }
     constructor(props) {
         super(props);
+        ////back handler
+        props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ////
         this.state = {
             titulo: "Datos faltantes rellenar ventas",
         }
     }
+
     render() {
         if (this.props.state.ventaReducer.estado === "cargando" && this.props.state.ventaReducer.type === "getVentaDatosRellenar") {
-            return <Estado estado={"cargando"}/>
+            return <Estado estado={"cargando"} />
         }
         if (!this.props.state.ventaReducer.dataVentaDatosPendiente) {
             this.props.getVentaDatosRellenar(this.props.state.socketReducer.socket);
-            return <Estado estado={"cargando"}/>
+            return <Estado estado={"cargando"} />
         }
         return (
             <View style={{

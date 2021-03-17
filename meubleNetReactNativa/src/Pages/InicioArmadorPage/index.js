@@ -8,11 +8,14 @@ import {
     AsyncStorage,
     ScrollView,
     FlatList,
-    Image
+    Image,
+    BackHandler
 } from 'react-native';
 import Barra from '../../Component/Barra';
 import Svg from '../../Svg';
+import * as paginaActions from '../../Actions/paginaActions'
 import myPropsJulio from '../../nativeSocket/myPropsServer.json';
+import Foto from '../../Component/Foto';
 class InicioArmadorPage extends Component {
     static navigationOptions = {
         headerShown: false,
@@ -23,31 +26,49 @@ class InicioArmadorPage extends Component {
         arrayMenu = ["trabajos", "salario"];
         var admin = false
         var usuarioPersona = props.state.usuarioReducer.usuarioLog.persona
+        var usuario = props.state.usuarioReducer.usuarioLog
         var key_area_trabajo = usuarioPersona.key_area_trabajo
         var areaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[key_area_trabajo].nombre
-        var url = myPropsJulio.images.urlImage + usuarioPersona.ci + ".png" + `?tipo=${"persona"}&date=${Date.now()}`
+          ///////////InicioBack
+          props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+          props.state.paginaReducer.objNavigation = {}
+          props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+          ///////////
         this.state = {
             titulo: "",
             menu: arrayMenu,
-            url,
             usuarioPersona,
             admin,
-            areaTrabajo
+            areaTrabajo,
+            usuario,
+            exitApp: true,
+            rutaKey: props.navigation.state.key
         }
     }
     handleClick = (item) => {
         switch (item) {
             case "trabajos":
-                this.props.navigation.navigate("TrabajosArmadorPage", { areaTrabajo: this.state.areaTrabajo })
+                this.state.exitApp = false
+                this.setState({ ...this.state })
+                this.props.navigation.navigate("TrabajosArmadorPage", {
+                    routeName: "VerLibroComprasPage",
+                    areaTrabajo: this.state.areaTrabajo
+                })
                 return <View />
             case "salario":
+                this.state.exitApp = false
+                this.setState({ ...this.state })
                 this.props.navigation.navigate("SalarioTrabajoPage", {
+                    routeName: "VerLibroComprasPage",
                     admin: false,
                     pagina: ""
                 })
                 return <View />
             case "Ver libro compras":
+                this.state.exitApp = false
+                this.setState({ ...this.state })
                 this.props.navigation.navigate("VerLibroComprasPage", {
+                    routeName: "VerLibroComprasPage",
                     persona: this.props.state.usuarioReducer.usuarioLog.persona,
                     area: this.state.areaTrabajo
                 })
@@ -131,6 +152,38 @@ class InicioArmadorPage extends Component {
             </View>
         )
     }
+
+    verificar() {
+        var pagina = this.props.state.paginaReducer.paginaActual
+        var objNavigation = this.props.state.paginaReducer.objNavigation
+        if (pagina === "InicioArmadorPage") {
+            BackHandler.exitApp()
+            return <View />
+        }
+        for (const key in objNavigation) {
+            var navigation = objNavigation[key]
+            if (key === pagina) {
+                navigation.goBack()
+                this.props.state.paginaReducer.paginaActual = navigation.paginaAnterior
+            }
+        }
+        return <View />
+
+    }
+    componentWillMount() {
+        const handleBackButtonClick = () => {
+            this.verificar()
+            return true;
+        }
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    }
+    componentWillUnmount() {
+        const handleBackButtonClick = () => {
+            this.verificar()
+            return true;
+        }
+        BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+    }
     render() {
         return (
             <View
@@ -145,13 +198,17 @@ class InicioArmadorPage extends Component {
                         <Text style={{ color: "#fff", fontSize: 40, fontWeight: 'bold', textAlign: 'center', width: "100%", }}>muebleNet</Text>
                     </View>
                     <View style={{ flex: 0.4, alignItems: 'center', }}>
-                        <View style={{ borderColor: "#999", borderWidth: 1, width: 70, height: 70, borderRadius: 100, overflow: 'hidden', alignItems: 'center', }}>
-                            <Image source={{ uri: this.state.url }} style={{ width: "100%", height: "100%", fill: "#000" }} />
-                        </View>
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.props.navigation.navigate("PerfilPage")
+                            }} style={{ borderColor: "#999", borderWidth: 1, width: 70, height: 70, borderRadius: 100, overflow: 'hidden', alignItems: 'center', }}>
+                            <Foto nombre={this.state.usuario.persona.key + ".png"}  tipo={"persona"} />
+                        </TouchableOpacity>
                         <Text style={{
                             color: "#fff", fontSize: 15,
                             fontWeight: 'bold', margin: 5,
-                        }}>{this.state.usuarioPersona.nombre}</Text>
+                        }}>{this.props.state.usuarioReducer.usuarioLog.user}</Text>
                     </View>
                 </View>
                 <ScrollView style={{
@@ -217,5 +274,7 @@ const styles = StyleSheet.create({
 const initStates = (state) => {
     return { state }
 };
-
+const initActions = ({
+    ...paginaActions,
+});
 export default connect(initStates)(InicioArmadorPage);

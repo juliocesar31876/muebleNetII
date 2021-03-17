@@ -2,8 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native';
 import * as productoActions from '../../../../Actions/productoActions'
+import * as fotoActions from '../../../../Actions/fotoActions'
 import * as popupActions from '../../../../Actions/popupActions'
-import Estado from '../../../../Component/Estado';
+import Foto from '../../../../Component/Foto';
+import ImagePicker from '../../../../Component/ImagePicker';
 import myPropsJulio from '../../../../nativeSocket/myPropsJulio.json'
 
 const VerProductos = (props) => {
@@ -95,6 +97,20 @@ const VerProductos = (props) => {
             )
         })
     }
+    const pickPhoto = (obj) => {
+        const response = (resp) => {
+            console.log(resp);
+        }
+        props.state.imagePickerReducer.respose = response;
+        props.state.imagePickerReducer.key = obj.key;
+        props.state.imagePickerReducer.tipo = "producto";
+        props.state.imagePickerReducer.key_usuario = obj.key;
+        props.state.imagePickerReducer.estado = "cambio";
+        props.state.imagePickerReducer.dispath = () => {
+            props.actualizarFoto(props.state.imagePickerReducer);
+        }
+        ImagePicker(props.state.imagePickerReducer)
+    }
     const Productos = () => {
         var objDataProducto = props.state.productosReducer.dataProducto
         var newDataProducto = {}
@@ -119,18 +135,19 @@ const VerProductos = (props) => {
                 {Object.keys(newDataProducto).map((key) => {
                     var obj = newDataProducto[key]
                     var url = myPropsJulio.images.urlImage + obj.key + ".png" + `?tipo=${"producto"}&date=${Date.now()}`
+                    props.state.fotoReducer.fotos.push()
                     return (
-                        <TouchableOpacity 
-                        onPress={()=>{
-                            props.navigation.navigate("VistaProductoPage",{producto:obj,pagina:"Producto"})
-                        }}
-                        style={{
-                            width: '90%',
-                            height: 150,
-                            borderRadius: 10,
-                            borderColor: "#fff",
-                            flexDirection: 'row',
-                        }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                pickPhoto(obj)
+                            }}
+                            style={{
+                                width: '90%',
+                                height: 150,
+                                borderRadius: 10,
+                                borderColor: "#fff",
+                                flexDirection: 'row',
+                            }}>
                             <View style={{
                                 flex: 0.4,
                                 alignItems: 'center',
@@ -142,11 +159,15 @@ const VerProductos = (props) => {
                                     borderRadius: 10,
                                     overflow: "hidden"
                                 }} >
-                                    <Image source={{ uri: url }} style={{ width: "100%", height: "100%", fill: "#000" }} />
+                                    <Foto nombre={obj.key + ".png"} tipo={"producto"} />
                                 </View>
                             </View>
-                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-                                <Text style={{ marginLeft: 5,  width: "75%",fontSize: 15, margin: 2, color: "#fff" }}>{obj.nombre.toUpperCase()}</Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    props.navigation.navigate("VistaProductoPage", { producto: obj, pagina: "Producto" })
+
+                                }} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+                                <Text style={{ marginLeft: 5, width: "75%", fontSize: 15, margin: 2, color: "#fff" }}>{obj.nombre.toUpperCase()}</Text>
                                 <Text style={{ fontSize: 12, width: "75%", marginLeft: 5, margin: 2, color: "#999" }}>{props.state.productosReducer.dataTipoProducto[obj.key_tipo_producto].nombre}</Text>
                                 <Text style={{
                                     fontSize: 12,
@@ -154,7 +175,7 @@ const VerProductos = (props) => {
                                     margin: 2, color: "#999"
                                 }}>............</Text>
                                 <Text style={{ fontSize: 15, width: "75%", marginLeft: 5, color: "#999", margin: 2, }}> {obj.precio_venta}  Bs </Text>
-                            </View>
+                            </TouchableOpacity>
 
                         </TouchableOpacity>
                     )
@@ -206,6 +227,7 @@ const initStates = (state) => {
 };
 const initActions = ({
     ...productoActions,
+    ...fotoActions,
     ...popupActions
 });
 export default connect(initStates, initActions)(VerProductos);

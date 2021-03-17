@@ -7,7 +7,8 @@ import {
     TouchableOpacity,
     Text,
     TextInput,
-    Dimensions
+    Dimensions,
+    BackHandler
 } from 'react-native';
 import Svg from '../../../Svg';
 import * as comprasActions from '../../../Actions/comprasActions'
@@ -20,8 +21,15 @@ class VerLibroComprasPage extends Component {
     }
     constructor(props) {
         super(props);
+        ////back handler
+        props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ////
         var persona = props.navigation.state.params.persona
         var area = props.navigation.state.params.area
+
         var personaUsuario = props.state.usuarioReducer.usuarioLog.persona
         var area_trabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[personaUsuario.key_area_trabajo].nombre
         this.state = {
@@ -89,8 +97,16 @@ class VerLibroComprasPage extends Component {
                 {this.state.area_trabajo === "administrador" ?
                     (
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate("AddSaldoCompradorPage", { persona: this.state.persona, area: this.state.area, nuevo: true, finalizo: false })}
-                            style={{ width: 50, height: 50, margin: 5, borderRadius: 100, }}>
+                            onPress={() => {
+                                this.props.state.comprasReducer.estado = ""
+                                this.props.navigation.navigate("AddSaldoCompradorPage", {
+                                    persona: this.state.persona,
+                                    area: this.state.area,
+                                    nuevo: true,
+                                    finalizo: false,
+                                })
+                            }}
+                            style={{ width: 50, height: 50, margin: 10, borderRadius: 100, position: 'absolute', right: 20, bottom: 50 }}>
                             <Svg name={'add'}
                                 style={{
                                     width: 50,

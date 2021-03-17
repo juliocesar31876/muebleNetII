@@ -22,6 +22,12 @@ class CosteProduccionPage extends Component {
     constructor(props) {
         super(props);
         var url = myPropsJulio.images.urlImage + props.navigation.state.params.producto.key + ".png" + `?tipo=${"producto"}&date=${Date.now()}`
+         ////back handler
+         props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+         props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+         props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+         props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+         ////
         this.state = {
             titulo: props.navigation.state.params.pagina,
             producto: props.navigation.state.params.producto,

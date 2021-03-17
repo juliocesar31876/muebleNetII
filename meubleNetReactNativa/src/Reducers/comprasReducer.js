@@ -51,15 +51,26 @@ const addCompras = (state, action) => {
 const addLibroComprasIngreso = (state, action) => {
     state.estado = action.estado
     state.type = action.type
+
     if (action.estado === "exito") {
-        state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].compra.push(action.data.compras)
-        state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].ingreso.push(action.data.compras_ingreso)
-        state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].totalIngreso = state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].totalIngreso + action.data.compras_ingreso.monto
+        if (!action.data.admin) {
+            state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].compra.push(action.data.compras)
+            state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].ingreso.push(action.data.compras_ingreso)
+            if (action.data.compras.ingreso) {
+                state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].totalIngreso = state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].totalIngreso + action.data.compras_ingreso.monto
+
+            }
+            if (!action.data.compras.ingreso) {
+                state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].totalEgreso = state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].totalEgreso + action.data.compras_ingreso.monto
+            }
+        }
     }
     if (action.estado === "actualizar") {
-        state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].compra.push(action.data.compras)
-        state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].ingreso.push(action.data.compras_ingreso)
-        state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].totalIngreso = state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].totalIngreso + action.data.compras_ingreso.monto
+        if (!action.data.admin) {
+            state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].compra.push(action.data.compras)
+            state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].ingreso.push(action.data.compras_ingreso)
+            state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].totalIngreso = state.dataLibroComprasPendiente[action.data.compras.key_compras_libro].totalIngreso + action.data.compras_ingreso.monto
+        }
     }
 }
 const addLibroCompras = (state, action) => {

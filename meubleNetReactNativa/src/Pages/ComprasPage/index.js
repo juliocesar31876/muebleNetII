@@ -4,6 +4,7 @@ import {
     Text,
     View,
     TouchableOpacity,
+    BackHandler,
 } from 'react-native';
 import Barra from '../../Component/Barra';
 import AddCompras from './AddCompras';
@@ -13,7 +14,12 @@ class ComprasPage extends Component {
     }
     constructor(props) {
         super(props);
-
+ ////back handler
+ props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+ props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+ props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+ props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+ ////
         this.state = {
             isOpen: false,
             index: 0,
@@ -21,6 +27,7 @@ class ComprasPage extends Component {
             titulo: "Compras"
         }
     }
+  
     render() {
         return (
             <View

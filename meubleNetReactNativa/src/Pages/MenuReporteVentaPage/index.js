@@ -6,7 +6,8 @@ import {
     TouchableOpacity,
     TextInput,
     StyleSheet,
-    ScrollView
+    ScrollView,
+    BackHandler
 } from 'react-native';
 import * as usuarioActions from '../../Actions/usuarioActions'
 import Barra from '../../Component/Barra';
@@ -15,10 +16,16 @@ class MenuReporteVentaPage extends Component {
         headerShown: false,
     }
     constructor(props) {
+        ////back handler
+        props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ////
         super(props);
         this.state = {
             titulo: "Menu reporte ventas",
-            menu: [ "Datos ventas faltante", "Informe venta", ]
+            menu: ["Datos ventas faltante", "Informe venta",]
         }
     }
     select(text) {
@@ -37,6 +44,7 @@ class MenuReporteVentaPage extends Component {
                 return <View />
         }
     }
+   
     render() {
         return (
             <View style={{

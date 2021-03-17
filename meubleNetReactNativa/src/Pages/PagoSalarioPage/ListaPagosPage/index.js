@@ -19,6 +19,12 @@ class ListaPagosPage extends Component {
     }
     constructor(props) {
         super(props);
+        ////back handler
+        props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ////
         var area = props.navigation.state.params.area
 
 
@@ -51,7 +57,7 @@ class ListaPagosPage extends Component {
                                     fontSize: 13,
                                     fontWeight: 'bold',
                                 }}>
-                                    Nombre : 
+                                    Nombre :
                 </Text>
                             </View>
                             <View style={{ flex: 1, }}>

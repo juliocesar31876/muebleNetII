@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FlatList, Image, ScrollView, TouchableOpacity, View,Text, TextInput } from 'react-native';
-import myPropsJulio from '../../../nativeSocket/myPropsServer.json'
+import { FlatList, Image, ScrollView, TouchableOpacity, View, Text, TextInput } from 'react-native';
+import myPropsJulio from '../../../nativeSocket/myPropsJulio.json'
 //import myPropsJulio from '../../../nativeSocket/myPropsJulio.json'
 import Estado from '../../../Component/Estado';
 import * as popupActions from '../../../Actions/popupActions'
 import * as productoActions from '../../../Actions/productoActions'
+import Foto from '../../../Component/Foto';
 
 const addVenta = (props) => {
     if (!props.state.socketReducer.socket) {
@@ -44,8 +45,8 @@ const addVenta = (props) => {
 
                                 <TouchableOpacity
                                     onPress={() => {
-                                       // popupDetalleProducto(item)
-                                        props.navigation.navigate("VentaProductoPage",{producto:item,pagina:"Producto"})
+                                        // popupDetalleProducto(item)
+                                        props.navigation.navigate("VentaProductoPage", { producto: item, pagina: "Producto" })
                                     }}
                                     style={{
                                         flex: 1,
@@ -62,7 +63,7 @@ const addVenta = (props) => {
                                         borderColor: "#fff",
                                         overflow: "hidden"
                                     }} >
-                                        <Image source={{ uri: myPropsJulio.images.urlImage + item.key + ".png" + `?tipo=${"producto"}&date=${Date.now()}` }} style={{ width: "100%", height: "100%", fill: "#000" }} />
+                                        <Foto nombre={item.key + ".png"} tipo={"producto"} />
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -91,4 +92,4 @@ const initActions = ({
     ...popupActions,
     ...productoActions
 });
-export default connect(initState,initActions)(addVenta);
+export default connect(initState, initActions)(addVenta);

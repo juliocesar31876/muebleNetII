@@ -1,5 +1,5 @@
 import ImagePicker from 'react-native-image-picker';
-import myProps from '../../nativeSocket/myProps.json'
+import myProps from '../../nativeSocket/myPropsServer.json'
 // More info on all the options is below in the API Reference... just some common use cases shown here
 /**
  * The first arg is the options object for customization (it can also be null or omitted for default options),
@@ -12,14 +12,14 @@ const options = {
     path: 'images',
   },
 };
+
 const ShowImagePicker = (props) => {
   const handleChange = (data) => {
     var body = new FormData();
-      body.append("archibo", { uri: data.uri, name: 'image.png', type: 'image/jpeg' })
+    body.append("archibo", { uri: data.uri, name: 'image.png', type: 'image/jpeg' })
     body.append('type', "subirFoto");
-    body.append('key', props.key);
+    body.append('nombre', props.key);
     body.append('tipo', props.tipo);
-    body.append('key_usuario', props.key_usuario);
     var myInit = {
       method: 'POST',
       body: body,
@@ -36,7 +36,10 @@ const ShowImagePicker = (props) => {
       .then(function (response) {
         
       }).catch(error => console.error('Error:', error))
-      .then(response => console.log('Success:', response));
+      .then(response => {
+        console.log('Success:', response)
+        props.dispath()
+      });
   }
   ImagePicker.showImagePicker(options, (response) => {
     if (response.didCancel) {
@@ -45,8 +48,6 @@ const ShowImagePicker = (props) => {
       console.log('ImagePicker Error: ', response.error);
     } else {
       const source = { uri: response.uri };
-      // You can also display the image using data:
-      // const source = { uri: 'data:image/jpeg;base64,' + response.data };
       handleChange(source)
     }
   });

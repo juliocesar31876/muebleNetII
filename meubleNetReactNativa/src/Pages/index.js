@@ -20,18 +20,20 @@ import VerificarCosteProduccionPage from './RellenarDatoVentaPage/VerificarCoste
 import MenuReporteVentaPage from './MenuReporteVentaPage';
 import ListaComprasPage from './MenuReporteVentaPage/ListaComprasPage';
 import InformeVentaPage from './MenuReporteVentaPage/InformeVentaPage';
-import VerLibroComprasPage from './MenuReporteVentaPage/VerLibroComprasPage';
-import RegistrarPagosComprasPage from './MenuReporteVentaPage/RegistrarPagosComprasPage';
-import AddSaldoCompradorPage from './MenuReporteVentaPage/AddSaldoCompradorPage';
+////////////////////////armador compras
+import VerLibroComprasPage from './RegistrarPagosComprasPage/VerLibroComprasPage';
+import RegistrarPagosComprasPage from './RegistrarPagosComprasPage';
+import AddSaldoCompradorPage from './RegistrarPagosComprasPage/AddSaldoCompradorPage';
 import InicioCompraPage from './InicioCompraPage';
 import ComprasVentaPage from './InicioCompraPage/ComprasVentaPage';
 ////////////////////////armador usuario
 import InicioArmadorPage from './InicioArmadorPage';
 import PagoSalarioPage from './PagoSalarioPage';
 import TrabajosArmadorPage from './InicioArmadorPage/TrabajosArmadorPage';
-import SalarioTrabajoPage from './InicioArmadorPage/SalarioTrabajoPage';
+import SalarioTrabajoPage from './SalarioTrabajoPage';
 import ListaPagosPage from './PagoSalarioPage/ListaPagosPage';
 import CuentaContablePage from './CuentaContablePage';
+import PerfilPage from './PerfilPage';
 export const getPages = () => {
     return {
         CargaPage,
@@ -66,6 +68,7 @@ export const getPages = () => {
         SalarioTrabajoPage,
         PagoSalarioPage,
         ListaPagosPage,
-        CuentaContablePage
+        CuentaContablePage,
+        PerfilPage,
     }
 }

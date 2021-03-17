@@ -10,9 +10,12 @@ import {
 import * as personaActions from '../../../Actions/personaActions'
 import * as popupActions from '../../../Actions/popupActions'
 import * as areaTrabajoActions from '../../../Actions/areaTrabajoActions'
+import * as fotoActions from '../../../Actions/fotoActions'
 import { connect } from 'react-redux';
 import Estado from '../../../Component/Estado';
+import ImagePicker from '../../../Component/ImagePicker';
 import myPropsJulio from '../../../nativeSocket/myPropsServer.json';
+import Foto from '../../../Component/Foto';
 //import myPropsJulio from '../../../nativeSocket/myPropsJulio.json';
 const VerPersona = (props) => {
     const [state, setState] = React.useState({
@@ -24,7 +27,7 @@ const VerPersona = (props) => {
     if (!props.state.socketReducer.socket) {
         return <Estado estado={"Reconectando"} />
     }
-  
+
     if (props.state.areaTrabajoReducer.estado === "cargando" && props.state.areaTrabajoReducer.type === "getAllAreaTrabajo") {
         return <Estado estado={"cargando"} />
     }
@@ -39,7 +42,20 @@ const VerPersona = (props) => {
         props.getAllPersona(props.state.socketReducer.socket);
         return <View />
     }
+    const pickPhoto = (obj) => {
+        const response = (resp) => {
+            console.log(resp);
+        }
+        props.state.imagePickerReducer.respose = response;
+        props.state.imagePickerReducer.key = obj.key;
+        props.state.imagePickerReducer.tipo = "persona";
+        props.state.imagePickerReducer.key_usuario = obj.key;
+        props.state.imagePickerReducer.dispath = () => {
+            props.actualizarFoto(props.state.imagePickerReducer);
+        }
+        ImagePicker(props.state.imagePickerReducer)
 
+    }
     const popupArea = () => {
         if (Object.keys(props.state.areaTrabajoReducer.dataAreaTrabajo).length === 0) {
             alert("agregue un tipo de producto")
@@ -115,23 +131,24 @@ const VerPersona = (props) => {
                             })}
                         </View>
                     </ScrollView>
-                </View>) })
+                </View>)
+        })
     }
 
-    const Personas =()=>{
+    const Personas = () => {
         var objDataPersona = props.state.personaReducer.dataPersonas
         var newDataPersona = {}
         for (const key in objDataPersona) {
             var obj = objDataPersona[key]
             if (!state.areaTrabajo.data) {
                 newDataPersona[key] = obj
-            }else{
-                if (state.areaTrabajo.data.key===obj.key_area_trabajo) {
+            } else {
+                if (state.areaTrabajo.data.key === obj.key_area_trabajo) {
                     newDataPersona[key] = obj
                 }
             }
         }
-        return(
+        return (
             <View style={{
                 flex: 1,
                 width: "100%",
@@ -145,7 +162,7 @@ const VerPersona = (props) => {
                     if (obj.key === props.state.usuarioReducer.usuarioLog.persona.key) {
                         return <View />
                     }
-                    var AreaTrabajo= props.state.areaTrabajoReducer.dataAreaTrabajo[obj.key_area_trabajo].nombre
+                    var AreaTrabajo = props.state.areaTrabajoReducer.dataAreaTrabajo[obj.key_area_trabajo].nombre
                     return (
                         <View style={{
                             margin: 10,
@@ -153,7 +170,7 @@ const VerPersona = (props) => {
                             height: 150,
                             padding: 5,
                             borderRadius: 10,
-                            borderWidth: 2,
+                            borderBottomWidth: 2,
                             borderColor: "#fff",
                             flexDirection: 'row',
                         }}>
@@ -188,17 +205,21 @@ const VerPersona = (props) => {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}>
-                                <Text style={{ color: "#fff" }}>Persona</Text>
-                                <View style={{
-                                    width: 70,
-                                    height: 70,
-                                    borderRadius: 100,
-                                    borderWidth: 2,
-                                    borderColor: "#fff",
-                                    overflow: "hidden"
-                                }} >
-                                    <Image source={{ uri: url }} style={{ width: "100%", height: "100%", fill: "#000" }} />
-                                </View>
+
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        pickPhoto(obj)
+                                    }}
+                                    style={{
+                                        width: 100,
+                                        height: 100,
+                                        borderRadius: 100,
+                                        borderWidth: 2,
+                                        borderColor: "#fff",
+                                        overflow: "hidden"
+                                    }} >
+                                    <Foto nombre={obj.key + ".png"} tipo={"persona"} />
+                                </TouchableOpacity>
                             </View>
                         </View>
                     )
@@ -212,7 +233,7 @@ const VerPersona = (props) => {
             width: '100%',
             alignItems: 'center',
         }}>
-               <View style={{
+            <View style={{
                 width: "80%",
                 height: 50,
                 flexDirection: 'row',
@@ -279,6 +300,7 @@ const initStates = (state) => {
 };
 const initActions = ({
     ...personaActions,
+    ...fotoActions,
     ...areaTrabajoActions,
     ...popupActions
 });

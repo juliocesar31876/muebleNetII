@@ -14,9 +14,13 @@ import materialReducer from './materialReducer';
 import ventaReducer from './ventaReducer';
 import trabajoReducer from './trabajoReducer';
 import cuentaContableReducer from './cuentaContableReducer';
+import fotoReducer from './fotoReducer';
+import paginaReducer from './paginaReducer';
+import imagePickerReducer from './imagePickerReducer';
 export default combineReducers({
     navigationReducer,
     socketReducer,
+    fotoReducer,
     usuarioReducer,
     productosReducer,
     popupReducer,
@@ -30,4 +34,6 @@ export default combineReducers({
     ventaReducer,
     trabajoReducer,
     cuentaContableReducer,
+    imagePickerReducer,
+    paginaReducer
 });

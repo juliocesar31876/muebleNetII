@@ -21,6 +21,12 @@ class PagoSalarioPage extends Component {
     }
     constructor(props) {
         super(props);
+         ////back handler
+         props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+         props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+         props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+         props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+         ////
         var arayArea = []
         Object.keys(props.state.areaTrabajoReducer.dataAreaTrabajo).map((key) => {
             var obj = props.state.areaTrabajoReducer.dataAreaTrabajo[key]
@@ -121,7 +127,7 @@ class PagoSalarioPage extends Component {
                                 this.props.navigation.navigate("SalarioTrabajoPage", {
                                     pagina: "PagoSalarioPage",
                                     data: obj,
-                                    admin:this.props.navigation.state.params.admin
+                                    admin: this.props.navigation.state.params.admin
 
                                 })
                             }}
@@ -149,6 +155,7 @@ class PagoSalarioPage extends Component {
             </ScrollView>
         )
     }
+    
     render() {
         return (
             <View
@@ -205,7 +212,7 @@ class PagoSalarioPage extends Component {
                                 justifyContent: 'center',
                                 position: 'absolute',
                                 right: 10,
-                                bottom: 10
+                                bottom: 50
 
                             }}>
                             <Text style={{

@@ -263,17 +263,17 @@ const TrabajoEmpleado = (props) => {
             }}>
                 <View style={{ flex: 1, width: '80%', alignItems: 'center', }}>
 
-                    <Text style={{ margin: 4, color: "#fff", fontSize: 25, textAlign: "center", fontWeight: 'bold', }}>Trabajos empleados</Text>
+                    <Text style={{ margin: 4, color: "#fff", fontSize: 20, textAlign: "center", fontWeight: 'bold', }}>Trabajos empleados</Text>
                     <View style={{ width: "100%", flexDirection: 'column', }}>
-                        <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Producto</Text>
+                        <Text style={{ margin: 4, color: "#fff", fontSize: 12, fontWeight: 'bold', }}>Producto</Text>
                         <TouchableOpacity
                             onPress={() => popupProducto()}
                             style={(state.key_producto.error ? styles.error : styles.touc)}>
-                            <Text style={{ fontSize: 13, color: "#666", }}>{state.key_producto.value.toUpperCase()}  </Text>
+                            <Text style={{ fontSize: 10, color: "#666", }}>{state.key_producto.value.toUpperCase()}  </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{ width: "100%", flexDirection: 'column', }}>
-                        <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>cantidad</Text>
+                        <Text style={{ margin: 4, color: "#fff", fontSize: 12, fontWeight: 'bold', }}>cantidad</Text>
                         <TextInput
                             keyboardType={"numeric"}
                             onChangeText={text => hanlechage({ text: text, id: "cantidad" })}
@@ -282,31 +282,31 @@ const TrabajoEmpleado = (props) => {
                     </View>
 
                     <View style={{ width: "100%", flexDirection: 'column', }}>
-                        <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Persona</Text>
+                        <Text style={{ margin: 4, color: "#fff", fontSize: 12, fontWeight: 'bold', }}>Persona</Text>
                         <TouchableOpacity
                             onPress={() => popupPersona("key_persona", "Armadores", "armador mueble")}
                             style={(state.key_persona.error ? styles.error : styles.touc)}>
-                            <Text style={{ fontSize: 13, color: "#666", }}>{state.key_persona.value.toUpperCase()}  </Text>
+                            <Text style={{ fontSize: 10, color: "#666", }}>{state.key_persona.value.toUpperCase()}  </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{ width: "100%", flexDirection: 'column', }}>
-                        <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Persona compra</Text>
+                        <Text style={{ margin: 4, color: "#fff", fontSize: 12, fontWeight: 'bold', }}>Persona compra</Text>
                         <TouchableOpacity
                             onPress={() => popupPersona("key_persona_compra", "Compras", "compras")}
                             style={(state.key_persona_compra.error ? styles.error : styles.touc)}>
-                            <Text style={{ fontSize: 13, color: "#666", }}>{state.key_persona_compra.value.toUpperCase()}  </Text>
+                            <Text style={{ fontSize: 10, color: "#666", }}>{state.key_persona_compra.value.toUpperCase()}  </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{ width: "100%", flexDirection: 'column', }}>
-                        <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Persona limpieza</Text>
+                        <Text style={{ margin: 4, color: "#fff", fontSize: 12, fontWeight: 'bold', }}>Persona limpieza</Text>
                         <TouchableOpacity
                             onPress={() => popupPersona("key_persona_limpieza", "Limpieza", "limpieza")}
                             style={(state.key_persona_limpieza.error ? styles.error : styles.touc)}>
-                            <Text style={{ fontSize: 13, color: "#666", }}>{state.key_persona_limpieza.value.toUpperCase()}  </Text>
+                            <Text style={{ fontSize: 10, color: "#666", }}>{state.key_persona_limpieza.value.toUpperCase()}  </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{ width: "100%", flexDirection: 'column', }}>
-                        <Text style={{ margin: 4, color: "#fff", fontSize: 15, fontWeight: 'bold', }}>Fecha entrega</Text>
+                        <Text style={{ margin: 4, color: "#fff", fontSize: 12, fontWeight: 'bold', }}>Fecha entrega</Text>
                         <TouchableOpacity onPress={() => popupCalendario()}
                             style={(state.fecha_entrega.error ? styles.error : styles.touc)}>
                             <Text style={{ fontSize: 10, color: "#666", }}>
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
-        height: 40,
+        height: 34,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
-        height: 40,
+        height: 34,
     },
     error: {
         borderWidth: 2,
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
-        height: 40,
+        height: 34,
     },
 });
 

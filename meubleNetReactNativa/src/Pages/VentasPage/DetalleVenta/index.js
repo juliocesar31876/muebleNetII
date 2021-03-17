@@ -3,13 +3,17 @@ import { connect } from 'react-redux';
 import { ScrollView, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import Svg from '../../../Svg';
 const DetalleVenta = (props) => {
-
-    
+    var total = 0
+    Object.keys(props.state.ventaReducer.dataVentaProducto).map((key) => {
+        var obj = props.state.ventaReducer.dataVentaProducto[key]
+        total = total + obj.cantidad * obj.precio_venta
+    })
     return (
         <ScrollView style={{
             flex: 1,
             width: "100%",
         }}>
+            <Text style={{ color: "#fff", fontWeight: 'bold', fontSize: 18, width: '100%',textAlign:'center' }}>TOTAL : {total} Bs</Text>
             <View style={{
                 flex: 1,
                 alignItems: 'center',
@@ -24,7 +28,7 @@ const DetalleVenta = (props) => {
                         <View style={{
                             width: "90%",
                             alignItems: 'center', justifyContent: 'center',
-                            borderColor: "#fff", borderRadius: 10, borderBottomWidth: 2, margin: 5,padding:2
+                            borderColor: "#fff", borderRadius: 10, borderBottomWidth: 2, margin: 5, padding: 2
                         }}>
                             <TouchableOpacity
                                 onPress={() => props.eliminarProductoVenta(key)}
@@ -71,6 +75,7 @@ const DetalleVenta = (props) => {
                     )
                 })}
             </View>
+
         </ScrollView>
     )
 }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import * as ventaActions from '../../../Actions/ventaActions'
+import * as popupActions from '../../../Actions/popupActions'
 import Barra from '../../../Component/Barra';
 class MenuDatoVentaPage extends Component {
     static navigationOptions = {
@@ -9,6 +10,12 @@ class MenuDatoVentaPage extends Component {
     }
     constructor(props) {
         super(props);
+        ////back handler
+        props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ////
         var totalDetalle = 0
         var mostrar = props.navigation.state.params.mostrar
         props.navigation.state.params.venta.detalle.map((objProducto) => {
@@ -28,6 +35,7 @@ class MenuDatoVentaPage extends Component {
                 break
         }
     }
+
     render() {
         if (this.props.state.ventaReducer.estado === "exito" && this.props.state.ventaReducer.type === "addVentaTrabajo") {
             this.props.state.ventaReducer.estado = ""
@@ -80,11 +88,11 @@ class MenuDatoVentaPage extends Component {
                                             onPress={() => {
                                                 if (objProducto.costeproduccion === null) {
                                                     alert("no contiene ningun coste de produccion agregado")
-                                                    return<View/>
+                                                    return <View />
                                                 }
                                                 if (objProducto.costeproduccion === undefined) {
                                                     alert("no contiene ningun coste de produccion agregado")
-                                                    return<View/>
+                                                    return <View />
                                                 }
                                                 this.props.navigation.navigate("VerificarCosteProduccionPage",
                                                     {
@@ -154,6 +162,7 @@ const initStates = (state) => {
     return { state }
 };
 const initActions = ({
-    ...ventaActions
+    ...ventaActions,
+    ...popupActions
 });
 export default connect(initStates, initActions)(MenuDatoVentaPage);

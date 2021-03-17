@@ -1,5 +1,5 @@
 
-import myProps from './myPropsJulio.json'
+import myProps from './myPropsServer.json'
 //import myPropsServer from './myPropsJulio.json'
 import { AsyncStorage } from 'react-native';
 const SocketComp = (store) => {

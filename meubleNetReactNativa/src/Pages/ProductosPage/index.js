@@ -6,9 +6,12 @@ import {
     TouchableOpacity,
     TextInput,
     StyleSheet,
-    ScrollView
+    ScrollView,
+    BackHandler,
+    Dimensions
 } from 'react-native';
 import * as usuarioActions from '../../Actions/usuarioActions'
+import * as popupActions from '../../Actions/popupActions'
 import Barra from '../../Component/Barra';
 import VerProductos from './Modelos/VerProductos';
 import AddProductos from './Modelos/AddProductos';
@@ -19,6 +22,12 @@ class ProductosPage extends Component {
     }
     constructor(props) {
         super(props);
+        ////back handler
+        props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ////
         this.state = {
             titulo: props.navigation.state.params.pagina,
             componet: "Agregar productos"
@@ -28,7 +37,7 @@ class ProductosPage extends Component {
     selectComponet() {
         switch (this.state.componet) {
             case "Ver productos":
-                return <VerProductos navigation={this.props.navigation}/>
+                return <VerProductos navigation={this.props.navigation} />
             case "Agregar productos":
                 return <AddProductos />
             case "Agregar Tipo Produto":
@@ -47,16 +56,16 @@ class ProductosPage extends Component {
 
             <View style={{
                 width: "100%",
-                height: 50,
+                height: 80,
                 alignItems: 'center',
                 flexDirection: 'row',
                 justifyContent: 'center',
             }}>
 
                 {["Agregar productos", "Agregar Tipo Produto", "Ver productos"].map((text) => {
-                    var color="#fff"
-                    if (this.state.componet===text) {
-                        color="#666"
+                    var color = "#fff"
+                    if (this.state.componet === text) {
+                        color = "#666"
                     }
                     return (
                         <TouchableOpacity
@@ -65,7 +74,7 @@ class ProductosPage extends Component {
                             }}
                             style={{
                                 flex: 1,
-                                height: "90%",
+                                height: 50,
                                 margin: 5,
                                 borderWidth: 1,
                                 borderRadius: 10,
@@ -88,18 +97,24 @@ class ProductosPage extends Component {
             </View>
         )
     }
+
     render() {
 
         return (
             <View style={{
                 backgroundColor: "#000",
                 flex: 1,
+                width: Dimensions.get("window").width,
+                height: Dimensions.get("window").height,
                 alignItems: 'center',
-
             }}>
-                <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
-                {this.selectComponet()}
-                {this.barraMenu()}
+                <View style={{ flex: 1, width: "100%", alignItems: 'center', }}>
+                    <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
+                    {this.selectComponet()}
+                </View>
+                <View style={{ flex: 0.18, }}>
+                    {this.barraMenu()}
+                </View>
             </View>
         );
     }
@@ -125,7 +140,8 @@ const styles = StyleSheet.create({
     },
 });
 const initActions = ({
-    ...usuarioActions
+    ...usuarioActions,
+    ...popupActions
 });
 const initStates = (state) => {
     return { state }

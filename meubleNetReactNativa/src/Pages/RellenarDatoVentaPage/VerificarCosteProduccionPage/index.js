@@ -8,6 +8,12 @@ class VerificarCosteProduccionPage extends Component {
     }
     constructor(props) {
         super(props);
+         ////back handler
+         props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+         props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+         props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+         props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+         ////
         var totalCoste = 0
         var costeproduccion=[]
         if (props.navigation.state.params.costeproduccion !== undefined &&props.navigation.state.params.costeproduccion !== null) {

@@ -20,8 +20,21 @@ class ListaComprasPage extends Component {
     }
     constructor(props) {
         super(props);
+        ////back handler
+        props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ////
+
+        var totalIngreso = 0
+        var totalEgreso = 0
         var comprasLibro = props.navigation.state.params.comprasLibro
         var ingreso = props.navigation.state.params.comprasLibro.ingreso
+        for (const key in ingreso) {
+            var data = ingreso[key]
+            totalIngreso = totalIngreso + data.monto
+        }
         var compras = props.navigation.state.params.comprasLibro.compra
         var persona = props.navigation.state.params.persona
         var area = props.navigation.state.params.area
@@ -45,6 +58,8 @@ class ListaComprasPage extends Component {
             comprasLibro,
             compras,
             ingreso,
+            totalIngreso,
+            totalEgreso,
             menu
         }
     }
@@ -89,8 +104,10 @@ class ListaComprasPage extends Component {
                             var hora = ingreso.fecha_on.split("T")[1]
                             return (
                                 <TouchableOpacity
-                                    style={{ width: "100%", borderBottomWidth: 2, borderColor: "#666", margin: 5, borderRadius: 10, height: 50,
-                                     alignItems: 'center', justifyContent: 'center', }}>
+                                    style={{
+                                        width: "100%", borderBottomWidth: 2, borderColor: "#666", margin: 5, borderRadius: 10, height: 50,
+                                        alignItems: 'center', justifyContent: 'center',
+                                    }}>
                                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center', }}>
                                         <View style={{ flex: 1, width: '100%', flexDirection: 'row', }}>
                                             <Text style={{ flex: 0.6, color: '#fff', fontWeight: 'bold', margin: 5, fontSize: 12, }}> {fecha}  {pago}  </Text>
@@ -181,7 +198,7 @@ class ListaComprasPage extends Component {
                             icono = "cerrar"
                         }
                         return (
-                            <View style={{ flex: 1, alignItems: 'center', height: 70, }}>
+                            <View style={{ flex: 1, alignItems: 'center', height: 100, }}>
                                 <TouchableOpacity
                                     onPress={() => {
                                         switch (text) {
@@ -217,16 +234,16 @@ class ListaComprasPage extends Component {
                                                 return <View />
                                         }
                                     }}
-                                    style={{ width: 100, height: 50, margin: 5, borderRadius: 100, alignItems: 'center', }}>
+                                    style={{ justifyContent: 'center', width: 100, margin: 5, borderRadius: 100, alignItems: 'center', }}>
                                     <Svg name={icono}
                                         style={{
-                                            width: 40,
-                                            height: 40,
+                                            width: 25,
+                                            height: 25,
                                             fill: "#999",
                                             margin: 5,
                                         }} />
                                     <Text style={{
-                                        color: '#fff', fontWeight: 'bold', margin: 5, width: '100%', textAlign: 'center',
+                                        color: '#fff', fontWeight: 'bold', width: '100%', textAlign: 'center',
                                         fontSize: 10,
                                     }}> {text}    </Text>
                                 </TouchableOpacity>

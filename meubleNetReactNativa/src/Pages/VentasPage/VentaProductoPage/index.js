@@ -8,6 +8,8 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
+    BackHandler,
+    Dimensions,
 } from 'react-native';
 import * as usuarioActions from '../../../Actions/usuarioActions';
 import * as ventaActions from '../../../Actions/ventaActions';
@@ -15,12 +17,19 @@ import * as popupActions from '../../../Actions/popupActions';
 import Barra from '../../../Component/Barra';
 import myPropsJulio from '../../../nativeSocket/myPropsServer.json';
 import Svg from '../../../Svg';
+import Foto from '../../../Component/Foto';
 class VentaProductoPage extends Component {
     static navigationOptions = {
         headerShown: false,
     }
     constructor(props) {
         super(props);
+        ////back handler
+        props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+        props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+        props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+        props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+        ////
         var url = myPropsJulio.images.urlImage + props.navigation.state.params.producto.key + ".png" + `?tipo=${"producto"}&date=${Date.now()}`
         this.state = {
             titulo: props.navigation.state.params.pagina,
@@ -61,13 +70,14 @@ class VentaProductoPage extends Component {
         this.props.cerrarPopup()
         this.props.navigation.goBack()
     }
+
     popupDetalleProducto = () => {
         this.props.abrirPopup(() => {
             var cantidad = ""
             return (
                 <View style={{
                     width: "90%",
-                    height: "80%",
+                    height: "50%",
                     backgroundColor: "#000",
                     borderWidth: 2,
                     borderColor: "#fff",
@@ -84,16 +94,16 @@ class VentaProductoPage extends Component {
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                            <View style={{ flexDirection: 'row', margin: 10, }}>
+                            <View style={{ flexDirection: 'row', margin: 5, }}>
                                 <Text style={{ color: "#666", flex: 1, }}>Precio :</Text>
                                 <Text style={{ color: "#fff", flex: 1, }}>{this.state.producto.precio_venta} bs</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', margin: 10, alignItems: 'center', justifyContent: 'center', }}>
+                            <View style={{ flexDirection: 'row', margin: 5, alignItems: 'center', justifyContent: 'center', }}>
                                 <Text style={{ color: "#666", flex: 1, }}>Cantidad :</Text>
                                 <TextInput
                                     onChangeText={text => { cantidad = text }}
                                     keyboardType="numeric"
-                                    style={{ flex: 1, width: 50, height: 40, backgroundColor: "#fff", }} />
+                                    style={{ flex: 1, width: 40, height: 40, backgroundColor: "#fff", borderRadius: 10, }} />
                             </View>
                             <View style={{ flexDirection: 'row', margin: 10, alignItems: 'center', justifyContent: 'center', }}>
                                 <TouchableOpacity
@@ -101,11 +111,7 @@ class VentaProductoPage extends Component {
                                     style={{ justifyContent: 'center', alignItems: 'center', flex: 1, height: 40, margin: 10, borderWidth: 2, borderColor: "#fff", borderRadius: 10, }}>
                                     <Text style={{ color: "#fff", }}>Agregar producto</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={() => this.props.cerrarPopup()}
-                                    style={{ justifyContent: 'center', alignItems: 'center', flex: 1, height: 40, margin: 10, borderWidth: 2, borderColor: "#fff", borderRadius: 10, }}>
-                                    <Text style={{ color: "#fff", }}>Cancelar producto</Text>
-                                </TouchableOpacity>
+
                             </View>
                         </View>
                     </ScrollView>
@@ -120,6 +126,8 @@ class VentaProductoPage extends Component {
             <View style={{
                 backgroundColor: "#000",
                 flex: 1,
+                width: Dimensions.get("window").width,
+                height: Dimensions.get("window").height,
                 alignItems: 'center',
             }}>
                 <Barra titulo={this.state.titulo} navigation={this.props.navigation} />
@@ -132,7 +140,8 @@ class VentaProductoPage extends Component {
                             borderRadius: 10,
                             overflow: "hidden"
                         }} >
-                            <Image source={{ uri: this.state.url }} style={{ width: "100%", height: "100%", fill: "#000" }} />
+                            <Foto nombre={this.state.producto.key + ".png"} tipo={"producto"} />
+
                         </View>
                         <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}>{this.state.producto.nombre.toUpperCase()}</Text>
                         <Text style={{ width: '80%', color: '#fff', margin: 10, fontWeight: 'bold', fontSize: 15, }}>Precio Venta : {this.state.producto.precio_venta} Bs</Text>
@@ -142,7 +151,7 @@ class VentaProductoPage extends Component {
                 </ScrollView>
                 <TouchableOpacity
                     onPress={() => this.popupDetalleProducto()}
-                    style={{ width: 40, height: 40, position: 'absolute', bottom: 10, right: 10, }}>
+                    style={{ width: 40, height: 40, position: 'absolute', bottom: 50, right: 20, }}>
                     <Text>
                         <Svg name={'add'}
                             style={{

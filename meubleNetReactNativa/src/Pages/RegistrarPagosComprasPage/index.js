@@ -6,14 +6,15 @@ import {
     ScrollView,
     TouchableOpacity,
     Text,
-    TextInput
+    TextInput,
+    BackHandler
 } from 'react-native';
-import Svg from '../../../Svg';
-import * as comprasActions from '../../../Actions/comprasActions'
-import * as popupActions from '../../../Actions/popupActions'
-import Barra from '../../../Component/Barra';
-import MiCheckBox from '../../../Component/MiCheckBox';
-import Estado from '../../../Component/Estado';
+import Svg from '../../Svg';
+import * as comprasActions from '../../Actions/comprasActions'
+import * as popupActions from '../../Actions/popupActions'
+import Barra from '../../Component/Barra';
+import MiCheckBox from '../../Component/MiCheckBox';
+import Estado from '../../Component/Estado';
 
 const initActions = ({
     ...comprasActions,
@@ -28,6 +29,12 @@ class RegistrarPagosComprasPage extends Component {
     }
     constructor(props) {
         super(props);
+         ////back handler
+         props.state.paginaReducer.paginaAnterior = props.state.paginaReducer.paginaActual
+         props.state.paginaReducer.paginaActual = props.navigation.state.routeName
+         props.navigation["paginaAnterior"] = props.state.paginaReducer.paginaAnterior
+         props.state.paginaReducer.objNavigation[props.navigation.state.routeName] = props.navigation
+         ////
         this.state = {
             titulo: "Registrar saldo comprador",
             menu: ["Reporte ventas", "Datos ventas faltante", "Informe venta"],
@@ -37,6 +44,7 @@ class RegistrarPagosComprasPage extends Component {
             }
         }
     }
+   
     popup(objPersona) {
         this.props.abrirPopup(() => {
             var pago = false
@@ -87,7 +95,7 @@ class RegistrarPagosComprasPage extends Component {
     }
     render() {
 
-       
+
         return (
             <View style={{
                 flex: 1,

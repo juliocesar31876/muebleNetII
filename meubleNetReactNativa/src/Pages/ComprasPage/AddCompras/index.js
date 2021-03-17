@@ -42,9 +42,7 @@ const AddCompras = (props) => {
         },
 
     })
-    if (!props.state.socketReducer.socket) {
-        return <Estado estado={"Reconectando"} />
-    }
+
     if (props.state.comprasReducer.type === "addCompras") {
         if (props.state.comprasReducer.estado === "exito") {
             props.state.comprasReducer.estado = ""
@@ -90,8 +88,25 @@ const AddCompras = (props) => {
             data["fecha_on"] = fecha_on
             data["key_compras_libro"] = props.params.key_compras_libro
             data["ingreso"] = false
+            props.state.comprasReducer.estado = "cargando";
             props.addCompras(props.state.socketReducer.socket, data)
         }
+    }
+    const verificarbutton = () => {
+        if (props.state.comprasReducer.estado === "cargando") {
+            return <Estado estado={""} />
+        }
+
+        if (!props.state.socketReducer.socket) {
+            return <Estado estado={"Reconectando"} />
+        }
+
+        return (
+            <TouchableOpacity onPress={() => addCompras()} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+                <Text style={{ color: "#fff", textAlign: "center", fontSize: 12, }}>Agreagar compras</Text>
+            </TouchableOpacity>
+        )
+
     }
     return (
         <View style={{
@@ -138,14 +153,7 @@ const AddCompras = (props) => {
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                        {props.state.comprasReducer.estado === "cargando" && props.state.comprasReducer.type === "addCompras" ? (
-                            <ActivityIndicator size="small" color="#fff" />
-                        ) : (
-                                <TouchableOpacity onPress={() => addCompras()} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-                                    <Text style={{ color: "#fff", textAlign: "center", fontSize: 12, }}>Agreagar compras</Text>
-                                </TouchableOpacity>
-                            )
-                        }
+                        {verificarbutton()}
                     </View>
                 </View>
             </ScrollView>
